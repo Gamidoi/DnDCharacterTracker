@@ -1,7 +1,3 @@
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import {Button} from "react-native";
-
 
 const spellSlotsArray = (givenLevel :number) => {
     {
@@ -28,4 +24,6 @@ const spellSlotsArray = (givenLevel :number) => {
         if (spellLevel === 19) {return "x433332111"}
         if (spellLevel >= 20) {return "x433332211"}
 }}
-export function spellSlotsByLevel(int :number){return spellSlotsArray(int);}
+export function spellSlotsByLevel(int :number){
+    return spellSlotsArray(int);
+    }

@@ -3,15 +3,37 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import {useState} from "react";
 import {spellSlotsByLevel} from '@/assets/objects/spellSlotsByLevel';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Character} from "@/assets/objects/character";
+
+let initializingName :string|null;
+let getNameAsString = async () => {
+    return await AsyncStorage.getItem("currentCharacterName");
+    }
+
+getNameAsString().then(nameString => {
+    initializingName = nameString;
+    getCurrentCharacterObjectStringPromise(initializingName).then(objectString => {
+        let currentCharacterObjectString = objectString;
+        if (currentCharacterObjectString != null) {
+            currentCharacter = JSON.parse(currentCharacterObjectString);
+        }
+    })});
+
+let currentCharacter = new Character("defaultSSR", 10, 5);
+let getCurrentCharacterObjectStringPromise = async (nameString :string|null) => {
+    return await AsyncStorage.getItem("newCharacter" + nameString);
+}
 
 
-export default function HomeScreen() {
-    let [maxHP, setMaxHP] = useState(54);
+export default function MainCharatcerSyndrome() {
+    if (currentCharacter == null){currentCharacter = new Character("default", 10, 5)}
+
+    let [currentCharacterName, setCurrentCharacterName] = useState(currentCharacter.charName);
+    let [maxHP, setMaxHP] = useState(currentCharacter.maxHP);
     let [incrementHP, setIncrementHP] = useState("0");
     let [currentHP, setCurrentHP] = useState(maxHP);
-    let [spellCastingLevel, setSpellCastingLevel] = useState(20);
+    let [spellCastingLevel, setSpellCastingLevel] = useState(currentCharacter.spellcastingLevel);
     let currentSpells :string = spellSlotsByLevel(spellCastingLevel);
-    let characterName ="Gamidoi";
 
 
     let has1stLevelSpell :boolean = !(currentSpells[1] === "0");
@@ -59,7 +81,21 @@ export default function HomeScreen() {
       }>
 
         <View style={{marginBottom: 20, backgroundColor: 'black'}}>
-            <Text style={{color: "white", fontSize: 50, backgroundColor: "tan"}}>{characterName}</Text>
+            <Pressable onPress={()=> {getNameAsString().then(nameString => {
+                initializingName = nameString;
+                getCurrentCharacterObjectStringPromise(initializingName).then(objectString => {
+                    if (objectString != null) {
+                        currentCharacter = JSON.parse(objectString);
+                    }
+
+                    setCurrentCharacterName(currentCharacter.charName);
+                    setMaxHP(currentCharacter.maxHP);
+                    setSpellCastingLevel(currentCharacter.spellcastingLevel);
+                    if (currentHP > currentCharacter.maxHP){setCurrentHP(currentCharacter.maxHP);}
+                })});
+            }}>
+                <Text style={{color: "white", fontSize: 50, backgroundColor: "tan", textAlign: "center"}}>{currentCharacterName}
+                </Text></Pressable>
         <Text style={{color: "white", fontSize: 28}}>current HP is {currentHP} / {maxHP}</Text>
         <Text>
             <Pressable
@@ -322,41 +358,14 @@ export default function HomeScreen() {
         </View>
         </View>
 
-        <View style={{backgroundColor: 'black'}}>
-        <Text style={styles.spellText}>set the spell casting level</Text>
-        <TextInput
-            keyboardType='numeric'
-            onChangeText={setSpellCastingLevel}
-            style={{
-                borderStyle: "solid",
-                borderWidth: 3,
-                borderColor: "white",
-                width: 150,
-                marginLeft: 100,
-                color: "grey"
-            }}
-        />
-        <Text style={styles.spellText}>set max HP</Text>
-        <TextInput
-            keyboardType='numeric'
-            onChangeText={setMaxHP}
-            style={{
-                borderStyle: "solid",
-                borderWidth: 3,
-                borderColor: "white",
-                width: 150,
-                color: "grey",
-                marginLeft: 100,
-            }}
-        />
-    </View>
-
-
     </ParallaxScrollView>
   );
 
 
 }
+
+
+
 
 const styles = StyleSheet.create({
   titleContainer: {
