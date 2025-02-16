@@ -18,29 +18,35 @@ export default function TabLayout() {
         tabBarButton: HapticTab,
         tabBarBackground: TabBarBackground,
 
-
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Character',
-          tabBarIcon: ({ color }) => <FontAwesome size={28}  name="user-secret" color={color} />,
+            title: 'Character',
+            tabBarIcon: ({ color }) => <FontAwesome size={28}  name="user-secret" color={color} />,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="SpellsAbilities"
         options={{
           title: 'Spells & Abilities',
           tabBarIcon: ({ color }) => <FontAwesome size={28} name="magic" color={color} />,
         }}
       />
         <Tabs.Screen
-        name="explore2"
-        options={{
-            title: 'Level Up',
-            tabBarIcon: ({ color }) => <FontAwesome size={28} name="level-up" color={color} />,
-        }}
-    />
+            name="SkillsSavesRolls"
+            options={{
+                title: 'Skills & Saves',
+                tabBarIcon: ({ color }) => <FontAwesome size={28} name="first-order" color={color} />,
+            }}
+        />
+        <Tabs.Screen
+            name="LevelUpTab"
+            options={{
+                title: 'Level Up',
+                tabBarIcon: ({ color }) => <FontAwesome size={28} name="level-up" color={color} />,
+            }}
+        />
     </Tabs>
   );
 }
