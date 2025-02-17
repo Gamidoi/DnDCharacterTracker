@@ -1,10 +1,9 @@
 this is an early project to bulk up a portfolio for job searching.
-
-
+-------
 the current app can track DnD characters, HP, spell slots, ability scores, and skills.
 
 future plans are to include:
-
+---------
 
 saving current and used spells slots between sessions
 
@@ -38,5 +37,5 @@ updating items page to "equip" armors, allowing AC to be displayed in other loca
 
 allowing equiped items to be visable on main page, and rolls on main page.
 
-
+--------
 current plans are likely to expand over time.
