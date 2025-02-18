@@ -1,50 +1,41 @@
-# Welcome to your Expo app 👋
+this is an early project to bulk up a portfolio for job searching.
+-------
+the current app can track DnD characters, HP, spell slots, ability scores, and skills.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+future plans are to include:
+---------
 
-## Get started
+saving current and used spells slots between sessions
 
-1. Install dependencies
+adding a "characterLevel" key: to object Characters, and connecting it to proficiency bonus
 
-   ```bash
-   npm install
-   ```
+creating and storing character specific spells
 
-2. Start the app
+character specific abilities
 
-   ```bash
-    npx expo start
-   ```
+short and long rest buttons
 
-In the output, you'll find options to open the app in a
+linking spells to spell slots, and making a button on each spell to use an available spell slot
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+linking spell slots and abilities to recharge on long or short rest
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+updating spellcasting level to take in seperate catagories of full caster, half caster
 
-## Get a fresh project
+adding Warlock specific spell slots that refresh on short rest
 
-When you're ready, run:
+adding items / inventory Tab, catagories for weapons, consumables, money and "other"
 
-```bash
-npm run reset-project
-```
+updating the spells and abilities page to make rolls for attacks and damage
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+updating the items page to include rolls for weapons
 
-## Learn more
+updating items page to track consumables, and give them a use button
 
-To learn more about developing your project with Expo, look at the following resources:
+updating items page to "equip" items, and place them at the top of the page to make commonly used weapons easily found
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+updating items page to "equip" armors, allowing AC to be displayed in other locations
 
-## Join the community
+allowing equiped items to be visable on main page, and rolls on main page.
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+--------
+current plans are likely to expand over time.
