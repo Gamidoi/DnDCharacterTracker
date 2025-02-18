@@ -50,4 +50,12 @@ export class Character {
             this.animalHandling = this.insight = this.medicine = this.perception = this.survival = this.deception = this.intimidation = this.performance =
                 this.persuasion = "X";
     }
+
+    public getSkills() {
+
+
+
+
+        return  "stringy string";
+    }
 }

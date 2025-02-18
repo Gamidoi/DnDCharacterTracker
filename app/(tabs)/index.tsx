@@ -1,9 +1,10 @@
 import { Image, StyleSheet, TextInput, View, Text, Pressable} from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import {useState} from "react";
+import {useState, useContext} from "react";
 import {spellSlotsByLevel} from '@/assets/objects/spellSlotsByLevel';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Character} from "@/assets/objects/character";
+import {ThingBadName} from "@/app/_layout";
 
 let initializingName :string|null;
 let getNameAsString = async () => {
@@ -27,6 +28,7 @@ let getCurrentCharacterObjectStringPromise = async (nameString :string|null) => 
 
 export default function MainCharatcerSyndrome() {
     if (currentCharacter == null){currentCharacter = new Character("default", 10, 5)}
+    const poop = useContext(ThingBadName);
 
     let [currentCharacterName, setCurrentCharacterName] = useState(currentCharacter.charName);
     let [maxHP, setMaxHP] = useState(currentCharacter.maxHP);
