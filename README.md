@@ -2,10 +2,10 @@ this is an early project to bulk up a portfolio for job searching.
 -------
 the current app can track DnD characters, HP, spell slots, ability scores, and skills.
 
+saving current and used spells slots between sessions
+
 future plans are to include:
 ---------
-
-saving current and used spells slots between sessions
 
 adding a "characterLevel" key: to object Characters, and connecting it to proficiency bonus
 
