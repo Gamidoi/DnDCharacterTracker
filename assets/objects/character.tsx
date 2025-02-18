@@ -3,8 +3,10 @@ export class Character {
     charName: string;
     maxHP: number;
     spellcastingLevel: number;
+    currentUsedSpells: string;
     abilities: {};
     spells: {};
+
     STR: number;
     DEX: number;
     CON: number;
@@ -14,23 +16,19 @@ export class Character {
     proficiency: number;
 
     athletics: string
-
     acrobatics: string
     sleightOfHand: string
     stealth: string
-
     arcana: string
     history: string
     investigation: string
     nature: string
     religion: string
-
     animalHandling: string
     insight: string
     medicine: string
     perception: string
     survival: string
-
     deception: string
     intimidation: string
     performance: string
@@ -41,6 +39,7 @@ export class Character {
         this.charName = character;
         this.maxHP = HPMax;
         this.spellcastingLevel = castingLevel;
+        this.currentUsedSpells = "0000000000000000000000"
         this.abilities = {};
         this.spells = {};
         this.STR = this.DEX = this.CON = this.INT = this.WIS = this.CHA = 10;

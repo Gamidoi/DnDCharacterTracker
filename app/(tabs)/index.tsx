@@ -36,39 +36,74 @@ export default function MainCharatcerSyndrome() {
     let [currentHP, setCurrentHP] = useState(maxHP);
     let [spellCastingLevel, setSpellCastingLevel] = useState(currentCharacter.spellcastingLevel);
     let currentSpells :string = spellSlotsByLevel(spellCastingLevel);
+    let [testString, setTestString] = useState(0);
 
 
     let has1stLevelSpell :boolean = !(currentSpells[1] === "0");
-    let [spell11, setSpell11] = useState(" ");
-    let [spell12, setSpell12] = useState(" ");
-    let [spell13, setSpell13] = useState(" ");
-    let [spell14, setSpell14] = useState(" ");
+    let [spell11, setSpell11] = useState(currentCharacter.currentUsedSpells[0]);
+    let [spell12, setSpell12] = useState(currentCharacter.currentUsedSpells[1]);
+    let [spell13, setSpell13] = useState(currentCharacter.currentUsedSpells[2]);
+    let [spell14, setSpell14] = useState(currentCharacter.currentUsedSpells[3]);
     let has2ndLevelSpell :boolean = !(currentSpells[2] === "0");
-    let [spell21, setSpell21] = useState(" ");
-    let [spell22, setSpell22] = useState(" ");
-    let [spell23, setSpell23] = useState(" ");
+    let [spell21, setSpell21] = useState(currentCharacter.currentUsedSpells[4]);
+    let [spell22, setSpell22] = useState(currentCharacter.currentUsedSpells[5]);
+    let [spell23, setSpell23] = useState(currentCharacter.currentUsedSpells[6]);
     let has3rdLevelSpell :boolean = !(currentSpells[3] === "0");
-    let [spell31, setSpell31] = useState(" ");
-    let [spell32, setSpell32] = useState(" ");
-    let [spell33, setSpell33] = useState(" ");
+    let [spell31, setSpell31] = useState(currentCharacter.currentUsedSpells[7]);
+    let [spell32, setSpell32] = useState(currentCharacter.currentUsedSpells[8]);
+    let [spell33, setSpell33] = useState(currentCharacter.currentUsedSpells[9]);
     let has4thLevelSpell :boolean = !(currentSpells[4] === "0");
-    let [spell41, setSpell41] = useState(" ");
-    let [spell42, setSpell42] = useState(" ");
-    let [spell43, setSpell43] = useState(" ");
+    let [spell41, setSpell41] = useState(currentCharacter.currentUsedSpells[10]);
+    let [spell42, setSpell42] = useState(currentCharacter.currentUsedSpells[11]);
+    let [spell43, setSpell43] = useState(currentCharacter.currentUsedSpells[12]);
     let has5thLevelSpell :boolean = !(currentSpells[5] === "0");
-    let [spell51, setSpell51] = useState(" ");
-    let [spell52, setSpell52] = useState(" ");
-    let [spell53, setSpell53] = useState(" ");
+    let [spell51, setSpell51] = useState(currentCharacter.currentUsedSpells[13]);
+    let [spell52, setSpell52] = useState(currentCharacter.currentUsedSpells[14]);
+    let [spell53, setSpell53] = useState(currentCharacter.currentUsedSpells[15]);
     let has6thLevelSpell :boolean = !(currentSpells[6] === "0");
-    let [spell61, setSpell61] = useState(" ");
-    let [spell62, setSpell62] = useState(" ");
+    let [spell61, setSpell61] = useState(currentCharacter.currentUsedSpells[16]);
+    let [spell62, setSpell62] = useState(currentCharacter.currentUsedSpells[17]);
     let has7thLevelSpell :boolean = !(currentSpells[7] === "0");
-    let [spell71, setSpell71] = useState(" ");
-    let [spell72, setSpell72] = useState(" ");
+    let [spell71, setSpell71] = useState(currentCharacter.currentUsedSpells[18]);
+    let [spell72, setSpell72] = useState(currentCharacter.currentUsedSpells[19]);
     let has8thLevelSpell :boolean = !(currentSpells[8] === "0");
-    let [spell81, setSpell81] = useState(" ");
+    let [spell81, setSpell81] = useState(currentCharacter.currentUsedSpells[20]);
     let has9thLevelSpell :boolean = !(currentSpells[9] === "0");
-    let [spell91, setSpell91] = useState(" ");
+    let [spell91, setSpell91] = useState(currentCharacter.currentUsedSpells[21]);
+
+    function saveSpellsUsed() {
+        currentCharacter.currentUsedSpells = (spell11 + spell12 + spell13 + spell14 + spell21 + spell22 + spell23 + spell31 + spell32 + spell33 + spell41 + spell42 + spell43 +
+        spell51 + spell52 + spell53 + spell61 + spell62 + spell71 + spell72 + spell81 + spell91);
+        if (detectChangeToSpellSlot > 0)
+            {AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter)).then(() => setTestString(testString + 1));
+            setDetectChangeToSpellSlot(0)}
+        return true;
+    }
+    let [detectChangeToSpellSlot, setDetectChangeToSpellSlot] = useState(0);
+    function setSpellsUsed(usedSpellString :string) {
+        setSpell11(usedSpellString[0]);
+        setSpell12(usedSpellString[1]);
+        setSpell13(usedSpellString[2]);
+        setSpell14(usedSpellString[3]);
+        setSpell21(usedSpellString[4]);
+        setSpell22(usedSpellString[5]);
+        setSpell23(usedSpellString[6]);
+        setSpell31(usedSpellString[7]);
+        setSpell32(usedSpellString[8]);
+        setSpell33(usedSpellString[9]);
+        setSpell41(usedSpellString[10]);
+        setSpell42(usedSpellString[11]);
+        setSpell43(usedSpellString[12]);
+        setSpell51(usedSpellString[13]);
+        setSpell52(usedSpellString[14]);
+        setSpell53(usedSpellString[15]);
+        setSpell61(usedSpellString[16]);
+        setSpell62(usedSpellString[17]);
+        setSpell71(usedSpellString[18]);
+        setSpell72(usedSpellString[19]);
+        setSpell81(usedSpellString[20]);
+        setSpell91(usedSpellString[21]);
+    }
 
 
 
@@ -93,6 +128,7 @@ export default function MainCharatcerSyndrome() {
                     setCurrentCharacterName(currentCharacter.charName);
                     setMaxHP(currentCharacter.maxHP);
                     setSpellCastingLevel(currentCharacter.spellcastingLevel);
+                    setSpellsUsed(currentCharacter.currentUsedSpells);
                     if (currentHP > currentCharacter.maxHP){setCurrentHP(currentCharacter.maxHP);}
                 })});
             }}>
@@ -155,36 +191,54 @@ export default function MainCharatcerSyndrome() {
         {has1stLevelSpell && <Text style={styles.spellText}> 1st Level Spells ({currentSpells[1]})</Text>}
         {<View style={styles.spellSlotButtonRow}> {(currentSpells[1] === "2") && (<Text>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
-                    if (spell11 === " "){setSpell11("X")}
-                    else {setSpell11(" ")}}}><Text style={styles.spellSlotButtonX}>{spell11}</Text></Pressable>
+                    if (spell11 === "0"){setSpell11("X")}
+                    else {setSpell11("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell11 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
-                    if (spell12 === " "){setSpell12("X")}
-                    else {setSpell12(" ")}}}><Text style={styles.spellSlotButtonX}>{spell12}</Text></Pressable>
+                    if (spell12 === "0"){setSpell12("X")}
+                    else {setSpell12("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell12 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
             </Text>)}
             {(currentSpells[1] === "3") && (<Text>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
-                    if (spell11 === " "){setSpell11("X")}
-                    else {setSpell11(" ")}}}><Text style={styles.spellSlotButtonX}>{spell11}</Text></Pressable>
+                    if (spell11 === "0"){setSpell11("X")}
+                    else {setSpell11("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell11 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
-                    if (spell12 === " "){setSpell12("X")}
-                    else {setSpell12(" ")}}}><Text style={styles.spellSlotButtonX}>{spell12}</Text></Pressable>
+                    if (spell12 === "0"){setSpell12("X")}
+                    else {setSpell12("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell12 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
-                    if (spell13 === " "){setSpell13("X")}
-                    else {setSpell13(" ")}}}><Text style={styles.spellSlotButtonX}>{spell13}</Text></Pressable>
+                    if (spell13 === "0"){setSpell13("X")}
+                    else {setSpell13("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell13 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
             </Text>)}
             {(currentSpells[1] === "4") && (<Text>
                 <Pressable style={styles.SpellSlotButton4} onPress={()=>{
-                    if (spell11 === " "){setSpell11("X")}
-                    else {setSpell11(" ")}}}><Text style={styles.spellSlotButtonX}>{spell11}</Text></Pressable>
+                    if (spell11 === "0"){setSpell11("X")}
+                    else {setSpell11("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell11 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
                 <Pressable style={styles.SpellSlotButton4} onPress={()=>{
-                    if (spell12 === " "){setSpell12("X")}
-                    else {setSpell12(" ")}}}><Text style={styles.spellSlotButtonX}>{spell12}</Text></Pressable>
+                    if (spell12 === "0"){setSpell12("X")}
+                    else {setSpell12("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell12 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
                 <Pressable style={styles.SpellSlotButton4} onPress={()=>{
-                    if (spell13 === " "){setSpell13("X")}
-                    else {setSpell13(" ")}}}><Text style={styles.spellSlotButtonX}>{spell13}</Text></Pressable>
+                    if (spell13 === "0"){setSpell13("X")}
+                    else {setSpell13("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell13 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
                 <Pressable style={styles.SpellSlotButton4} onPress={()=>{
-                    if (spell14 === " "){setSpell14("X")}
-                    else {setSpell14(" ")}}}><Text style={styles.spellSlotButtonX}>{spell14}</Text></Pressable>
+                    if (spell14 === "0"){setSpell14("X")}
+                    else {setSpell14("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell14 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
             </Text>)}
         </View>}
         </View>
@@ -194,22 +248,32 @@ export default function MainCharatcerSyndrome() {
             {has2ndLevelSpell && <Text style={styles.spellText}> 2nd Level Spells ({currentSpells[2]})</Text>}
         {<View style={styles.spellSlotButtonRow}> {(currentSpells[2] === "2") && (<Text>
             <Pressable style={styles.SpellSlotButton2} onPress={()=>{
-                if (spell21 === " "){setSpell21("X")}
-                else {setSpell21(" ")}}}><Text style={styles.spellSlotButtonX}>{spell21}</Text></Pressable>
+                if (spell21 === "0"){setSpell21("X")}
+                else {setSpell21("0")}
+                setDetectChangeToSpellSlot(1);
+            }}>{spell21 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
             <Pressable style={styles.SpellSlotButton2} onPress={()=>{
-                if (spell22 === " "){setSpell22("X")}
-                else {setSpell22(" ")}}}><Text style={styles.spellSlotButtonX}>{spell22}</Text></Pressable>
+                if (spell22 === "0"){setSpell22("X")}
+                else {setSpell22("0")}
+                setDetectChangeToSpellSlot(1);
+            }}>{spell22 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
         </Text>)}
         {(currentSpells[2] === "3") && (<Text>
             <Pressable style={styles.SpellSlotButton3} onPress={()=>{
-                if (spell21 === " "){setSpell21("X")}
-                else {setSpell21(" ")}}}><Text style={styles.spellSlotButtonX}>{spell21}</Text></Pressable>
+                if (spell21 === "0"){setSpell21("X")}
+                else {setSpell21("0")}
+                setDetectChangeToSpellSlot(1);
+            }}>{spell21 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
             <Pressable style={styles.SpellSlotButton3} onPress={()=>{
-                if (spell22 === " "){setSpell22("X")}
-                else {setSpell22(" ")}}}><Text style={styles.spellSlotButtonX}>{spell22}</Text></Pressable>
+                if (spell22 === "0"){setSpell22("X")}
+                else {setSpell22("0")}
+                setDetectChangeToSpellSlot(1);
+            }}>{spell22 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
             <Pressable style={styles.SpellSlotButton3} onPress={()=>{
-                if (spell23 === " "){setSpell23("X")}
-                else {setSpell23(" ")}}}><Text style={styles.spellSlotButtonX}>{spell23}</Text></Pressable>
+                if (spell23 === "0"){setSpell23("X")}
+                else {setSpell23("0")}
+                setDetectChangeToSpellSlot(1);
+            }}>{spell23 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
         </Text>)}
         </View>}
         </View>
@@ -219,22 +283,32 @@ export default function MainCharatcerSyndrome() {
             {has3rdLevelSpell && <Text style={styles.spellText}> 3rd Level Spells ({currentSpells[3]})</Text>}
         {<View style={styles.spellSlotButtonRow}> {(currentSpells[3] === "2") && (<Text>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
-                    if (spell31 === " "){setSpell31("X")}
-                    else {setSpell31(" ")}}}><Text style={styles.spellSlotButtonX}>{spell31}</Text></Pressable>
+                    if (spell31 === "0"){setSpell31("X")}
+                    else {setSpell31("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell31 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
-                    if (spell32 === " "){setSpell32("X")}
-                    else {setSpell32(" ")}}}><Text style={styles.spellSlotButtonX}>{spell32}</Text></Pressable>
+                    if (spell32 === "0"){setSpell32("X")}
+                    else {setSpell32("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell32 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
             </Text>)}
             {(currentSpells[3] === "3") && (<Text>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
-                    if (spell31 === " "){setSpell31("X")}
-                    else {setSpell31(" ")}}}><Text style={styles.spellSlotButtonX}>{spell31}</Text></Pressable>
+                    if (spell31 === "0"){setSpell31("X")}
+                    else {setSpell31("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell31 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
-                    if (spell32 === " "){setSpell32("X")}
-                    else {setSpell32(" ")}}}><Text style={styles.spellSlotButtonX}>{spell32}</Text></Pressable>
+                    if (spell32 === "0"){setSpell32("X")}
+                    else {setSpell32("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell32 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
-                    if (spell33 === " "){setSpell33("X")}
-                    else {setSpell33(" ")}}}><Text style={styles.spellSlotButtonX}>{spell33}</Text></Pressable>
+                    if (spell33 === "0"){setSpell33("X")}
+                    else {setSpell33("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell33 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
             </Text>)}
             </View>}
         </View>
@@ -244,27 +318,39 @@ export default function MainCharatcerSyndrome() {
             {has4thLevelSpell && <Text style={styles.spellText}> 4th Level Spells ({currentSpells[4]})</Text>}
         {<View style={styles.spellSlotButtonRow}> {(currentSpells[4] === "1") && (<Text>
                 <Pressable style={styles.SpellSlotButton1} onPress={()=>{
-                    if (spell41 === " "){setSpell41("X")}
-                    else {setSpell41(" ")}}}><Text style={styles.spellSlotButtonX}>{spell41}</Text></Pressable>
+                    if (spell41 === "0"){setSpell41("X")}
+                    else {setSpell41("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell41 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
             </Text>)}
             {(currentSpells[4] === "2") && (<Text>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
-                    if (spell41 === " "){setSpell41("X")}
-                    else {setSpell41(" ")}}}><Text style={styles.spellSlotButtonX}>{spell41}</Text></Pressable>
+                    if (spell41 === "0"){setSpell41("X")}
+                    else {setSpell41("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell41 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
-                    if (spell42 === " "){setSpell42("X")}
-                    else {setSpell42(" ")}}}><Text style={styles.spellSlotButtonX}>{spell42}</Text></Pressable>
+                    if (spell42 === "0"){setSpell42("X")}
+                    else {setSpell42("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell42 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
             </Text>)}
             {(currentSpells[4] === "3") && (<Text>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
-                    if (spell41 === " "){setSpell41("X")}
-                    else {setSpell41(" ")}}}><Text style={styles.spellSlotButtonX}>{spell41}</Text></Pressable>
+                    if (spell41 === "0"){setSpell41("X")}
+                    else {setSpell41("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell41 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
-                    if (spell42 === " "){setSpell42("X")}
-                    else {setSpell42(" ")}}}><Text style={styles.spellSlotButtonX}>{spell42}</Text></Pressable>
+                    if (spell42 === "0"){setSpell42("X")}
+                    else {setSpell42("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell42 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
-                    if (spell43 === " "){setSpell43("X")}
-                    else {setSpell43(" ")}}}><Text style={styles.spellSlotButtonX}>{spell43}</Text></Pressable>
+                    if (spell43 === "0"){setSpell43("X")}
+                    else {setSpell43("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell43 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
             </Text>)}
             </View>}
         </View>
@@ -274,27 +360,39 @@ export default function MainCharatcerSyndrome() {
             {has5thLevelSpell && <Text style={styles.spellText}> 5th Level Spells ({currentSpells[5]})</Text>}
         {<View style={styles.spellSlotButtonRow}> {(currentSpells[5] === "1") && (<Text>
                 <Pressable style={styles.SpellSlotButton1} onPress={()=>{
-                    if (spell51 === " "){setSpell51("X")}
-                    else {setSpell51(" ")}}}><Text style={styles.spellSlotButtonX}>{spell51}</Text></Pressable>
+                    if (spell51 === "0"){setSpell51("X")}
+                    else {setSpell51("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell51 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
             </Text>)}
             {(currentSpells[5] === "2") && (<Text>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
-                    if (spell51 === " "){setSpell51("X")}
-                    else {setSpell51(" ")}}}><Text style={styles.spellSlotButtonX}>{spell51}</Text></Pressable>
+                    if (spell51 === "0"){setSpell51("X")}
+                    else {setSpell51("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell51 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
-                    if (spell52 === " "){setSpell52("X")}
-                    else {setSpell52(" ")}}}><Text style={styles.spellSlotButtonX}>{spell52}</Text></Pressable>
+                    if (spell52 === "0"){setSpell52("X")}
+                    else {setSpell52("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell52 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
             </Text>)}
             {(currentSpells[5] === "3") && (<Text>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
-                    if (spell51 === " "){setSpell51("X")}
-                    else {setSpell51(" ")}}}><Text style={styles.spellSlotButtonX}>{spell51}</Text></Pressable>
+                    if (spell51 === "0"){setSpell51("X")}
+                    else {setSpell51("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell51 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
-                    if (spell52 === " "){setSpell52("X")}
-                    else {setSpell52(" ")}}}><Text style={styles.spellSlotButtonX}>{spell52}</Text></Pressable>
+                    if (spell52 === "0"){setSpell52("X")}
+                    else {setSpell52("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell52 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
-                    if (spell53 === " "){setSpell53("X")}
-                    else {setSpell53(" ")}}}><Text style={styles.spellSlotButtonX}>{spell53}</Text></Pressable>
+                    if (spell53 === "0"){setSpell53("X")}
+                    else {setSpell53("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell53 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
             </Text>)}
             </View>}
         </View>
@@ -304,16 +402,22 @@ export default function MainCharatcerSyndrome() {
             {has6thLevelSpell && <Text style={styles.spellText}> 6th Level Spells ({currentSpells[6]})</Text>}
         {<View style={styles.spellSlotButtonRow}> {(currentSpells[6] === "1") && (<Text>
                 <Pressable style={styles.SpellSlotButton1} onPress={()=>{
-                    if (spell61 === " "){setSpell61("X")}
-                    else {setSpell61(" ")}}}><Text style={styles.spellSlotButtonX}>{spell61}</Text></Pressable>
+                    if (spell61 === "0"){setSpell61("X")}
+                    else {setSpell61("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell61 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
             </Text>)}
             {(currentSpells[6] === "2") && (<Text>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
-                    if (spell61 === " "){setSpell61("X")}
-                    else {setSpell61(" ")}}}><Text style={styles.spellSlotButtonX}>{spell61}</Text></Pressable>
+                    if (spell61 === "0"){setSpell61("X")}
+                    else {setSpell61("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell61 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
-                    if (spell62 === " "){setSpell62("X")}
-                    else {setSpell62(" ")}}}><Text style={styles.spellSlotButtonX}>{spell62}</Text></Pressable>
+                    if (spell62 === "0"){setSpell62("X")}
+                    else {setSpell62("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell62 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
             </Text>)}
             </View>}
         </View>
@@ -323,16 +427,22 @@ export default function MainCharatcerSyndrome() {
             {has7thLevelSpell && <Text style={styles.spellText}> 7th Level Spells ({currentSpells[7]})</Text>}
         {<View style={styles.spellSlotButtonRow}> {(currentSpells[7] === "1") && (<Text>
             <Pressable style={styles.SpellSlotButton1} onPress={()=>{
-                if (spell71 === " "){setSpell71("X")}
-                else {setSpell71(" ")}}}><Text style={styles.spellSlotButtonX}>{spell71}</Text></Pressable>
+                if (spell71 === "0"){setSpell71("X")}
+                else {setSpell71("0")}
+                setDetectChangeToSpellSlot(1);
+            }}>{spell71 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
         </Text>)}
             {(currentSpells[7] === "2") && (<Text>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
-                    if (spell71 === " "){setSpell71("X")}
-                    else {setSpell71(" ")}}}><Text style={styles.spellSlotButtonX}>{spell71}</Text></Pressable>
+                    if (spell71 === "0"){setSpell71("X")}
+                    else {setSpell71("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell71 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
-                    if (spell72 === " "){setSpell72("X")}
-                    else {setSpell72(" ")}}}><Text style={styles.spellSlotButtonX}>{spell72}</Text></Pressable>
+                    if (spell72 === "0"){setSpell72("X")}
+                    else {setSpell72("0")}
+                    setDetectChangeToSpellSlot(1);
+                }}>{spell72 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
             </Text>)}
             </View>}
         </View>
@@ -342,8 +452,10 @@ export default function MainCharatcerSyndrome() {
             {has8thLevelSpell && <Text style={styles.spellText}> 8th Level Spells ({currentSpells[8]})</Text>}
         {<View style={styles.spellSlotButtonRow}> {(currentSpells[8] === "1") && (<Text>
             <Pressable style={styles.SpellSlotButton1} onPress={()=>{
-                if (spell81 === " "){setSpell81("X")}
-                else {setSpell81(" ")}}}><Text style={styles.spellSlotButtonX}>{spell81}</Text></Pressable>
+                if (spell81 === "0"){setSpell81("X")}
+                else {setSpell81("0")}
+            setDetectChangeToSpellSlot(1);
+            }}>{spell81 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
         </Text>)}
             </View>}
         </View>
@@ -353,11 +465,15 @@ export default function MainCharatcerSyndrome() {
             {has9thLevelSpell && <Text style={styles.spellText}> 9th Level Spells ({currentSpells[9]})</Text>}
         {<View style={styles.spellSlotButtonRow}> {(currentSpells[9] === "1") && (<Text>
             <Pressable style={styles.SpellSlotButton1} onPress={()=>{
-                if (spell91 === " "){setSpell91("X")}
-                else {setSpell91(" ")}}}><Text style={styles.spellSlotButtonX}>{spell91}</Text></Pressable>
+                if (spell91 === "0"){setSpell91("X");}
+                else {setSpell91("0");}
+                setDetectChangeToSpellSlot(1);
+            }}>{spell91 == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
         </Text>)}
             </View>}
         </View>
+            {saveSpellsUsed()}
+            <Text style={{color: "white"}}>{testString} Test String to see updates to saved spell string</Text>
         </View>
 
     </ParallaxScrollView>
