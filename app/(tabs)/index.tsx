@@ -70,9 +70,21 @@ export default function MainCharatcerSyndrome() {
     let has9thLevelSpell :boolean = !(currentSpells[9] === "0");
     let [spell91, setSpell91] = useState(currentCharacter.currentUsedSpells[21]);
 
+    let [warlockSpells, setWarlockSpells] = useState(currentCharacter.warlockCurrentUsedSpells);
+    let [warlockCasterLevel, setWarlockCasterLevel] = useState(currentCharacter.warlockCasterLevel)
+
+    function lableWarlockSpellLevel(warlockCasterLevel: number) :string {
+        if (warlockCasterLevel > 0 && warlockCasterLevel < 3) {return "1st Level"}
+        if (warlockCasterLevel >= 3 && warlockCasterLevel < 5) {return "2nd Level"}
+        if (warlockCasterLevel >= 5 && warlockCasterLevel < 7) {return "3rd Level"}
+        if (warlockCasterLevel >= 7 && warlockCasterLevel < 9) {return "4th Level"}
+        if (warlockCasterLevel >= 9) {return "5th Level"}
+    }
+
     function saveSpellsUsed() {
         currentCharacter.currentUsedSpells = (spell11 + spell12 + spell13 + spell14 + spell21 + spell22 + spell23 + spell31 + spell32 + spell33 + spell41 + spell42 + spell43 +
         spell51 + spell52 + spell53 + spell61 + spell62 + spell71 + spell72 + spell81 + spell91);
+        currentCharacter.warlockCurrentUsedSpells = warlockSpells;
         if (detectChangeToSpellSlot > 0)
             {AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter));
             setDetectChangeToSpellSlot(0);}
@@ -128,6 +140,8 @@ export default function MainCharatcerSyndrome() {
                     setMaxHP(currentCharacter.maxHP);
                     setSpellCastingLevel(currentCharacter.spellcastingLevel);
                     setSpellsUsed(currentCharacter.currentUsedSpells);
+                    setWarlockCasterLevel(currentCharacter.warlockCasterLevel);
+                    setWarlockSpells(currentCharacter.warlockCurrentUsedSpells);
                     if (currentHP > currentCharacter.maxHP){setCurrentHP(currentCharacter.maxHP);}
                 })});
             }}>
@@ -185,7 +199,7 @@ export default function MainCharatcerSyndrome() {
             </Text>
         </View>
 
-        <View style={{backgroundColor: 'black'}}>
+        {has1stLevelSpell && <View style={{backgroundColor: 'black'}}>
             <View style={styles.spellRow}>
         {has1stLevelSpell && <Text style={styles.spellText}> 1st Level Spells ({currentSpells[1]})</Text>}
         {<View style={styles.spellSlotButtonRow}> {(currentSpells[1] === "2") && (<Text>
@@ -472,7 +486,76 @@ export default function MainCharatcerSyndrome() {
             </View>}
         </View>
             {saveSpellsUsed()}
-        </View>
+        </View>}
+
+
+
+        {currentCharacter.warlockCasterLevel > 0 && <View style={{backgroundColor: 'black'}}>
+            <View style={styles.spellRow}>
+                <View style={styles.spellText}><Text style={styles.spellText}>Warlock Spells</Text>
+                    <Text style={styles.spellText}>{lableWarlockSpellLevel(warlockCasterLevel)}</Text></View>
+                <View style={[styles.spellSlotButtonRow, {marginTop: 12}]}> {warlockCasterLevel == 1 && (<Text>
+                        <Pressable style={[styles.SpellSlotButton1, {backgroundColor: "purple"}]} onPress={()=>{
+                            if (warlockSpells[0] === "0"){setWarlockSpells("X" + warlockSpells[1] + warlockSpells[2] + warlockSpells[3])}
+                            else {setWarlockSpells("0" + warlockSpells[1] + warlockSpells[2] + warlockSpells[3])}
+                            setDetectChangeToSpellSlot(1);
+                        }}>{warlockSpells[0] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                    </Text>)})
+                    {(warlockCasterLevel > 1 && warlockCasterLevel < 12) && (<Text>
+                        <Pressable style={[styles.SpellSlotButton2, {backgroundColor: "purple"}]} onPress={()=>{
+                            if (warlockSpells[0] === "0"){setWarlockSpells("X" + warlockSpells[1] + warlockSpells[2] + warlockSpells[3])}
+                            else {setWarlockSpells("0" + warlockSpells[1] + warlockSpells[2] + warlockSpells[3])}
+                            setDetectChangeToSpellSlot(1);
+                        }}>{warlockSpells[0] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                        <Pressable style={[styles.SpellSlotButton2, {backgroundColor: "purple"}]} onPress={()=>{
+                            if (warlockSpells[1] === "0"){setWarlockSpells(warlockSpells[0] + "X" + warlockSpells[2] + warlockSpells[3])}
+                            else {setWarlockSpells(warlockSpells[0] + "0" + warlockSpells[2] + warlockSpells[3])}
+                            setDetectChangeToSpellSlot(1);
+                        }}>{warlockSpells[1] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                    </Text>)}
+                    {(warlockCasterLevel > 11 && warlockCasterLevel < 17) && (<Text>
+                        <Pressable style={[styles.SpellSlotButton3, {backgroundColor: "purple"}]} onPress={()=>{
+                            if (warlockSpells[0] === "0"){setWarlockSpells("X" + warlockSpells[1] + warlockSpells[2] + warlockSpells[3])}
+                            else {setWarlockSpells("0" + warlockSpells[1] + warlockSpells[2] + warlockSpells[3])}
+                            setDetectChangeToSpellSlot(1);
+                        }}>{warlockSpells[0] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                        <Pressable style={[styles.SpellSlotButton3, {backgroundColor: "purple"}]} onPress={()=>{
+                            if (warlockSpells[1] === "0"){setWarlockSpells(warlockSpells[0] + "X" + warlockSpells[2] + warlockSpells[3])}
+                            else {setWarlockSpells(warlockSpells[0] + "0" + warlockSpells[2] + warlockSpells[3])}
+                            setDetectChangeToSpellSlot(1);
+                        }}>{warlockSpells[1] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                        <Pressable style={[styles.SpellSlotButton3, {backgroundColor: "purple"}]} onPress={()=>{
+                            if (warlockSpells[2] === "0"){setWarlockSpells(warlockSpells[0] + warlockSpells[1] + "X" + warlockSpells[3])}
+                            else {setWarlockSpells(warlockSpells[0] + warlockSpells[1] + "0" + warlockSpells[3])}
+                            setDetectChangeToSpellSlot(1);
+                        }}>{warlockSpells[2] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                    </Text>)}
+                    {warlockCasterLevel > 16 && (<Text>
+                        <Pressable style={[styles.SpellSlotButton4, {backgroundColor: "purple"}]} onPress={()=>{
+                            if (warlockSpells[0] === "0"){setWarlockSpells("X" + warlockSpells[1] + warlockSpells[2] + warlockSpells[3])}
+                            else {setWarlockSpells("0" + warlockSpells[1] + warlockSpells[2] + warlockSpells[3])}
+                            setDetectChangeToSpellSlot(1);
+                        }}>{warlockSpells[0] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                        <Pressable style={[styles.SpellSlotButton4, {backgroundColor: "purple"}]} onPress={()=>{
+                            if (warlockSpells[1] === "0"){setWarlockSpells(warlockSpells[0] + "X" + warlockSpells[2] + warlockSpells[3])}
+                            else {setWarlockSpells(warlockSpells[0] + "0" + warlockSpells[2] + warlockSpells[3])}
+                            setDetectChangeToSpellSlot(1);
+                        }}>{warlockSpells[1] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                        <Pressable style={[styles.SpellSlotButton4, {backgroundColor: "purple"}]} onPress={()=>{
+                            if (warlockSpells[2] === "0"){setWarlockSpells(warlockSpells[0] + warlockSpells[1] + "X" + warlockSpells[3])}
+                            else {setWarlockSpells(warlockSpells[0] + warlockSpells[1] + "0" + warlockSpells[3])}
+                            setDetectChangeToSpellSlot(1);
+                        }}>{warlockSpells[2] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                        <Pressable style={[styles.SpellSlotButton4, {backgroundColor: "purple"}]} onPress={()=>{
+                            if (warlockSpells[3] === "0"){setWarlockSpells(warlockSpells[0] + warlockSpells[1] + warlockSpells[2] + "X")}
+                            else {setWarlockSpells(warlockSpells[0] + warlockSpells[1] + warlockSpells[2] + "0")}
+                            setDetectChangeToSpellSlot(1);
+                        }}>{warlockSpells[3] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                    </Text>)}
+                </View>
+            </View>
+        </View>}
+
 
     </ParallaxScrollView>
   );
@@ -511,6 +594,7 @@ const styles = StyleSheet.create({
       color: 'white',
         flex: 0.57,
         fontSize: 20,
+        textAlign: 'center',
     },
     SpellSlotButton1: {
         color: 'white',
