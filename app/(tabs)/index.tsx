@@ -36,7 +36,6 @@ export default function MainCharatcerSyndrome() {
     let [currentHP, setCurrentHP] = useState(maxHP);
     let [spellCastingLevel, setSpellCastingLevel] = useState(currentCharacter.spellcastingLevel);
     let currentSpells :string = spellSlotsByLevel(spellCastingLevel);
-    let [testString, setTestString] = useState(0);
 
 
     let has1stLevelSpell :boolean = !(currentSpells[1] === "0");
@@ -75,8 +74,8 @@ export default function MainCharatcerSyndrome() {
         currentCharacter.currentUsedSpells = (spell11 + spell12 + spell13 + spell14 + spell21 + spell22 + spell23 + spell31 + spell32 + spell33 + spell41 + spell42 + spell43 +
         spell51 + spell52 + spell53 + spell61 + spell62 + spell71 + spell72 + spell81 + spell91);
         if (detectChangeToSpellSlot > 0)
-            {AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter)).then(() => setTestString(testString + 1));
-            setDetectChangeToSpellSlot(0)}
+            {AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter));
+            setDetectChangeToSpellSlot(0);}
         return true;
     }
     let [detectChangeToSpellSlot, setDetectChangeToSpellSlot] = useState(0);
@@ -473,7 +472,6 @@ export default function MainCharatcerSyndrome() {
             </View>}
         </View>
             {saveSpellsUsed()}
-            <Text style={{color: "white"}}>{testString} Test String to see updates to saved spell string</Text>
         </View>
 
     </ParallaxScrollView>

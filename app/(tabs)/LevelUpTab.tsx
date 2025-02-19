@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text, View, TextInput, Pressable} from 'react-native
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState} from "react";
-import {Character} from '@/assets/objects/character';
+import {Character, updateProficiency, updateSpellcastingLevel} from '@/assets/objects/character';
 import {FontAwesome} from "@expo/vector-icons";
 
 
@@ -48,18 +48,23 @@ export default function levelUpTab() {
     let [maxHP, setMaxHP] = useState(currentCharacter.maxHP);
     let [spellCastingLevel, setSpellCastingLevel] = useState(currentCharacter.spellcastingLevel);
     let [currentCharacterName, setCurrentCharacterName] = useState(currentCharacter.charName);
+    let [currentCharacterLevel, setCurrentCharacterLevel] = useState(currentCharacter.characterLevel);
+    let [currentProficiency, setCurrentProficiency] = useState(currentCharacter.proficiency);
     let [allCharacterNames, setAllCharacterNames] = useState(allCharacterNamesInitial);
 
     let [nameChangeVariable, setNameChangeVariable] = useState("");
     let [abilityScoreChangeVariable, setAbilityScoreChangeVariable] = useState(NaN);
-    let [spellCastingLevelChangeVariable, setSpellCastingLevelChangeVariable] = useState(NaN);
+    let [fullCasterLevelsChangeVariable, setFullCasterLevelsChangeVariable] = useState(NaN);
+    let [halfCasterLevelsChangeVariable, setHalfCasterLevelsChangeVariable] = useState(NaN);
+    let [warlockCasterLevelsChangeVariable, setWarlockCasterLevelsChangeVariable] = useState(NaN);
     let [HPChangeVariable, setHPChangeVariable] = useState(NaN);
+    let [characterLevelChangeVariable, setCharacterLevelChangeVariable] = useState(NaN);
     let [confirmDelete, setConfirmDelete] = useState(false);
     let [deletionName, setDeletionName] = useState("");
 
     let [addCharacterBoxDisplayStatus, SetAddCharacterBoxDisplayStatus] = useState(false);
     let [addHPAdjustBoxDisplayStatus, SetAddHPAdjustBoxDisplayStatusStatus] = useState(false);
-    let [addSpellCastingLevelBoxDisplayStatus, SetAddSpellCastingLevelBoxDisplayStatus] = useState(false);
+    let [addSpellAndCharacterLevelBoxDisplayStatus, SetAddSpellAndCharacterLevelBoxDisplayStatus] = useState(false);
     let [addAbilityScoreBoxDisplayStatus, setAddAbilityScoreBoxDisplayStatus] = useState(false);
     let [addSkillsBoxDisplayStatus, setAddSkillsBoxDisplayStatus] = useState(false);
     let [loadCharacterBoxDisplayStatus, setLoadCharacterBoxDisplayStatus] = useState(false);
@@ -68,7 +73,7 @@ export default function levelUpTab() {
     let [skillChangeConfirmationCount, setSkillChangeConfirmationCount] = useState(0);
     let [addCharacterConfirmationCount, setAddCharacterConfirmationCount] = useState(0);
     let [addHPAdjustConfirmationCount, setAddHPAdjustConfirmationCount] = useState(0);
-    let [addSpellLevelConfirmationCount, setAddSpellLevelConfirmationCount] = useState(0);
+    let [addSpellandCharacterLevelConfirmationCount, setAddSpellAndCharaterLevelConfirmationCount] = useState(0);
     let [addAbilityScoreConfirmationCount, setAddAbilityScoreConfirmationCount] = useState(0);
     let [loadCharacterConfirmationCount, setLoadCharacterConfirmationCount] = useState(0);
     let [deleteCharacterConfirmationCount, setDeleteCharacterConfirmationCount] = useState(0);
@@ -115,8 +120,10 @@ export default function levelUpTab() {
             }>
             <View>
             <Text style={{color: "white", fontSize: 50, backgroundColor: "tan", textAlign: "center"}}>{currentCharacterName}</Text>
-            <Text style={{color: "white", fontSize: 20, backgroundColor: "black"}}> Max HP {maxHP}</Text>
-            <Text style={{color: "white", fontSize: 20, backgroundColor: "black"}}>Spellcasting Level {spellCastingLevel}</Text>
+            <Text style={{color: "white", fontSize: 20, backgroundColor: "black"}}> Max HP: {maxHP} </Text>
+                <Text style={{color: "white", fontSize: 20, backgroundColor: "black"}}> Character Level: {currentCharacterLevel}</Text>
+                <Text style={{color: "white", fontSize: 20, backgroundColor: "black"}}> Proficiency Bonus: +{currentProficiency} </Text>
+            <Text style={{color: "white", fontSize: 20, backgroundColor: "black"}}>Spellcasting Level: {spellCastingLevel}</Text>
             </View>
 
 
@@ -177,14 +184,14 @@ export default function levelUpTab() {
 
 
             <Pressable style={styles.toolBoxStyle} onPress={() =>
-            {SetAddSpellCastingLevelBoxDisplayStatus(!addSpellCastingLevelBoxDisplayStatus)}
+            {SetAddSpellAndCharacterLevelBoxDisplayStatus(!addSpellAndCharacterLevelBoxDisplayStatus)}
             }>
                 <View>
-                    {!addSpellCastingLevelBoxDisplayStatus && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open Spellcasting Level Tool</Text>}
-                    {addSpellCastingLevelBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Close Spellcasting Level Tool</Text>}
-                    {addSpellCastingLevelBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter Spellcasting Level Below</Text>}
-                    {addSpellCastingLevelBoxDisplayStatus && <TextInput
-                        onChangeText={setSpellCastingLevelChangeVariable}
+                    {!addSpellAndCharacterLevelBoxDisplayStatus && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open Character and Spellcasting Level Tool</Text>}
+                    {addSpellAndCharacterLevelBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Close Character and Spellcasting Level Tool</Text>}
+                    {addSpellAndCharacterLevelBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter Total Character Level of All Classes Below</Text>}
+                    {addSpellAndCharacterLevelBoxDisplayStatus && <TextInput
+                        onChangeText={setCharacterLevelChangeVariable}
                         maxLength={2}
                         keyboardType='numeric'
                         placeholder={"12"}
@@ -201,8 +208,67 @@ export default function levelUpTab() {
                             textAlign: "center"
                         }}
                     />}
-                    {(addSpellCastingLevelBoxDisplayStatus && (addSpellLevelConfirmationCount > 0)) &&
-                        <Pressable onPress={() => {setAddSpellLevelConfirmationCount(0);}}>
+                    <View style={{flexDirection: "row"}}>
+                        <View style={{flex: 0.333}}>{addSpellAndCharacterLevelBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter Full Caster Levels Below</Text>}
+                            {addSpellAndCharacterLevelBoxDisplayStatus && <TextInput
+                                onChangeText={setFullCasterLevelsChangeVariable}
+                                maxLength={2}
+                                keyboardType='numeric'
+                                placeholder={"12"}
+                                placeholderTextColor={"grey"}
+                                style={{
+                                    fontSize: 22,
+                                    borderStyle: "solid",
+                                    borderWidth: 3,
+                                    borderColor: "white",
+                                    width: 115,
+                                    height: 60,
+                                    alignSelf: "center",
+                                    color: "white",
+                                    textAlign: "center"
+                                }}
+                            />}</View>
+                        <View style={{flex: 0.333}}>{addSpellAndCharacterLevelBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter Half Caster Levels Below</Text>}
+                            {addSpellAndCharacterLevelBoxDisplayStatus && <TextInput
+                                onChangeText={setHalfCasterLevelsChangeVariable}
+                                maxLength={2}
+                                keyboardType='numeric'
+                                placeholder={"12"}
+                                placeholderTextColor={"grey"}
+                                style={{
+                                    fontSize: 22,
+                                    borderStyle: "solid",
+                                    borderWidth: 3,
+                                    borderColor: "white",
+                                    width: 115,
+                                    height: 60,
+                                    alignSelf: "center",
+                                    color: "white",
+                                    textAlign: "center"
+                                }}
+                            />}</View>
+                        <View style={{flex: 0.333}}>{addSpellAndCharacterLevelBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter Warlock Levels Below</Text>}
+                        {addSpellAndCharacterLevelBoxDisplayStatus && <TextInput
+                            onChangeText={setWarlockCasterLevelsChangeVariable}
+                            maxLength={2}
+                            keyboardType='numeric'
+                            placeholder={"12"}
+                            placeholderTextColor={"grey"}
+                            style={{
+                                fontSize: 22,
+                                borderStyle: "solid",
+                                borderWidth: 3,
+                                borderColor: "white",
+                                width: 115,
+                                height: 60,
+                                alignSelf: "center",
+                                color: "white",
+                                textAlign: "center"
+                            }}
+                        />}</View>
+                    </View>
+                    {(addSpellAndCharacterLevelBoxDisplayStatus && (addSpellandCharacterLevelConfirmationCount > 0)) &&
+                        <Pressable onPress={() => {setAddSpellAndCharaterLevelConfirmationCount(0);}}>
                             <Text style={{
                                 textAlign: "center",
                                 color: "white",
@@ -210,21 +276,26 @@ export default function levelUpTab() {
                                 backgroundColor: "blue",
                                 margin: 15,
                                 borderRadius: 10
-                            }}>Confirmed! Spellcasting Level Updated {addSpellLevelConfirmationCount} time(s)!</Text></Pressable>}
-                    {addSpellCastingLevelBoxDisplayStatus && <Pressable
+                            }}>Confirmed! Spellcasting and Character Level Updated {addSpellandCharacterLevelConfirmationCount} time(s)!</Text></Pressable>}
+                    {addSpellAndCharacterLevelBoxDisplayStatus && <Pressable
                         style={styles.toolBoxButton}
-                        onPress={() => { if ((!isNaN(spellCastingLevelChangeVariable))&&!(spellCastingLevelChangeVariable == "")){
-                            if (spellCastingLevelChangeVariable < 0){spellCastingLevelChangeVariable = 0;}
-                            if (spellCastingLevelChangeVariable > 20){spellCastingLevelChangeVariable = 20;}
-                            spellCastingLevelChangeVariable = Math.floor(spellCastingLevelChangeVariable);
-                            currentCharacter.spellcastingLevel = spellCastingLevelChangeVariable;
-                            AsyncStorage.setItem("CurrentSpellCastingLevel", "" + spellCastingLevelChangeVariable);
+                        onPress={() => { if ((!isNaN(characterLevelChangeVariable))&&!(characterLevelChangeVariable == "")){
+                            if (characterLevelChangeVariable < 0){characterLevelChangeVariable = 0;}
+                            if (characterLevelChangeVariable > 20){characterLevelChangeVariable = 20;}
+                            if (fullCasterLevelsChangeVariable == "")
+                                {setFullCasterLevelsChangeVariable(currentCharacter.fullCasterLevel);}
+                            if (halfCasterLevelsChangeVariable == "")
+                                {setFullCasterLevelsChangeVariable(currentCharacter.halfCasterLevel);}
+                            if (warlockCasterLevelsChangeVariable == "")
+                                {setWarlockCasterLevelsChangeVariable(currentCharacter.warlockCasterLevel);}
+                            currentCharacter.characterLevel = parseInt("" + characterLevelChangeVariable);
+                            setCurrentCharacterLevel(characterLevelChangeVariable);
+                            setCurrentProficiency(updateProficiency(currentCharacter, parseInt("" + characterLevelChangeVariable)));
+                            setSpellCastingLevel(updateSpellcastingLevel(currentCharacter, parseInt("" + fullCasterLevelsChangeVariable), parseInt("" + halfCasterLevelsChangeVariable)));
+                            setAddSpellAndCharaterLevelConfirmationCount(addSpellandCharacterLevelConfirmationCount + 1);
                             AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter));
-                            setSpellCastingLevelChangeVariable(spellCastingLevelChangeVariable);
-                            setSpellCastingLevel(spellCastingLevelChangeVariable);
-                            setAddSpellLevelConfirmationCount(addSpellLevelConfirmationCount + 1);
                         }}}>
-                        <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust Spellcasting Level; {spellCastingLevelChangeVariable}</Text>
+                        <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust Character and Spellcasting Level; {characterLevelChangeVariable}</Text>
                     </Pressable>}
                 </View>
             </Pressable>
@@ -749,10 +820,10 @@ export default function levelUpTab() {
                     />}
                         </View>
                         <View>
-                    {addCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter Spell</Text>}
-                            {addCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Casting Level</Text>}
+                    {addCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter Character</Text>}
+                            {addCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Level</Text>}
                     {addCharacterBoxDisplayStatus && <TextInput
-                        onChangeText={setSpellCastingLevelChangeVariable}
+                        onChangeText={setCharacterLevelChangeVariable}
                         keyboardType={"numeric"}
                         maxLength={2}
                         placeholder={"12"}
@@ -785,10 +856,14 @@ export default function levelUpTab() {
                     {addCharacterBoxDisplayStatus && <Pressable
                         style={styles.toolBoxButton}
                         onPress={() => {if (nameChangeVariable != ""){
-                            currentCharacter = new Character(nameChangeVariable, HPChangeVariable, spellCastingLevelChangeVariable);
+                            if (isNaN(characterLevelChangeVariable) || characterLevelChangeVariable == "" ){setCharacterLevelChangeVariable(1);}
+                            if (isNaN(HPChangeVariable) || HPChangeVariable == ""){setHPChangeVariable(10);}
+                            currentCharacter = new Character(nameChangeVariable, parseInt("" + HPChangeVariable), parseInt("" + characterLevelChangeVariable));
                             AsyncStorage.setItem("newCharacter" + nameChangeVariable, JSON.stringify(currentCharacter));
                             AsyncStorage.setItem("currentCharacterName", currentCharacter.charName)
                             setCurrentCharacterName(currentCharacter.charName);
+                            setCurrentCharacterLevel(currentCharacter.characterLevel);
+                            setCurrentProficiency(currentCharacter.proficiency)
                             setMaxHP(currentCharacter.maxHP);
                             setSpellCastingLevel(currentCharacter.spellcastingLevel)
                             setCurrentStatSTR(currentCharacter.STR);
@@ -826,7 +901,7 @@ export default function levelUpTab() {
                             })
                         }}}>
                         <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Add a new Character; {nameChangeVariable}</Text>
-                        <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>HP; {HPChangeVariable} Casting Level; {spellCastingLevelChangeVariable}</Text>
+                        <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>HP; {HPChangeVariable} Character Level; {characterLevelChangeVariable}</Text>
                     </Pressable>}
                 </View>
             </Pressable>

@@ -54,7 +54,7 @@ export default function TabSkillsSavesRolls() {
     let [toggleAdvantage, setToggleAdvantage] = useState(false);
     let [toggleDisadvantage, setToggleDisadvantage] = useState(false);
 
-    let [currentProficiencyMod, setCurrentProficiencyMod] = useState(currentCharacter.proficiency);
+    let [currentProficiency, setCurrentProficiency] = useState(currentCharacter.proficiency);
 
     let [athletics, setAthletics ] = useState(currentCharacter.athletics);
     let [acrobatics, setAcrobatics] = useState(currentCharacter.acrobatics);
@@ -127,7 +127,7 @@ export default function TabSkillsSavesRolls() {
                             setIntimidation(currentCharacter.intimidation);
                             setPerformance(currentCharacter.performance);
                             setPersuasion(currentCharacter.persuasion);
-                            setCurrentProficiencyMod(currentCharacter.proficiency);
+                            setCurrentProficiency(currentCharacter.proficiency);
                         })});
 
                 }}>
@@ -179,15 +179,23 @@ export default function TabSkillsSavesRolls() {
             }}><Pressable  style={styles.toggleAdv} onPress={()=> {
                     setToggleAdvantage(!toggleAdvantage);
                     setToggleDisadvantage(false);
-                    if (!toggleAdvantage) {setCurrentRollDie2(20);}
-                    else {setCurrentRollDie2(NaN);}
+                    if (!toggleAdvantage) {
+                        setCurrentRollDie2(20);
+                        setCurrentRollName("Toggled Advantage 'on'");}
+                    else {
+                        setCurrentRollDie2(NaN);
+                        setCurrentRollName("Toggled Advantage 'off'")}
                 }}> <Text style={{color: "white", fontSize: 17, textAlign: "center"}}>Toggle Advantage: {toggleAdvantage && "On"}{!toggleAdvantage && "Off"}</Text>
                 </Pressable>
                 <Pressable style={styles.toggleAdv} onPress={()=> {
                     setToggleDisadvantage(!toggleDisadvantage);
                     setToggleAdvantage(false);
-                    if (!toggleDisadvantage) {setCurrentRollDie2(1);}
-                    else {setCurrentRollDie2(NaN);}
+                    if (!toggleDisadvantage) {
+                        setCurrentRollDie2(1);
+                        setCurrentRollName("Toggled Disadvantage 'on'")}
+                    else {
+                        setCurrentRollDie2(NaN);
+                        setCurrentRollName("Toggled Disadvantage 'off'")}
                 }}> <Text style={{color: "white", fontSize: 17, textAlign: "center"}}>Toggle Disadvantage: {toggleDisadvantage && "On"}{!toggleDisadvantage && "Off"}</Text>
                 </Pressable>
             </View>
@@ -260,12 +268,13 @@ export default function TabSkillsSavesRolls() {
 
 
 
+            <Text style={{color: "white", textAlign: "center", fontSize: 25}}>Proficiency {currentProficiency}</Text>
             <View style={{flexDirection: "row"}}>
                 <View style={styles.skillRollColumn}>
-                    <Pressable style={styles.skillBoxes} onPress={()=> {
+                    <Pressable style={[styles.skillBoxes, {backgroundColor: "green"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (stealth == "P") {proficiencyBonus = currentProficiencyMod;}
-                        if (stealth == "E") {proficiencyBonus = (2 * currentProficiencyMod);}
+                        if (stealth == "P") {proficiencyBonus = currentProficiency;}
+                        if (stealth == "E") {proficiencyBonus = (2 * currentProficiency);}
                         setCurrentRollMod(currentDEXMod + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Stealth");
@@ -275,14 +284,14 @@ export default function TabSkillsSavesRolls() {
                         {stealth == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
                             <Text style={styles.coreStatText}>{currentDEXMod > 0 && "+"}{currentDEXMod}</Text></View>}
                         {stealth == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentDEXMod + currentProficiencyMod > 0 && "+"}{currentDEXMod + currentProficiencyMod}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentDEXMod + currentProficiency > 0 && "+"}{currentDEXMod + currentProficiency}</Text></View>}
                         {stealth == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentDEXMod + (2 * currentProficiencyMod) > 0 && "+"}{currentDEXMod + (2 * currentProficiencyMod)}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentDEXMod + (2 * currentProficiency) > 0 && "+"}{currentDEXMod + (2 * currentProficiency)}</Text></View>}
                     </Pressable>
-                    <Pressable style={styles.skillBoxes} onPress={()=> {
+                    <Pressable style={[styles.skillBoxes, {backgroundColor: "maroon"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (athletics == "P") {proficiencyBonus = currentProficiencyMod;}
-                        if (athletics == "E") {proficiencyBonus = (2 * currentProficiencyMod);}
+                        if (athletics == "P") {proficiencyBonus = currentProficiency;}
+                        if (athletics == "E") {proficiencyBonus = (2 * currentProficiency);}
                         setCurrentRollMod(currentSTRMod + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Athletics");
@@ -292,14 +301,14 @@ export default function TabSkillsSavesRolls() {
                         {athletics == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
                             <Text style={styles.coreStatText}>{currentSTRMod > 0 && "+"}{currentSTRMod}</Text></View>}
                         {athletics == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentSTRMod + currentProficiencyMod > 0 && "+"}{currentSTRMod + currentProficiencyMod}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentSTRMod + currentProficiency > 0 && "+"}{currentSTRMod + currentProficiency}</Text></View>}
                         {athletics == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentSTRMod + (2 * currentProficiencyMod) > 0 && "+"}{currentSTRMod + (2 * currentProficiencyMod)}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentSTRMod + (2 * currentProficiency) > 0 && "+"}{currentSTRMod + (2 * currentProficiency)}</Text></View>}
                     </Pressable>
-                    <Pressable style={styles.skillBoxes} onPress={()=> {
+                    <Pressable style={[styles.skillBoxes, {backgroundColor: "red"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (deception == "P") {proficiencyBonus = currentProficiencyMod;}
-                        if (deception == "E") {proficiencyBonus = (2 * currentProficiencyMod);}
+                        if (deception == "P") {proficiencyBonus = currentProficiency;}
+                        if (deception == "E") {proficiencyBonus = (2 * currentProficiency);}
                         setCurrentRollMod(currentCHAMod + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Deception");
@@ -309,14 +318,14 @@ export default function TabSkillsSavesRolls() {
                         {deception == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
                             <Text style={styles.coreStatText}>{currentCHAMod > 0 && "+"}{currentCHAMod}</Text></View>}
                         {deception == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentCHAMod + currentProficiencyMod > 0 && "+"}{currentCHAMod + currentProficiencyMod}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentCHAMod + currentProficiency > 0 && "+"}{currentCHAMod + currentProficiency}</Text></View>}
                         {deception == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentCHAMod + (2 * currentProficiencyMod) > 0 && "+"}{currentCHAMod + (2 * currentProficiencyMod)}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentCHAMod + (2 * currentProficiency) > 0 && "+"}{currentCHAMod + (2 * currentProficiency)}</Text></View>}
                     </Pressable>
-                    <Pressable style={styles.skillBoxes} onPress={()=> {
+                    <Pressable style={[styles.skillBoxes, {backgroundColor: "red"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (intimidation == "P") {proficiencyBonus = currentProficiencyMod;}
-                        if (intimidation == "E") {proficiencyBonus = (2 * currentProficiencyMod);}
+                        if (intimidation == "P") {proficiencyBonus = currentProficiency;}
+                        if (intimidation == "E") {proficiencyBonus = (2 * currentProficiency);}
                         setCurrentRollMod(currentCHAMod + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Intimidation");
@@ -326,14 +335,14 @@ export default function TabSkillsSavesRolls() {
                         {intimidation == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
                             <Text style={styles.coreStatText}>{currentCHAMod > 0 && "+"}{currentCHAMod}</Text></View>}
                         {intimidation == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentCHAMod + currentProficiencyMod > 0 && "+"}{currentCHAMod + currentProficiencyMod}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentCHAMod + currentProficiency > 0 && "+"}{currentCHAMod + currentProficiency}</Text></View>}
                         {intimidation == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentCHAMod + (2 * currentProficiencyMod) > 0 && "+"}{currentCHAMod + (2 * currentProficiencyMod)}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentCHAMod + (2 * currentProficiency) > 0 && "+"}{currentCHAMod + (2 * currentProficiency)}</Text></View>}
                     </Pressable>
-                    <Pressable style={styles.skillBoxes} onPress={()=> {
+                    <Pressable style={[styles.skillBoxes, {backgroundColor: "red"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (performance == "P") {proficiencyBonus = currentProficiencyMod;}
-                        if (performance == "E") {proficiencyBonus = (2 * currentProficiencyMod);}
+                        if (performance == "P") {proficiencyBonus = currentProficiency;}
+                        if (performance == "E") {proficiencyBonus = (2 * currentProficiency);}
                         setCurrentRollMod(currentCHAMod + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Performance");
@@ -343,14 +352,14 @@ export default function TabSkillsSavesRolls() {
                         {performance == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
                             <Text style={styles.coreStatText}>{currentCHAMod > 0 && "+"}{currentCHAMod}</Text></View>}
                         {performance == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentCHAMod + currentProficiencyMod > 0 && "+"}{currentCHAMod + currentProficiencyMod}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentCHAMod + currentProficiency > 0 && "+"}{currentCHAMod + currentProficiency}</Text></View>}
                         {performance == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentCHAMod + (2 * currentProficiencyMod) > 0 && "+"}{currentCHAMod + (2 * currentProficiencyMod)}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentCHAMod + (2 * currentProficiency) > 0 && "+"}{currentCHAMod + (2 * currentProficiency)}</Text></View>}
                     </Pressable>
-                    <Pressable style={styles.skillBoxes} onPress={()=> {
+                    <Pressable style={[styles.skillBoxes, {backgroundColor: "red"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (persuasion == "P") {proficiencyBonus = currentProficiencyMod;}
-                        if (persuasion == "E") {proficiencyBonus = (2 * currentProficiencyMod);}
+                        if (persuasion == "P") {proficiencyBonus = currentProficiency;}
+                        if (persuasion == "E") {proficiencyBonus = (2 * currentProficiency);}
                         setCurrentRollMod(currentCHAMod + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Persuasion");
@@ -360,16 +369,16 @@ export default function TabSkillsSavesRolls() {
                         {persuasion == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
                             <Text style={styles.coreStatText}>{currentCHAMod > 0 && "+"}{currentCHAMod}</Text></View>}
                         {persuasion == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentCHAMod + currentProficiencyMod > 0 && "+"}{currentCHAMod + currentProficiencyMod}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentCHAMod + currentProficiency > 0 && "+"}{currentCHAMod + currentProficiency}</Text></View>}
                         {persuasion == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentCHAMod + (2 * currentProficiencyMod) > 0 && "+"}{currentCHAMod + (2 * currentProficiencyMod)}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentCHAMod + (2 * currentProficiency) > 0 && "+"}{currentCHAMod + (2 * currentProficiency)}</Text></View>}
                     </Pressable>
                 </View>
                 <View style={styles.skillRollColumn}>
-                    <Pressable style={styles.skillBoxes} onPress={()=> {
+                    <Pressable style={[styles.skillBoxes, {backgroundColor: "green"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (acrobatics == "P") {proficiencyBonus = currentProficiencyMod;}
-                        if (acrobatics == "E") {proficiencyBonus = (2 * currentProficiencyMod);}
+                        if (acrobatics == "P") {proficiencyBonus = currentProficiency;}
+                        if (acrobatics == "E") {proficiencyBonus = (2 * currentProficiency);}
                         setCurrentRollMod(currentDEXMod + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Acrobatics");
@@ -379,14 +388,14 @@ export default function TabSkillsSavesRolls() {
                         {acrobatics == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
                             <Text style={styles.coreStatText}>{currentDEXMod > 0 && "+"}{currentDEXMod}</Text></View>}
                         {acrobatics == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentDEXMod + currentProficiencyMod > 0 && "+"}{currentDEXMod + currentProficiencyMod}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentDEXMod + currentProficiency > 0 && "+"}{currentDEXMod + currentProficiency}</Text></View>}
                         {acrobatics == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentDEXMod + (2 * currentProficiencyMod) > 0 && "+"}{currentDEXMod + (2 * currentProficiencyMod)}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentDEXMod + (2 * currentProficiency) > 0 && "+"}{currentDEXMod + (2 * currentProficiency)}</Text></View>}
                     </Pressable>
-                    <Pressable style={styles.skillBoxes} onPress={()=> {
+                    <Pressable style={[styles.skillBoxes, {backgroundColor: "blue"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (arcana == "P") {proficiencyBonus = currentProficiencyMod;}
-                        if (arcana == "E") {proficiencyBonus = (2 * currentProficiencyMod);}
+                        if (arcana == "P") {proficiencyBonus = currentProficiency;}
+                        if (arcana == "E") {proficiencyBonus = (2 * currentProficiency);}
                         setCurrentRollMod(currentINTMod + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Arcana");
@@ -396,14 +405,14 @@ export default function TabSkillsSavesRolls() {
                         {arcana == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
                             <Text style={styles.coreStatText}>{currentINTMod > 0 && "+"}{currentINTMod}</Text></View>}
                         {arcana == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod + currentProficiencyMod > 0 && "+"}{currentINTMod + currentProficiencyMod}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentINTMod + currentProficiency > 0 && "+"}{currentINTMod + currentProficiency}</Text></View>}
                         {arcana == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod + (2 * currentProficiencyMod) > 0 && "+"}{currentINTMod + (2 * currentProficiencyMod)}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentINTMod + (2 * currentProficiency) > 0 && "+"}{currentINTMod + (2 * currentProficiency)}</Text></View>}
                     </Pressable>
-                    <Pressable style={styles.skillBoxes} onPress={()=> {
+                    <Pressable style={[styles.skillBoxes, {backgroundColor: "blue"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (history == "P") {proficiencyBonus = currentProficiencyMod;}
-                        if (history == "E") {proficiencyBonus = (2 * currentProficiencyMod);}
+                        if (history == "P") {proficiencyBonus = currentProficiency;}
+                        if (history == "E") {proficiencyBonus = (2 * currentProficiency);}
                         setCurrentRollMod(currentINTMod + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("History");
@@ -413,14 +422,14 @@ export default function TabSkillsSavesRolls() {
                         {history == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
                             <Text style={styles.coreStatText}>{currentINTMod > 0 && "+"}{currentINTMod}</Text></View>}
                         {history == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod + currentProficiencyMod > 0 && "+"}{currentINTMod + currentProficiencyMod}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentINTMod + currentProficiency > 0 && "+"}{currentINTMod + currentProficiency}</Text></View>}
                         {history == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod + (2 * currentProficiencyMod) > 0 && "+"}{currentINTMod + (2 * currentProficiencyMod)}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentINTMod + (2 * currentProficiency) > 0 && "+"}{currentINTMod + (2 * currentProficiency)}</Text></View>}
                     </Pressable>
-                    <Pressable style={styles.skillBoxes} onPress={()=> {
+                    <Pressable style={[styles.skillBoxes, {backgroundColor: "blue"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (investigation == "P") {proficiencyBonus = currentProficiencyMod;}
-                        if (investigation == "E") {proficiencyBonus = (2 * currentProficiencyMod);}
+                        if (investigation == "P") {proficiencyBonus = currentProficiency;}
+                        if (investigation == "E") {proficiencyBonus = (2 * currentProficiency);}
                         setCurrentRollMod(currentINTMod + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Investigation");
@@ -430,14 +439,14 @@ export default function TabSkillsSavesRolls() {
                         {investigation == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
                             <Text style={styles.coreStatText}>{currentINTMod > 0 && "+"}{currentINTMod}</Text></View>}
                         {investigation == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod + currentProficiencyMod > 0 && "+"}{currentINTMod + currentProficiencyMod}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentINTMod + currentProficiency > 0 && "+"}{currentINTMod + currentProficiency}</Text></View>}
                         {investigation == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod + (2 * currentProficiencyMod) > 0 && "+"}{currentINTMod + (2 * currentProficiencyMod)}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentINTMod + (2 * currentProficiency) > 0 && "+"}{currentINTMod + (2 * currentProficiency)}</Text></View>}
                     </Pressable>
-                    <Pressable style={styles.skillBoxes} onPress={()=> {
+                    <Pressable style={[styles.skillBoxes, {backgroundColor: "blue"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (nature == "P") {proficiencyBonus = currentProficiencyMod;}
-                        if (nature == "E") {proficiencyBonus = (2 * currentProficiencyMod);}
+                        if (nature == "P") {proficiencyBonus = currentProficiency;}
+                        if (nature == "E") {proficiencyBonus = (2 * currentProficiency);}
                         setCurrentRollMod(currentINTMod + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Nature");
@@ -447,14 +456,14 @@ export default function TabSkillsSavesRolls() {
                         {nature == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
                             <Text style={styles.coreStatText}>{currentINTMod > 0 && "+"}{currentINTMod}</Text></View>}
                         {nature == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod + currentProficiencyMod > 0 && "+"}{currentINTMod + currentProficiencyMod}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentINTMod + currentProficiency > 0 && "+"}{currentINTMod + currentProficiency}</Text></View>}
                         {nature == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod + (2 * currentProficiencyMod) > 0 && "+"}{currentINTMod + (2 * currentProficiencyMod)}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentINTMod + (2 * currentProficiency) > 0 && "+"}{currentINTMod + (2 * currentProficiency)}</Text></View>}
                     </Pressable>
-                    <Pressable style={styles.skillBoxes} onPress={()=> {
+                    <Pressable style={[styles.skillBoxes, {backgroundColor: "blue"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (religion == "P") {proficiencyBonus = currentProficiencyMod;}
-                        if (religion == "E") {proficiencyBonus = (2 * currentProficiencyMod);}
+                        if (religion == "P") {proficiencyBonus = currentProficiency;}
+                        if (religion == "E") {proficiencyBonus = (2 * currentProficiency);}
                         setCurrentRollMod(currentINTMod + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Religion");
@@ -464,16 +473,16 @@ export default function TabSkillsSavesRolls() {
                         {religion == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
                             <Text style={styles.coreStatText}>{currentINTMod > 0 && "+"}{currentINTMod}</Text></View>}
                         {religion == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod + currentProficiencyMod > 0 && "+"}{currentINTMod + currentProficiencyMod}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentINTMod + currentProficiency > 0 && "+"}{currentINTMod + currentProficiency}</Text></View>}
                         {religion == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod + (2 * currentProficiencyMod) > 0 && "+"}{currentINTMod + (2 * currentProficiencyMod)}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentINTMod + (2 * currentProficiency) > 0 && "+"}{currentINTMod + (2 * currentProficiency)}</Text></View>}
                     </Pressable>
                 </View>
                 <View style={styles.skillRollColumn}>
-                    <Pressable style={styles.skillBoxes} onPress={()=> {
+                    <Pressable style={[styles.skillBoxes, {backgroundColor: "green"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (sleightOfHand == "P") {proficiencyBonus = currentProficiencyMod;}
-                        if (sleightOfHand == "E") {proficiencyBonus = (2 * currentProficiencyMod);}
+                        if (sleightOfHand == "P") {proficiencyBonus = currentProficiency;}
+                        if (sleightOfHand == "E") {proficiencyBonus = (2 * currentProficiency);}
                         setCurrentRollMod(currentDEXMod + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Sleight of Hand");
@@ -483,14 +492,14 @@ export default function TabSkillsSavesRolls() {
                         {sleightOfHand == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
                             <Text style={styles.coreStatText}>{currentDEXMod > 0 && "+"}{currentDEXMod}</Text></View>}
                         {sleightOfHand == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentDEXMod + currentProficiencyMod > 0 && "+"}{currentDEXMod + currentProficiencyMod}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentDEXMod + currentProficiency > 0 && "+"}{currentDEXMod + currentProficiency}</Text></View>}
                         {sleightOfHand == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentDEXMod + (2 * currentProficiencyMod) > 0 && "+"}{currentDEXMod + (2 * currentProficiencyMod)}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentDEXMod + (2 * currentProficiency) > 0 && "+"}{currentDEXMod + (2 * currentProficiency)}</Text></View>}
                     </Pressable>
-                    <Pressable style={styles.skillBoxes} onPress={()=> {
+                    <Pressable style={[styles.skillBoxes, {backgroundColor: "purple"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (animalHandling == "P") {proficiencyBonus = currentProficiencyMod;}
-                        if (animalHandling == "E") {proficiencyBonus = (2 * currentProficiencyMod);}
+                        if (animalHandling == "P") {proficiencyBonus = currentProficiency;}
+                        if (animalHandling == "E") {proficiencyBonus = (2 * currentProficiency);}
                         setCurrentRollMod(currentWISMod + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Animal Handling");
@@ -500,14 +509,14 @@ export default function TabSkillsSavesRolls() {
                         {animalHandling == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
                             <Text style={styles.coreStatText}>{currentWISMod > 0 && "+"}{currentWISMod}</Text></View>}
                         {animalHandling == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod + currentProficiencyMod > 0 && "+"}{currentWISMod + currentProficiencyMod}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentWISMod + currentProficiency > 0 && "+"}{currentWISMod + currentProficiency}</Text></View>}
                         {animalHandling == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod + (2 * currentProficiencyMod) > 0 && "+"}{currentWISMod + (2 * currentProficiencyMod)}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentWISMod + (2 * currentProficiency) > 0 && "+"}{currentWISMod + (2 * currentProficiency)}</Text></View>}
                     </Pressable>
-                    <Pressable style={styles.skillBoxes} onPress={()=> {
+                    <Pressable style={[styles.skillBoxes, {backgroundColor: "purple"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (insight == "P") {proficiencyBonus = currentProficiencyMod;}
-                        if (insight == "E") {proficiencyBonus = (2 * currentProficiencyMod);}
+                        if (insight == "P") {proficiencyBonus = currentProficiency;}
+                        if (insight == "E") {proficiencyBonus = (2 * currentProficiency);}
                         setCurrentRollMod(currentWISMod + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Insight");
@@ -517,14 +526,14 @@ export default function TabSkillsSavesRolls() {
                         {insight == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
                             <Text style={styles.coreStatText}>{currentWISMod > 0 && "+"}{currentWISMod}</Text></View>}
                         {insight == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod + currentProficiencyMod > 0 && "+"}{currentWISMod + currentProficiencyMod}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentWISMod + currentProficiency > 0 && "+"}{currentWISMod + currentProficiency}</Text></View>}
                         {insight == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod + (2 * currentProficiencyMod) > 0 && "+"}{currentWISMod + (2 * currentProficiencyMod)}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentWISMod + (2 * currentProficiency) > 0 && "+"}{currentWISMod + (2 * currentProficiency)}</Text></View>}
                     </Pressable>
-                    <Pressable style={styles.skillBoxes} onPress={()=> {
+                    <Pressable style={[styles.skillBoxes, {backgroundColor: "purple"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (medicine == "P") {proficiencyBonus = currentProficiencyMod;}
-                        if (medicine == "E") {proficiencyBonus = (2 * currentProficiencyMod);}
+                        if (medicine == "P") {proficiencyBonus = currentProficiency;}
+                        if (medicine == "E") {proficiencyBonus = (2 * currentProficiency);}
                         setCurrentRollMod(currentWISMod + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Medicine");
@@ -534,14 +543,14 @@ export default function TabSkillsSavesRolls() {
                         {medicine == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
                             <Text style={styles.coreStatText}>{currentWISMod > 0 && "+"}{currentWISMod}</Text></View>}
                         {medicine == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod + currentProficiencyMod > 0 && "+"}{currentWISMod + currentProficiencyMod}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentWISMod + currentProficiency > 0 && "+"}{currentWISMod + currentProficiency}</Text></View>}
                         {medicine == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod + (2 * currentProficiencyMod) > 0 && "+"}{currentWISMod + (2 * currentProficiencyMod)}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentWISMod + (2 * currentProficiency) > 0 && "+"}{currentWISMod + (2 * currentProficiency)}</Text></View>}
                     </Pressable>
-                    <Pressable style={styles.skillBoxes} onPress={()=> {
+                    <Pressable style={[styles.skillBoxes, {backgroundColor: "purple"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (perception == "P") {proficiencyBonus = currentProficiencyMod;}
-                        if (perception == "E") {proficiencyBonus = (2 * currentProficiencyMod);}
+                        if (perception == "P") {proficiencyBonus = currentProficiency;}
+                        if (perception == "E") {proficiencyBonus = (2 * currentProficiency);}
                         setCurrentRollMod(currentWISMod + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Perception");
@@ -551,14 +560,14 @@ export default function TabSkillsSavesRolls() {
                         {perception == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
                             <Text style={styles.coreStatText}>{currentWISMod > 0 && "+"}{currentWISMod}</Text></View>}
                         {perception == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod + currentProficiencyMod > 0 && "+"}{currentWISMod + currentProficiencyMod}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentWISMod + currentProficiency > 0 && "+"}{currentWISMod + currentProficiency}</Text></View>}
                         {perception == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod + (2 * currentProficiencyMod) > 0 && "+"}{currentWISMod + (2 * currentProficiencyMod)}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentWISMod + (2 * currentProficiency) > 0 && "+"}{currentWISMod + (2 * currentProficiency)}</Text></View>}
                     </Pressable>
-                    <Pressable style={styles.skillBoxes} onPress={()=> {
+                    <Pressable style={[styles.skillBoxes, {backgroundColor: "purple"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (survival == "P") {proficiencyBonus = currentProficiencyMod;}
-                        if (survival == "E") {proficiencyBonus = (2 * currentProficiencyMod);}
+                        if (survival == "P") {proficiencyBonus = currentProficiency;}
+                        if (survival == "E") {proficiencyBonus = (2 * currentProficiency);}
                         setCurrentRollMod(currentWISMod + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Survival");
@@ -568,9 +577,9 @@ export default function TabSkillsSavesRolls() {
                         {survival == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
                             <Text style={styles.coreStatText}>{currentWISMod > 0 && "+"}{currentWISMod}</Text></View>}
                         {survival == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod + currentProficiencyMod > 0 && "+"}{currentWISMod + currentProficiencyMod}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentWISMod + currentProficiency > 0 && "+"}{currentWISMod + currentProficiency}</Text></View>}
                         {survival == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod + (2 * currentProficiencyMod) > 0 && "+"}{currentWISMod + (2 * currentProficiencyMod)}</Text></View>}
+                            <Text style={styles.coreStatText}>{currentWISMod + (2 * currentProficiency) > 0 && "+"}{currentWISMod + (2 * currentProficiency)}</Text></View>}
                     </Pressable>
                 </View>
             </View>
@@ -594,7 +603,6 @@ const styles = StyleSheet.create({
     skillBoxes: {
         flex: 10,
         color: "white",
-        backgroundColor: "maroon",
         margin: 3,
         borderRadius: 4,
     },
