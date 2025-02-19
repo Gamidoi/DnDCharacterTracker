@@ -7,8 +7,6 @@ saving current and used spells slots between sessions
 future plans are to include:
 ---------
 
-adding a "characterLevel" key: to object Characters, and connecting it to proficiency bonus
-
 creating and storing character specific spells
 
 character specific abilities
@@ -18,10 +16,6 @@ short and long rest buttons
 linking spells to spell slots, and making a button on each spell to use an available spell slot
 
 linking spell slots and abilities to recharge on long or short rest
-
-updating spellcasting level to take in seperate catagories of full caster, half caster
-
-adding Warlock specific spell slots that refresh on short rest
 
 adding items / inventory Tab, catagories for weapons, consumables, money and "other"
 
