@@ -3,7 +3,8 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState} from "react";
 import {Character, updateProficiency, updateSpellcastingLevel} from '@/assets/objects/character';
-import {FontAwesome} from "@expo/vector-icons";
+import {FontAwesome, MaterialCommunityIcons} from "@expo/vector-icons";
+import {useNavigation} from "@react-navigation/native";
 
 
 
@@ -48,6 +49,8 @@ export default function levelUpTab() {
     let [maxHP, setMaxHP] = useState(currentCharacter.maxHP);
     let [spellCastingLevel, setSpellCastingLevel] = useState(currentCharacter.spellcastingLevel);
     let [warlockCastingLevel, setWarlockCastingLevel] = useState(currentCharacter.warlockCasterLevel);
+    let [fullCasterLevel, setFullCasterLevel] = useState(currentCharacter.fullCasterLevel);
+    let [halfCasterLevel, setHalfCasterLevel] = useState(currentCharacter.halfCasterLevel);
     let [currentCharacterName, setCurrentCharacterName] = useState(currentCharacter.charName);
     let [currentCharacterLevel, setCurrentCharacterLevel] = useState(currentCharacter.characterLevel);
     let [currentProficiency, setCurrentProficiency] = useState(currentCharacter.proficiency);
@@ -106,6 +109,22 @@ export default function levelUpTab() {
     let [performance, setPerformance ] = useState(currentCharacter.performance);
     let [persuasion,setPersuasion ] = useState(currentCharacter.persuasion);
 
+    const navigation = useNavigation();
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            getNameAsString().then(nameString => {
+                initializingName = nameString;
+                getCurrentCharacterObjectStringPromise(initializingName).then(objectString => {
+                    if (objectString != null) {
+                        currentCharacter = JSON.parse(objectString);
+                    }
+
+                    setCurrentCharacterName(currentCharacter.charName);
+                })});
+        });
+        return unsubscribe;
+    }, [navigation]);
+
 
     function updateAllStatsToNewCharacter(){
         AsyncStorage.setItem("newCharacter" + nameChangeVariable, JSON.stringify(currentCharacter));
@@ -158,11 +177,12 @@ export default function levelUpTab() {
             }>
             <View>
                 <Text style={{color: "white", fontSize: 50, backgroundColor: "tan", textAlign: "center"}}>{currentCharacterName}</Text>
-                <Text style={{color: "white", fontSize: 20, backgroundColor: "black"}}> Max HP: {maxHP} </Text>
-                <Text style={{color: "white", fontSize: 20, backgroundColor: "black"}}> Character Level: {currentCharacterLevel}</Text>
-                <Text style={{color: "white", fontSize: 20, backgroundColor: "black"}}> Proficiency Bonus: +{currentProficiency} </Text>
-                <Text style={{color: "white", fontSize: 20, backgroundColor: "black"}}>Spellcasting Level: {spellCastingLevel}</Text>
-                {warlockCastingLevel > 0 && <Text style={{color: "white", fontSize: 20, backgroundColor: "black"}}>Warlock Level: {warlockCastingLevel}</Text>}
+                <Text style={{color: "white", fontSize: 30, backgroundColor: "black", textAlign: "center"}}> Max HP: {maxHP} </Text>
+                <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}> Character Level: {currentCharacterLevel}</Text>
+                <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}> Proficiency Bonus: +{currentProficiency} </Text>
+                <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}>Total Spellcasting Level: {spellCastingLevel}</Text>
+                <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}>Full caster: {fullCasterLevel} | Half Caster: {halfCasterLevel}</Text>
+                {warlockCastingLevel > 0 && <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}>Warlock Level: {warlockCastingLevel}</Text>}
             </View>
 
 
@@ -318,7 +338,8 @@ export default function levelUpTab() {
                             }}>Confirmed! Spellcasting and Character Level Updated {addSpellandCharacterLevelConfirmationCount} time(s)!</Text></Pressable>}
                     {addSpellAndCharacterLevelBoxDisplayStatus && <Pressable
                         style={styles.toolBoxButton}
-                        onPress={() => { if ((!isNaN(characterLevelChangeVariable))&&!("" + characterLevelChangeVariable == "")){
+                        onPress={() => {
+                            if (isNaN(characterLevelChangeVariable) || ("" + characterLevelChangeVariable == "")){characterLevelChangeVariable = currentCharacter.characterLevel}
                             if (characterLevelChangeVariable < 0){characterLevelChangeVariable = 0;}
                             if (characterLevelChangeVariable > 20){characterLevelChangeVariable = 20;}
                             if ("" + fullCasterLevelsChangeVariable == "" || isNaN(fullCasterLevelsChangeVariable))
@@ -333,9 +354,11 @@ export default function levelUpTab() {
                             setSpellCastingLevel(updateSpellcastingLevel(currentCharacter, parseInt("" + fullCasterLevelsChangeVariable), parseInt("" + halfCasterLevelsChangeVariable)));
                             currentCharacter.warlockCasterLevel = parseInt("" + warlockCasterLevelsChangeVariable);
                             setWarlockCastingLevel(parseInt("" + warlockCasterLevelsChangeVariable));
+                            setFullCasterLevel(parseInt("" + fullCasterLevelsChangeVariable));
+                            setHalfCasterLevel(parseInt("" + halfCasterLevelsChangeVariable));
                             setAddSpellAndCharaterLevelConfirmationCount(addSpellandCharacterLevelConfirmationCount + 1);
                             AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter));
-                        }}}>
+                        }}>
                         <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust Character Level: {characterLevelChangeVariable} and Spellcasting Level: {parseInt("" + fullCasterLevelsChangeVariable) + parseInt("" + (halfCasterLevelsChangeVariable / 2))} </Text>
                         {(currentCharacter.warlockCasterLevel > 0 || parseInt("" + warlockCasterLevelsChangeVariable) > 0) && <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Warlock Level {warlockCasterLevelsChangeVariable}</Text>}
                     </Pressable>}
@@ -1000,7 +1023,7 @@ export default function levelUpTab() {
                             backgroundColor: "blue",
                             margin: 15,
                             borderRadius: 10
-                        }}>Confirm Character {deletionName} Deletion?<FontAwesome size={28} name="frown-o" color={"red"} /></Text></Pressable>}
+                        }}>Confirm Character {deletionName} Deletion?<MaterialCommunityIcons size={28} name="skull-crossbones-outline" color={"red"} /></Text></Pressable>}
             </View>
 
 

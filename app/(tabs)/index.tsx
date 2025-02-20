@@ -1,10 +1,11 @@
 import { Image, StyleSheet, TextInput, View, Text, Pressable} from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import {useState, useContext} from "react";
+import React, {useState, useContext} from "react";
 import {spellSlotsByLevel} from '@/assets/objects/spellSlotsByLevel';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Character} from "@/assets/objects/character";
 import {ThingBadName} from "@/app/_layout";
+import {useNavigation} from "@react-navigation/native";
 
 let initializingName :string|null;
 let getNameAsString = async () => {
@@ -26,7 +27,7 @@ let getCurrentCharacterObjectStringPromise = async (nameString :string|null) => 
 }
 
 
-export default function MainCharatcerSyndrome() {
+export default function MainCharacterSyndrome() {
     if (currentCharacter == null){currentCharacter = new Character("default", 10, 5)}
     const poop = useContext(ThingBadName);
 
@@ -79,6 +80,7 @@ export default function MainCharatcerSyndrome() {
         if (warlockCasterLevel >= 5 && warlockCasterLevel < 7) {return "3rd Level"}
         if (warlockCasterLevel >= 7 && warlockCasterLevel < 9) {return "4th Level"}
         if (warlockCasterLevel >= 9) {return "5th Level"}
+        return "0th ooops!"
     }
 
     function saveSpellsUsed() {
@@ -117,6 +119,30 @@ export default function MainCharatcerSyndrome() {
     }
 
 
+    const navigation = useNavigation();
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            getNameAsString().then(nameString => {
+                initializingName = nameString;
+                getCurrentCharacterObjectStringPromise(initializingName).then(objectString => {
+                    if (objectString != null) {
+                        currentCharacter = JSON.parse(objectString);
+                    }
+
+                    setCurrentCharacterName(currentCharacter.charName);
+                    setMaxHP(currentCharacter.maxHP);
+                    setSpellCastingLevel(currentCharacter.spellcastingLevel);
+                    setSpellsUsed(currentCharacter.currentUsedSpells);
+                    setWarlockCasterLevel(currentCharacter.warlockCasterLevel);
+                    setWarlockSpells(currentCharacter.warlockCurrentUsedSpells);
+                    if (currentHP > currentCharacter.maxHP){setCurrentHP(currentCharacter.maxHP);}
+                })});
+        });
+        return unsubscribe;
+    }, [navigation]);
+
+
+
 
   return (
     <ParallaxScrollView
@@ -127,6 +153,7 @@ export default function MainCharatcerSyndrome() {
           style={styles.headImage}
         />
       }>
+        {}
 
         <View style={{marginBottom: 20, backgroundColor: 'black'}}>
             <Pressable onPress={()=> {getNameAsString().then(nameString => {

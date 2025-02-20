@@ -2,8 +2,9 @@ import {StyleSheet, Image, Text, View, Pressable} from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import {useState} from "react";
+import React, {useState} from "react";
 import {Character} from "@/assets/objects/character";
+import {useNavigation} from "@react-navigation/native";
 
 
 let initializingName :string|null;
@@ -28,6 +29,9 @@ getNameAsString().then(nameString => {
 
 
 
+
+
+
 let allKeys :string[]  = [];
 let getAllKeys = async () => {
     return await AsyncStorage.getAllKeys();
@@ -45,7 +49,23 @@ export default function SpellsAbilitiesScreen() {
     if (currentCharacter == null){currentCharacter = new Character("default", 10, 5)}
 
     let [currentCharacterName, setCurrentCharacterName] = useState(currentCharacter.charName);
-    AsyncStorage.removeItem("testArray");
+
+
+    const navigation = useNavigation();
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            getNameAsString().then(nameString => {
+                initializingName = nameString;
+                getCurrentCharacterObjectStringPromise(initializingName).then(objectString => {
+                    if (objectString != null) {
+                        currentCharacter = JSON.parse(objectString);
+                    }
+
+                    setCurrentCharacterName(currentCharacter.charName);
+                })});
+        });
+        return unsubscribe;
+    }, [navigation]);
 
 
 

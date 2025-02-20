@@ -1,8 +1,9 @@
 import {StyleSheet, Image, Text, View, Pressable} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useState} from "react";
+import React, {useState} from "react";
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import {Character} from '@/assets/objects/character';
+import {useNavigation} from "@react-navigation/native";
 
 let initializingName :string|null;
 let getNameAsString = async () => {
@@ -74,6 +75,56 @@ export default function TabSkillsSavesRolls() {
     let [intimidation, setIntimidation ] = useState(currentCharacter.intimidation);
     let [performance, setPerformance ] = useState(currentCharacter.performance);
     let [persuasion,setPersuasion ] = useState(currentCharacter.persuasion);
+
+
+
+    const navigation = useNavigation();
+    React.useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            getNameAsString().then(nameString => {
+                initializingName = nameString;
+                getCurrentCharacterObjectStringPromise(initializingName).then(objectString => {
+                    let currentCharacterObjectString = objectString;
+                    if (currentCharacterObjectString != null) {
+                        currentCharacter = JSON.parse(currentCharacterObjectString);
+                    }
+
+                    setCurrentCharacterName(currentCharacter.charName);
+                    setCurrentStatSTR(currentCharacter.STR);
+                    setCurrentStatDEX(currentCharacter.DEX);
+                    setCurrentStatCON(currentCharacter.CON);
+                    setCurrentStatINT(currentCharacter.INT);
+                    setCurrentStatWIS(currentCharacter.WIS);
+                    setCurrentStatCHA(currentCharacter.CHA);
+                    setCurrentSTRMod(findCoreStatMod(currentCharacter.STR))
+                    setCurrentDEXMod(findCoreStatMod(currentCharacter.DEX))
+                    setCurrentCONMod(findCoreStatMod(currentCharacter.CON))
+                    setCurrentINTMod(findCoreStatMod(currentCharacter.INT))
+                    setCurrentWISMod(findCoreStatMod(currentCharacter.WIS))
+                    setCurrentCHAMod(findCoreStatMod(currentCharacter.CHA))
+                    setAthletics(currentCharacter.athletics);
+                    setAcrobatics(currentCharacter.acrobatics);
+                    setSleightOfHand(currentCharacter.sleightOfHand);
+                    setStealth(currentCharacter.stealth);
+                    setArcana(currentCharacter.arcana);
+                    setHistory(currentCharacter.history);
+                    setInvestigation(currentCharacter.investigation);
+                    setNature(currentCharacter.nature);
+                    setReligion(currentCharacter.religion);
+                    setAnimalHandling(currentCharacter.animalHandling);
+                    setInsight(currentCharacter.insight);
+                    setMedicine(currentCharacter.medicine);
+                    setPerception(currentCharacter.perception);
+                    setSurvival(currentCharacter.survival);
+                    setDeception(currentCharacter.deception);
+                    setIntimidation(currentCharacter.intimidation);
+                    setPerformance(currentCharacter.performance);
+                    setPersuasion(currentCharacter.persuasion);
+                    setCurrentProficiency(currentCharacter.proficiency);
+                })});
+        });
+        return unsubscribe;
+    }, [navigation]);
 
 
 
@@ -203,7 +254,7 @@ export default function TabSkillsSavesRolls() {
 
 
             <View style={{marginBottom: 20, backgroundColor: 'orange', flexDirection: "row"}}>
-                <Pressable style={styles.coreSkillBoxes} onPress={()=> {
+                <Pressable style={[styles.coreSkillBoxes, {backgroundColor: "maroon"}]} onPress={()=> {
                     setCurrentRollMod(currentSTRMod);
                     setCurrentRollDie1(rollD20());
                     setCurrentRollName("flat STR");
@@ -213,7 +264,7 @@ export default function TabSkillsSavesRolls() {
                     <Text style={styles.coreStatText}>{currentStatSTR}</Text>
                     <Text style={styles.coreStatText}>{currentSTRMod > 0 && "+"}{currentSTRMod}</Text>
                 </Pressable>
-                <Pressable style={styles.coreSkillBoxes} onPress={()=> {
+                <Pressable style={[styles.coreSkillBoxes, {backgroundColor: "green"}]} onPress={()=> {
                     setCurrentRollMod(currentDEXMod);
                     setCurrentRollDie1(rollD20());
                     setCurrentRollName("flat DEX");
@@ -233,7 +284,7 @@ export default function TabSkillsSavesRolls() {
                     <Text style={styles.coreStatText}>{currentStatCON}</Text>
                     <Text style={styles.coreStatText}>{currentCONMod > 0 && "+"}{currentCONMod}</Text>
                 </Pressable>
-                <Pressable style={styles.coreSkillBoxes} onPress={()=> {
+                <Pressable style={[styles.coreSkillBoxes, {backgroundColor: "blue"}]} onPress={()=> {
                     setCurrentRollMod(currentINTMod);
                     setCurrentRollDie1(rollD20());
                     setCurrentRollName("flat INT");
@@ -243,7 +294,7 @@ export default function TabSkillsSavesRolls() {
                     <Text style={styles.coreStatText}>{currentStatINT}</Text>
                     <Text style={styles.coreStatText}>{currentINTMod > 0 && "+"}{currentINTMod}</Text>
                 </Pressable>
-                <Pressable style={styles.coreSkillBoxes} onPress={()=> {
+                <Pressable style={[styles.coreSkillBoxes, {backgroundColor: "purple"}]} onPress={()=> {
                     setCurrentRollMod(currentWISMod);
                     setCurrentRollDie1(rollD20());
                     setCurrentRollName("flat WIS");
@@ -253,7 +304,7 @@ export default function TabSkillsSavesRolls() {
                     <Text style={styles.coreStatText}>{currentStatWIS}</Text>
                     <Text style={styles.coreStatText}>{currentWISMod > 0 && "+"}{currentWISMod}</Text>
                 </Pressable>
-                <Pressable style={styles.coreSkillBoxes} onPress={()=> {
+                <Pressable style={[styles.coreSkillBoxes, {backgroundColor: "red"}]} onPress={()=> {
                     setCurrentRollMod(currentCHAMod);
                     setCurrentRollDie1(rollD20());
                     setCurrentRollName("flat CHA");

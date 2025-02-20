@@ -5,7 +5,8 @@ import { HapticTab } from '@/components/HapticTab';
 import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import {FontAwesome} from "@expo/vector-icons";
+import { MaterialCommunityIcons} from "@expo/vector-icons";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -23,28 +24,28 @@ export default function TabLayout() {
         name="index"
         options={{
             title: 'Character',
-            tabBarIcon: ({ color }) => <FontAwesome size={28}  name="user-secret" color={color} />,
+            tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28}  name="robot-excited" color={color} />,
         }}
       />
       <Tabs.Screen
         name="SpellsAbilities"
         options={{
           title: 'Spells & Abilities',
-          tabBarIcon: ({ color }) => <FontAwesome size={28} name="magic" color={color} />,
+          tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="crystal-ball" color={color} />,
         }}
       />
         <Tabs.Screen
             name="SkillsSavesRolls"
             options={{
                 title: 'Skills & Saves',
-                tabBarIcon: ({ color }) => <FontAwesome size={28} name="first-order" color={color} />,
+                tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="hexagon-multiple-outline" color={color} />,
             }}
         />
         <Tabs.Screen
             name="LevelUpTab"
             options={{
                 title: 'Level Up',
-                tabBarIcon: ({ color }) => <FontAwesome size={28} name="level-up" color={color} />,
+                tabBarIcon: ({ color }) => <MaterialIcons size={28} name="engineering" color={color} />,
             }}
         />
     </Tabs>
