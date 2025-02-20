@@ -5,6 +5,7 @@ import React, {useState} from "react";
 import {Character, updateProficiency, updateSpellcastingLevel} from '@/assets/objects/character';
 import {FontAwesome, MaterialCommunityIcons} from "@expo/vector-icons";
 import {useNavigation} from "@react-navigation/native";
+import newSpellCreationTool from "@/assets/objects/newSpellCreationTool";
 
 
 
@@ -127,8 +128,6 @@ export default function levelUpTab() {
 
 
     function updateAllStatsToNewCharacter(){
-        AsyncStorage.setItem("newCharacter" + nameChangeVariable, JSON.stringify(currentCharacter));
-        AsyncStorage.setItem("currentCharacterName", currentCharacter.charName);
         setCurrentCharacterName(currentCharacter.charName);
         setCurrentCharacterLevel(currentCharacter.characterLevel);
         setCurrentProficiency(currentCharacter.proficiency)
@@ -926,6 +925,8 @@ export default function levelUpTab() {
                             if (parseInt("" + characterLevelChangeVariable) > 20) {characterLevelChangeVariable = 20;}
                             if (isNaN(parseInt("" + HPChangeVariable)) || "" + HPChangeVariable == ""){HPChangeVariable = 10;}
                             currentCharacter = new Character(nameChangeVariable, parseInt("" + HPChangeVariable), parseInt("" + characterLevelChangeVariable));
+                            AsyncStorage.setItem("newCharacter" + nameChangeVariable, JSON.stringify(currentCharacter));
+                            AsyncStorage.setItem("currentCharacterName", currentCharacter.charName);
                             setAddCharacterConfirmationCount(addCharacterConfirmationCount + 1);
                             setDetectChange(true);
                             getAllCharacterNames().then(keysString => {
@@ -1026,6 +1027,7 @@ export default function levelUpTab() {
                         }}>Confirm Character {deletionName} Deletion?<MaterialCommunityIcons size={28} name="skull-crossbones-outline" color={"red"} /></Text></Pressable>}
             </View>
 
+            <View>{newSpellCreationTool(detectChange, setDetectChange, currentCharacterName)}</View>
 
             {detectChange && updateAllStatsToNewCharacter()}
         </ParallaxScrollView>
@@ -1037,11 +1039,6 @@ export default function levelUpTab() {
 }
 
 const styles = StyleSheet.create({
-    titleContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-    },
     stepContainer: {
         gap: 8,
         marginBottom: 8,

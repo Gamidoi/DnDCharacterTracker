@@ -44,7 +44,6 @@ getAllKeys().then(keysString => {
 })
 
 
-
 export default function SpellsAbilitiesScreen() {
     if (currentCharacter == null){currentCharacter = new Character("default", 10, 5)}
 
@@ -62,7 +61,8 @@ export default function SpellsAbilitiesScreen() {
                     }
 
                     setCurrentCharacterName(currentCharacter.charName);
-                })});
+                })
+            });
         });
         return unsubscribe;
     }, [navigation]);
