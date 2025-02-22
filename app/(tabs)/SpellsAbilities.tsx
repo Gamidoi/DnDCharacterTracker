@@ -17,11 +17,6 @@ let currentCharacter = new Character("defaultSSR", 10, 5);
 let getCurrentCharacterObjectStringPromise = async (nameString :string|null) => {
     return await AsyncStorage.getItem("newCharacter" + nameString);
 }
-
-let allKeys :string[]  = [];
-let getAllKeys = async () => {
-    return await AsyncStorage.getAllKeys();
-}
 getNameAsString().then(nameString => {
     initializingName = nameString;
     getCurrentCharacterObjectStringPromise(initializingName).then(objectString => {
