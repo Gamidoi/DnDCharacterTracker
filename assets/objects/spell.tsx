@@ -11,14 +11,14 @@ export class Spell {
     spellRange : string;
     spellTarget : string;
     isAttack : [boolean, string];
-    isSaveDC : [boolean, string];
+    isSaveDC : [boolean, string, string];
     // d4, d6, d8, d10, d12, bonus
     damage : [boolean, number, number, number, number, number, number];
     description : [boolean, string];
     constructor(name : string, spellLevel : number = 0, verbal : boolean = false, somatic : boolean = false, material : [boolean, string] = [false, ''],
                 concentration : boolean = false, ritual : boolean = false, time : string = "action", duration : string = "instant",
                 spellRange : string = "touch", spellTarget : string= "self", isAttack : [boolean, string] = [false, "INT"],
-                isSaveDC : [boolean, string] = [false, "INT"], damage: [boolean, number, number, number, number, number, number] = [false, 0, 0, 0, 0, 0, 0],
+                isSaveDC : [boolean, string, string] = [false, "INT", "DEX"], damage: [boolean, number, number, number, number, number, number] = [false, 0, 0, 0, 0, 0, 0],
                 description : [boolean, string] = [false, ""],){
         this.name = name;
         this.spellLevel = spellLevel;

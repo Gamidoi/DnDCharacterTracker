@@ -3,13 +3,22 @@ import {StyleSheet, Text, View, Pressable, TextInput} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState} from "react";
 import {Spell} from "@/assets/objects/spell";
+import {Character} from "@/assets/objects/character";
+import {FontAwesome, MaterialCommunityIcons} from "@expo/vector-icons";
 
-export default function newSpellCreationTool(detectChange : boolean, setDetectChange : Function, currentCharacterName : string) {
+
+
+export default function newSpellCreationTool(currentCharacter :Character) {
     let [newSpellCreationToolDisplay, setNewSpellCreationToolDisplay] = useState(false);
     let [newSpellConfirmationCount, setNewSpellConfirmationCount] = useState(0);
+    let [deleteSpellToolDisplay, setDeleteSpellToolDisplay] = useState(false);
+    let [deleteSpellName, setDeleteSpellName] = useState("");
+    let [deleteSpellIndex, setDeleteSpellIndex] = useState(0);
+    let [spellConfirmDelete, setSpellConfirmDelete] = useState(false);
+    let [deleteSpellConfirmationCount, setDeleteSpellConfirmationCount] = useState(0);
 
     let [spellNameVariable, setSpellNameVariable] = useState("");
-    let [spellLevelVariable, setSpellLevelVariable] = useState(0);
+    let [spellLevelVariable, setSpellLevelVariable] = useState("0");
     let [spellVerbalVariable, setSpellVerbalVariable] = useState(false);
     let [spellSomaticVariable, setSpellSomaticVariable] = useState(false);
     let [spellMaterialBooleanVariable, setSpellMaterialBooleanVariable] = useState(false,);
@@ -23,13 +32,19 @@ export default function newSpellCreationTool(detectChange : boolean, setDetectCh
     let isAttack :[boolean, string] = [false, "INT"];
     let [spellIsAttack, setSpellIsAttack] = useState(isAttack);
     let [spellIsSaveDC, setSpellIsSaveDC] = useState(isAttack);
-    let defaultDamageVariable :[boolean, number, number, number, number, number, number] = [false, 0, 0, 0, 0, 0, 0]
-    let [spellDamageVariable, setSpellDamageVariable] = useState(defaultDamageVariable);
+    let [spellSaveType, setSpellSaveType] = useState("DEX");
+    let [spellDamageVariable, setSpellDamageVariable] = useState(false);
+    let [damageD4, setDamageD4] = useState("0");
+    let [damageD6, setDamageD6] = useState("0");
+    let [damageD8, setDamageD8] = useState("0");
+    let [damageD10, setDamageD10] = useState("0");
+    let [damageD12, setDamageD12] = useState("0");
+    let [damageBonus, setDamageBonus] = useState("0");
     let [spellDescription, setSpellDescription] = useState("");
 
 
 
-    return(
+    return(<View>
         <View style={styles.toolBoxStyle}>
             <Pressable onPress={() => {setNewSpellCreationToolDisplay(!newSpellCreationToolDisplay)}}>
             {!newSpellCreationToolDisplay && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open New Spell Tool</Text>}
@@ -254,6 +269,34 @@ export default function newSpellCreationTool(detectChange : boolean, setDetectCh
                     </Pressable>}
                 </View>
 
+                {spellIsSaveDC[0] && <Text style={styles.lables}>What is the Saving Throw?</Text>}
+                {spellIsSaveDC[0] && <View style={{flexDirection: "row", alignSelf: "center"}}>
+                    {spellSaveType == "STR" && <Pressable style={styles.saveTypeToggleON} onPress={() =>
+                    {setSpellSaveType("STR")}}><Text style={styles.saveStatLable}>STR</Text></Pressable>}
+                    {spellSaveType != "STR" && <Pressable style={styles.saveTypeToggleOff} onPress={() =>
+                    {setSpellSaveType("STR")}}><Text style={styles.saveStatLable}>STR</Text></Pressable>}
+                    {spellSaveType == "DEX" && <Pressable style={styles.saveTypeToggleON} onPress={() =>
+                    {setSpellSaveType("DEX")}}><Text style={styles.saveStatLable}>DEX</Text></Pressable>}
+                    {spellSaveType != "DEX" && <Pressable style={styles.saveTypeToggleOff} onPress={() =>
+                    {setSpellSaveType("DEX")}}><Text style={styles.saveStatLable}>DEX</Text></Pressable>}
+                    {spellSaveType == "CON" && <Pressable style={styles.saveTypeToggleON} onPress={() =>
+                    {setSpellSaveType("CON")}}><Text style={styles.saveStatLable}>CON</Text></Pressable>}
+                    {spellSaveType != "CON" && <Pressable style={styles.saveTypeToggleOff} onPress={() =>
+                    {setSpellSaveType("CON")}}><Text style={styles.saveStatLable}>CON</Text></Pressable>}
+                    {spellSaveType == "INT" && <Pressable style={styles.saveTypeToggleON} onPress={() =>
+                    {setSpellSaveType("INT")}}><Text style={styles.saveStatLable}>INT</Text></Pressable>}
+                    {spellSaveType != "INT" && <Pressable style={styles.saveTypeToggleOff} onPress={() =>
+                    {setSpellSaveType("INT")}}><Text style={styles.saveStatLable}>INT</Text></Pressable>}
+                    {spellSaveType == "WIS" && <Pressable style={styles.saveTypeToggleON} onPress={() =>
+                    {setSpellSaveType("WIS")}}><Text style={styles.saveStatLable}>WIS</Text></Pressable>}
+                    {spellSaveType != "WIS" && <Pressable style={styles.saveTypeToggleOff} onPress={() =>
+                    {setSpellSaveType("WIS")}}><Text style={styles.saveStatLable}>WIS</Text></Pressable>}
+                    {spellSaveType == "CHA" && <Pressable style={styles.saveTypeToggleON} onPress={() =>
+                    {setSpellSaveType("CHA")}}><Text style={styles.saveStatLable}>CHA</Text></Pressable>}
+                    {spellSaveType != "CHA" && <Pressable style={styles.saveTypeToggleOff} onPress={() =>
+                    {setSpellSaveType("CHA")}}><Text style={styles.saveStatLable}>CHA</Text></Pressable>}
+                </View>}
+
 
                 <Text style={styles.lables}>Spell Casting Stat</Text>
                 <View style={{flexDirection: "row", alignSelf: "center"}}>
@@ -336,6 +379,126 @@ export default function newSpellCreationTool(detectChange : boolean, setDetectCh
                 </View>
 
 
+                <View><Text style={styles.lables}>Does the Spell Roll for Damage/Healing/Other?</Text>
+                    <Pressable style={[styles.newSpellToolToggleButtons, {width: 250, height: 90}]} onPress={() => {
+                        setSpellDamageVariable(!spellDamageVariable)
+                    }}>
+                        {spellDamageVariable && <Text style={styles.toggleButtonLables}>Yes</Text>}
+                        {!spellDamageVariable && <Text style={styles.toggleButtonLables}>No</Text>}
+                    </Pressable>
+                    {spellDamageVariable && <View style={{flexDirection: "row", alignSelf: "center"}}>
+                        <View style={{flex: 0.1666}}><Text style={styles.lables}>D4s</Text>
+                            <TextInput
+                                onChangeText={setDamageD4}
+                                placeholder={"0"}
+                                keyboardType={"numeric"}
+                                maxLength={2}
+                                placeholderTextColor={"grey"}
+                                style={{
+                                    fontSize: 22,
+                                    borderStyle: "solid",
+                                    borderWidth: 3,
+                                    borderColor: "white",
+                                    width: 60,
+                                    height: 60,
+                                    alignSelf: "center",
+                                    color: "white",
+                                    textAlign: "center",
+                                }}/></View>
+                        <View style={{flex: 0.1666}}><Text style={styles.lables}>D6s</Text>
+                            <TextInput
+                                onChangeText={setDamageD6}
+                                placeholder={"0"}
+                                keyboardType={"numeric"}
+                                maxLength={2}
+                                placeholderTextColor={"grey"}
+                                style={{
+                                    fontSize: 22,
+                                    borderStyle: "solid",
+                                    borderWidth: 3,
+                                    borderColor: "white",
+                                    width: 60,
+                                    height: 60,
+                                    alignSelf: "center",
+                                    color: "white",
+                                    textAlign: "center",
+                                }}/></View>
+                        <View style={{flex: 0.1666}}><Text style={styles.lables}>D8s</Text>
+                            <TextInput
+                                onChangeText={setDamageD8}
+                                placeholder={"0"}
+                                keyboardType={"numeric"}
+                                maxLength={2}
+                                placeholderTextColor={"grey"}
+                                style={{
+                                    fontSize: 22,
+                                    borderStyle: "solid",
+                                    borderWidth: 3,
+                                    borderColor: "white",
+                                    width: 60,
+                                    height: 60,
+                                    alignSelf: "center",
+                                    color: "white",
+                                    textAlign: "center",
+                                }}/></View>
+                        <View style={{flex: 0.1666}}><Text style={styles.lables}>D10s</Text>
+                            <TextInput
+                                onChangeText={setDamageD10}
+                                placeholder={"0"}
+                                keyboardType={"numeric"}
+                                maxLength={2}
+                                placeholderTextColor={"grey"}
+                                style={{
+                                    fontSize: 22,
+                                    borderStyle: "solid",
+                                    borderWidth: 3,
+                                    borderColor: "white",
+                                    width: 60,
+                                    height: 60,
+                                    alignSelf: "center",
+                                    color: "white",
+                                    textAlign: "center",
+                                }}/></View>
+                        <View style={{flex: 0.1666}}><Text style={styles.lables}>D12s</Text>
+                            <TextInput
+                                onChangeText={setDamageD12}
+                                placeholder={"0"}
+                                keyboardType={"numeric"}
+                                maxLength={2}
+                                placeholderTextColor={"grey"}
+                                style={{
+                                    fontSize: 22,
+                                    borderStyle: "solid",
+                                    borderWidth: 3,
+                                    borderColor: "white",
+                                    width: 60,
+                                    height: 60,
+                                    alignSelf: "center",
+                                    color: "white",
+                                    textAlign: "center",
+                                }}/></View>
+                        <View style={{flex: 0.1666}}><Text style={styles.lables}>bonus</Text>
+                            <TextInput
+                                onChangeText={setDamageBonus}
+                                placeholder={"0"}
+                                keyboardType={"numeric"}
+                                maxLength={2}
+                                placeholderTextColor={"grey"}
+                                style={{
+                                    fontSize: 22,
+                                    borderStyle: "solid",
+                                    borderWidth: 3,
+                                    borderColor: "white",
+                                    width: 60,
+                                    height: 60,
+                                    alignSelf: "center",
+                                    color: "white",
+                                    textAlign: "center",
+                                }}/></View>
+                    </View>}
+                </View>
+
+
                 <Text style={styles.lables}>Verbose Description</Text>
                 <TextInput
                     onChangeText={setSpellDescription}
@@ -350,7 +513,9 @@ export default function newSpellCreationTool(detectChange : boolean, setDetectCh
                         borderColor: "white",
                         alignSelf: "center",
                         color: "white",
-                        textAlign: "center"
+                        textAlign: "center",
+                        width: 350,
+                        minHeight: 200,
                     }}/>
 
                 {(newSpellConfirmationCount > 0) &&
@@ -370,23 +535,80 @@ export default function newSpellCreationTool(detectChange : boolean, setDetectCh
                     onPress={() => {
                         if (spellNameVariable != ""){
 
-                            let newSpell = new Spell(spellNameVariable, spellLevelVariable, spellVerbalVariable, spellSomaticVariable,
+                            let newSpell = new Spell(spellNameVariable, parseInt(spellLevelVariable), spellVerbalVariable, spellSomaticVariable,
                                 [spellMaterialBooleanVariable, spellMaterialDescriptionVariable], spellConcentrationVariable, spellRitualVariable,
-                                spellTimeVariable, spellDurationVariable, spellRangeVariable, spellTargetVariable, spellIsAttack, spellIsSaveDC, spellDamageVariable,
-                            [true, spellDescription]);
+                                spellTimeVariable, spellDurationVariable, spellRangeVariable, spellTargetVariable, spellIsAttack,
+                                [spellIsSaveDC[0], spellIsSaveDC[1], spellSaveType],
+                                [spellDamageVariable, parseInt(damageD4), parseInt(damageD6), parseInt(damageD8), parseInt(damageD10), parseInt(damageD12), parseInt(damageBonus)],
+                                [true, spellDescription]);
                             setNewSpellConfirmationCount(newSpellConfirmationCount + 1);
-                            AsyncStorage.setItem("spell" + currentCharacterName + spellNameVariable, JSON.stringify(newSpell));
-
-
+                            currentCharacter.spells.push(newSpell);
+                            AsyncStorage.setItem("newCharacter" + currentCharacter.charName, JSON.stringify(currentCharacter));
                     }}}>
                     <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Create New Spell: {spellNameVariable}</Text>
-                    <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>For {currentCharacterName}</Text>
+                    <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>For {currentCharacter.charName}</Text>
                 </Pressable>
-
-
-
-
             </View>}
+        </View>
+
+
+        <View style={[styles.toolBoxStyle, {marginTop: 17}]}>
+            <Pressable onPress={() => {setDeleteSpellToolDisplay(!deleteSpellToolDisplay)}}>
+                {!deleteSpellToolDisplay && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open Spell Deletion Tool</Text>}
+                {deleteSpellToolDisplay && <Text style={{color: "white", textAlign: "center", marginBottom: 20}}>Close Spell Deletion Tool</Text>}
+                {deleteSpellToolDisplay && <Text style={{color: "white", textAlign: "center", marginBottom: 20}}>Choose Spell Below</Text>}
+            </Pressable>
+            <View style={{alignSelf: "center"}}>
+            {currentCharacter.spells.map((pickedSpellForDeletion :Spell, pickedSpellIndex :number) => {
+                return(
+                    deleteSpellToolDisplay && <View><Pressable onPress={() => {
+                        setSpellConfirmDelete(!spellConfirmDelete);
+                        setDeleteSpellName(pickedSpellForDeletion.name);
+                        setDeleteSpellIndex(pickedSpellIndex);
+                    }}><Text style={{
+                        fontSize: 20,
+                        backgroundColor: "maroon",
+                        textAlign: "center",
+                        margin: 10,
+                        height: 50,
+                        borderRadius: 30,
+                        width: 260,
+                        color: "white",
+                        paddingTop: 10,
+                        borderColor: "orange",
+                        borderWidth: 3,
+                    }}>{pickedSpellForDeletion.name}</Text></Pressable></View>
+                )})}</View>
+            {(deleteSpellToolDisplay && spellConfirmDelete) &&
+                <Pressable onPress={() => {
+                    setDeleteSpellConfirmationCount(0);
+                    setSpellConfirmDelete(false);}}>
+                    <Text style={{
+                        textAlign: "center",
+                        color: "white",
+                        fontSize: 25,
+                        backgroundColor: "blue",
+                        margin: 15,
+                        borderRadius: 10
+                    }}>Cancel Spell {deleteSpellName} Deletion?<FontAwesome size={28} name="smile-o" color={"green"} /></Text></Pressable>}
+            {(deleteSpellToolDisplay && spellConfirmDelete) &&
+                <Pressable onPress={() => {
+                    setDeleteSpellConfirmationCount(0);
+                    setSpellConfirmDelete(false);
+                    currentCharacter.spells.splice(deleteSpellIndex, 1)
+                    AsyncStorage.setItem("newCharacter" + currentCharacter.charName, JSON.stringify(currentCharacter));
+
+                }}>
+                    <Text style={{
+                        textAlign: "center",
+                        color: "white",
+                        fontSize: 25,
+                        backgroundColor: "blue",
+                        margin: 15,
+                        borderRadius: 10
+                    }}>Confirm Spell {deleteSpellName} Deletion?<MaterialCommunityIcons size={28} name="skull-crossbones-outline" color={"red"} /></Text></Pressable>}
+
+        </View>
 
 
 
@@ -442,5 +664,25 @@ const styles = StyleSheet.create({
         borderWidth: 6,
         borderColor: "orange",
         alignSelf: "center",
+    },
+    saveTypeToggleON: {
+        flex: 0.15,
+        backgroundColor: "maroon",
+        height: 40,
+        borderColor: "orange",
+        borderWidth: 3,
+    },
+    saveTypeToggleOff: {
+        flex: 0.15,
+        backgroundColor: "grey",
+        height: 40,
+        borderColor: "orange",
+        borderWidth: 3,
+    },
+    saveStatLable: {
+        textAlign: "center",
+        color: "white",
+        fontSize: 12,
+        marginTop: 8
     }
 })

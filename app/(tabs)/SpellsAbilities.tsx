@@ -5,6 +5,7 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import React, {useState} from "react";
 import {Character} from "@/assets/objects/character";
 import {useNavigation} from "@react-navigation/native";
+import DisplaySpellBox from "@/components/displaySpellBox";
 
 
 let initializingName :string|null;
@@ -17,6 +18,10 @@ let getCurrentCharacterObjectStringPromise = async (nameString :string|null) => 
     return await AsyncStorage.getItem("newCharacter" + nameString);
 }
 
+let allKeys :string[]  = [];
+let getAllKeys = async () => {
+    return await AsyncStorage.getAllKeys();
+}
 getNameAsString().then(nameString => {
     initializingName = nameString;
     getCurrentCharacterObjectStringPromise(initializingName).then(objectString => {
@@ -24,30 +29,22 @@ getNameAsString().then(nameString => {
         if (currentCharacterObjectString != null) {
             currentCharacter = JSON.parse(currentCharacterObjectString);
         }
-    })});
+    })
+    getAllKeys().then(keysString => {
+        keysString.forEach((key) => {
+            if (key.startsWith("spell" + nameString)) {
+                allKeys.push(key);
+            }});
+    })
+});
 
-
-
-
-
-
-
-let allKeys :string[]  = [];
-let getAllKeys = async () => {
-    return await AsyncStorage.getAllKeys();
-}
-getAllKeys().then(keysString => {
-    keysString.forEach((key) => {
-        if (key.startsWith("newCharacter")) {
-        allKeys.push(key.replace("newCharacter", ""));
-    }});
-})
 
 
 export default function SpellsAbilitiesScreen() {
     if (currentCharacter == null){currentCharacter = new Character("default", 10, 5)}
 
     let [currentCharacterName, setCurrentCharacterName] = useState(currentCharacter.charName);
+    let [allSpells, setAllSpells] = useState(allKeys);
 
 
     const navigation = useNavigation();
@@ -61,6 +58,15 @@ export default function SpellsAbilitiesScreen() {
                     }
 
                     setCurrentCharacterName(currentCharacter.charName);
+                })
+                getAllKeys().then(keysString => {
+                    let getSpellNames:string[] = [];
+                    keysString.forEach((key) => {
+                        if (key.startsWith("spell" + nameString)) {
+                            getSpellNames.push(key);
+                        }});
+
+                    setAllSpells(getSpellNames);
                 })
             });
         });
@@ -83,24 +89,30 @@ export default function SpellsAbilitiesScreen() {
         <View style={{marginBottom: 20, backgroundColor: 'black'}}>
             <Pressable onPress={()=> {
                 getNameAsString().then(nameString => {
-                initializingName = nameString;
-                getCurrentCharacterObjectStringPromise(initializingName).then(objectString => {
-                    let currentCharacterObjectString = objectString;
-                    if (currentCharacterObjectString != null) {
-                        currentCharacter = JSON.parse(currentCharacterObjectString);
-                    }
-                    setCurrentCharacterName(currentCharacter.charName);
-                })});
+                    initializingName = nameString;
+                    getCurrentCharacterObjectStringPromise(initializingName).then(objectString => {
+                        let currentCharacterObjectString = objectString;
+                        if (currentCharacterObjectString != null) {
+                            currentCharacter = JSON.parse(currentCharacterObjectString);
+                        }
+                        setCurrentCharacterName(currentCharacter.charName);
+                    })
+                    getAllKeys().then(keysString => {
+                        let getSpellNames:string[] = [];
+                        keysString.forEach((key) => {
+                            if (key.startsWith("spell" + nameString)) {
+                                getSpellNames.push(key);
+                            }});
+
+                        setAllSpells(getSpellNames);
+                    })
+                });
             }}>
                 <Text style={{color: "white", fontSize: 50, backgroundColor: "tan", textAlign: "center"}}>{currentCharacterName}
                 </Text>
             </Pressable>
         </View>
-
-
-        {allKeys.map((key :string)=> {
-            return (<Text style={{color: "white"}}>{key}</Text>)
-        })}
+            <View>{DisplaySpellBox(currentCharacter)}</View>
 
 
     </ParallaxScrollView>

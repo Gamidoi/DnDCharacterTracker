@@ -133,6 +133,8 @@ export default function levelUpTab() {
         setCurrentProficiency(currentCharacter.proficiency)
         setMaxHP(currentCharacter.maxHP);
         setSpellCastingLevel(currentCharacter.spellcastingLevel);
+        setFullCasterLevel(currentCharacter.fullCasterLevel);
+        setHalfCasterLevel(currentCharacter.halfCasterLevel)
         setWarlockCastingLevel(currentCharacter.warlockCasterLevel);
         setCurrentStatSTR(currentCharacter.STR);
         setCurrentStatDEX(currentCharacter.DEX);
@@ -925,10 +927,10 @@ export default function levelUpTab() {
                             if (parseInt("" + characterLevelChangeVariable) > 20) {characterLevelChangeVariable = 20;}
                             if (isNaN(parseInt("" + HPChangeVariable)) || "" + HPChangeVariable == ""){HPChangeVariable = 10;}
                             currentCharacter = new Character(nameChangeVariable, parseInt("" + HPChangeVariable), parseInt("" + characterLevelChangeVariable));
-                            AsyncStorage.setItem("newCharacter" + nameChangeVariable, JSON.stringify(currentCharacter));
-                            AsyncStorage.setItem("currentCharacterName", currentCharacter.charName);
+                            AsyncStorage.setItem("newCharacter" + nameChangeVariable, JSON.stringify(currentCharacter)).then(()=>{
+                                AsyncStorage.setItem("currentCharacterName", currentCharacter.charName).then(()=>{
+                                    setDetectChange(true);})})
                             setAddCharacterConfirmationCount(addCharacterConfirmationCount + 1);
-                            setDetectChange(true);
                             getAllCharacterNames().then(keysString => {
                                 allCharacterNamesInitial = [];
                                 keysString.forEach((key) => {
@@ -1027,7 +1029,7 @@ export default function levelUpTab() {
                         }}>Confirm Character {deletionName} Deletion?<MaterialCommunityIcons size={28} name="skull-crossbones-outline" color={"red"} /></Text></Pressable>}
             </View>
 
-            <View>{newSpellCreationTool(detectChange, setDetectChange, currentCharacterName)}</View>
+            <View>{newSpellCreationTool(currentCharacter)}</View>
 
             {detectChange && updateAllStatsToNewCharacter()}
         </ParallaxScrollView>

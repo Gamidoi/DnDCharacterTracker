@@ -1,3 +1,4 @@
+import {Spell} from "@/assets/objects/spell";
 
 export class Character {
     charName: string;
@@ -9,8 +10,8 @@ export class Character {
     warlockCasterLevel: number;
     currentUsedSpells: string;
     warlockCurrentUsedSpells: string;
-    abilities: {};
-    spells: {};
+    abilities: [];
+    spells: Spell[];
 
     STR: number;
     DEX: number;
@@ -48,8 +49,8 @@ export class Character {
         this.fullCasterLevel = this.warlockCasterLevel = this.halfCasterLevel = 0;
         this.currentUsedSpells = "0000000000000000000000"
         this.warlockCurrentUsedSpells = "0000"
-        this.abilities = {};
-        this.spells = {};
+        this.abilities = [];
+        this.spells = [];
         this.STR = this.DEX = this.CON = this.INT = this.WIS = this.CHA = 10;
         this.proficiency = this.updateProficiency(characterLevel);
 
