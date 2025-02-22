@@ -5,7 +5,7 @@ import {Character} from "@/assets/objects/character";
 
 
 
-export default function DisplaySpellBox(currentCharacter :Character){
+export default function DisplaySpellBox(currentCharacter :Character, spellLevel :number){
     function spellLevelToString(spellLevel :number){
         if (spellLevel == 9){ return "9th Level Spell"}
         if (spellLevel == 8){ return "8th Level Spell"}
@@ -67,7 +67,8 @@ export default function DisplaySpellBox(currentCharacter :Character){
     }
 
     return(<View>
-        {currentCharacter.spells.map((spell:Spell) => {
+        {currentCharacter.spells.map((spell :Spell) => {
+            if (spell.spellLevel == spellLevel){
 
             return (
         <View style={{
@@ -131,12 +132,10 @@ export default function DisplaySpellBox(currentCharacter :Character){
                 {spell.damage[0] && <Text style={styles.diceDisplay}>{getDamageDiceAsString(spell.damage)}</Text>}
             </View>
 
-
             <Text style={styles.descriptionText}>{spell.description}</Text>
-
         </View>
     )
-})})</View>)}
+}})})</View>)}
 
 const styles = StyleSheet.create({
     vsmStyle: {

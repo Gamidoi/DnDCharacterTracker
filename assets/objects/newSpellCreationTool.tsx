@@ -15,7 +15,6 @@ export default function newSpellCreationTool(currentCharacter :Character) {
     let [deleteSpellName, setDeleteSpellName] = useState("");
     let [deleteSpellIndex, setDeleteSpellIndex] = useState(0);
     let [spellConfirmDelete, setSpellConfirmDelete] = useState(false);
-    let [deleteSpellConfirmationCount, setDeleteSpellConfirmationCount] = useState(0);
 
     let [spellNameVariable, setSpellNameVariable] = useState("");
     let [spellLevelVariable, setSpellLevelVariable] = useState("0");
@@ -581,7 +580,6 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                 )})}</View>
             {(deleteSpellToolDisplay && spellConfirmDelete) &&
                 <Pressable onPress={() => {
-                    setDeleteSpellConfirmationCount(0);
                     setSpellConfirmDelete(false);}}>
                     <Text style={{
                         textAlign: "center",
@@ -593,7 +591,6 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                     }}>Cancel Spell {deleteSpellName} Deletion?<FontAwesome size={28} name="smile-o" color={"green"} /></Text></Pressable>}
             {(deleteSpellToolDisplay && spellConfirmDelete) &&
                 <Pressable onPress={() => {
-                    setDeleteSpellConfirmationCount(0);
                     setSpellConfirmDelete(false);
                     currentCharacter.spells.splice(deleteSpellIndex, 1)
                     AsyncStorage.setItem("newCharacter" + currentCharacter.charName, JSON.stringify(currentCharacter));

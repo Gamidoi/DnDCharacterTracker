@@ -21,6 +21,7 @@ export class Spell {
                 isSaveDC : [boolean, string, string] = [false, "INT", "DEX"], damage: [boolean, number, number, number, number, number, number] = [false, 0, 0, 0, 0, 0, 0],
                 description : [boolean, string] = [false, ""],){
         this.name = name;
+        if (isNaN(spellLevel) || spellLevel == undefined){spellLevel = 0;}
         this.spellLevel = spellLevel;
         this.verbal = verbal;
         this.somatic = somatic;
