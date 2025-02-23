@@ -20,11 +20,11 @@ XXX- Separate the final roll into a highlighted box so easier to read? Not sure 
 
 Level Up tab: 
 - Close all option?
-- Some sections have ";" at end of button and some dont. Not sure what's going on there?
-- Play around with sizing of text fields, could get more real estate/less white space
+Xx- Some sections have ";" at end of button and some dont. Not sure what's going on there?
+XXX- Play around with sizing of text fields, could get more real estate/less white space
 - Adjust skills, not sure you need "not prof-prof..." under EVER section, maybe just at the top like a column header?
 XXX- "Open New Character Creator" slightly larger than others when collapsed
-- New spell tool section buttons are a bit large compared to the rest of the tab
+XXX- New spell tool section buttons are a bit large compared to the rest of the tab
 - New spell, change Spell Level to dropdown, possible for Casting Time as well (more variability with that though)
 - When using "confirm" windows, put object name in quotes, or have a "-" after the confirm to separate
-- Move Character Load/Delete to the bottom of the page, as it shouldnt be used as much (or maybe delete at the bottom and load at the top?)
+XXX- Move Character Load/Delete to the bottom of the page, as it shouldnt be used as much (or maybe delete at the bottom and load at the top?)
