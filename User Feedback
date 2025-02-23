@@ -1,0 +1,30 @@
+THESE ARE MERELY SUGGESTIONS, DO WITH THEM AS YOU WILL!
+
+Overall: Possible to keep character name visible on the top all the time?
+
+Character:
+- Capitolize "take damage" to match "Heal HP"
+
+Spells tab:
+- When "Close all Spells" clicked, minimize all spell lists internally
+- Maybe make Close All a "-" button with tooltip for Close all?  Not sure if better/worse, just a thought
+- Saving Throw section is a bit confusing 
+- Not sure spell level is needed within the spell window itself? If want it, maybe deliniate it more, like put it into a small box?
+- Damage types not shown with dice breakdown
+- Nitpick: is it possible to keep the "Close all" displayed all the time?
+- Personal pet peeve: Should capitolize the second part of spell components ("Casting Time: Action" instead of "..: action")
+
+Skills tab:
+- Advantage/Disadvantage: checkboxes instead of buttons with just "Advantage"/"Disadvantage" instead of full text
+- Separate the final roll into a highlighted box so easier to read? Not sure on that one
+
+Level Up tab: 
+- Close all option?
+- Some sections have ";" at end of button and some dont. Not sure what's going on there?
+- Play around with sizing of text fields, could get more real estate/less white space
+- Adjust skills, not sure you need "not prof-prof..." under EVER section, maybe just at the top like a column header?
+- "Open New Character Creator" slightly larger than others when collapsed
+- New spell tool section buttons are a bit large compared to the rest of the tab
+- New spell, change Spell Level to dropdown, possible for Casting Time as well (more variability with that though)
+- When using "confirm" windows, put object name in quotes, or have a "-" after the confirm to separate
+- Move Character Load/Delete to the bottom of the page, as it shouldnt be used as much (or maybe delete at the bottom and load at the top?)
