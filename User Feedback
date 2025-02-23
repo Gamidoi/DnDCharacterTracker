@@ -16,14 +16,14 @@ Spells tab:
 
 Skills tab:
 - Advantage/Disadvantage: checkboxes instead of buttons with just "Advantage"/"Disadvantage" instead of full text
-- Separate the final roll into a highlighted box so easier to read? Not sure on that one
+XXX- Separate the final roll into a highlighted box so easier to read? Not sure on that one
 
 Level Up tab: 
 - Close all option?
 - Some sections have ";" at end of button and some dont. Not sure what's going on there?
 - Play around with sizing of text fields, could get more real estate/less white space
 - Adjust skills, not sure you need "not prof-prof..." under EVER section, maybe just at the top like a column header?
-- "Open New Character Creator" slightly larger than others when collapsed
+XXX- "Open New Character Creator" slightly larger than others when collapsed
 - New spell tool section buttons are a bit large compared to the rest of the tab
 - New spell, change Spell Level to dropdown, possible for Casting Time as well (more variability with that though)
 - When using "confirm" windows, put object name in quotes, or have a "-" after the confirm to separate
