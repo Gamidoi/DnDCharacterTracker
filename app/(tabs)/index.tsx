@@ -1,9 +1,9 @@
 import { Image, StyleSheet, TextInput, View, Text, Pressable} from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import React, {useState, useContext} from "react";
-import {spellSlotsByLevel} from '@/assets/objects/spellSlotsByLevel';
+import {spellSlotsByLevel} from '@/assets/classes/spellSlotsByLevel';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Character} from "@/assets/objects/character";
+import {Character} from "@/assets/classes/character";
 import {ThingBadName} from "@/app/_layout";
 import {useNavigation} from "@react-navigation/native";
 

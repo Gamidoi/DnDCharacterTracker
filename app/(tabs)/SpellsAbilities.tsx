@@ -3,7 +3,7 @@ import {StyleSheet, Image, Text, View, Pressable} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import React, {useState} from "react";
-import {Character} from "@/assets/objects/character";
+import {Character} from "@/assets/classes/character";
 import {useNavigation} from "@react-navigation/native";
 import DisplaySpellBox from "@/components/displaySpellBox";
 

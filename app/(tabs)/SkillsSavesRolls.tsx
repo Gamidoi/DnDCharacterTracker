@@ -2,7 +2,7 @@ import {StyleSheet, Image, Text, View, Pressable} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState} from "react";
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import {Character} from '@/assets/objects/character';
+import {Character} from '@/assets/classes/character';
 import {useNavigation} from "@react-navigation/native";
 
 let initializingName :string|null;
@@ -36,16 +36,22 @@ export default function TabSkillsSavesRolls() {
 
     let [currentStatSTR, setCurrentStatSTR] = useState(currentCharacter.STR);
     let [currentSTRMod, setCurrentSTRMod] = useState(findCoreStatMod(currentStatSTR))
+    let [STRSaveProf, setSTRSaveProf] = useState(currentCharacter.STRSaveProf);
     let [currentStatDEX, setCurrentStatDEX] = useState(currentCharacter.DEX);
     let [currentDEXMod, setCurrentDEXMod] = useState(findCoreStatMod(currentStatDEX))
+    let [DEXSaveProf, setDEXSaveProf] = useState(currentCharacter.DEXSaveProf);
     let [currentStatCON, setCurrentStatCON] = useState(currentCharacter.CON);
     let [currentCONMod, setCurrentCONMod] = useState(findCoreStatMod(currentStatCON))
+    let [CONSaveProf, setCONSaveProf] = useState(currentCharacter.CONSaveProf);
     let [currentStatINT, setCurrentStatINT] = useState(currentCharacter.INT);
     let [currentINTMod, setCurrentINTMod] = useState(findCoreStatMod(currentStatINT))
+    let [INTSaveProf, setINTSaveProf] = useState(currentCharacter.INTSaveProf);
     let [currentStatWIS, setCurrentStatWIS] = useState(currentCharacter.WIS);
     let [currentWISMod, setCurrentWISMod] = useState(findCoreStatMod(currentStatWIS))
+    let [WISSaveProf, setWISSaveProf] = useState(currentCharacter.WISSaveProf);
     let [currentStatCHA, setCurrentStatCHA] = useState(currentCharacter.CHA);
     let [currentCHAMod, setCurrentCHAMod] = useState(findCoreStatMod(currentStatCHA))
+    let [CHASaveProf, setCHASaveProf] = useState(currentCharacter.CHASaveProf);
 
 
     let [currentRollDie1, setCurrentRollDie1] = useState(20);
@@ -96,6 +102,12 @@ export default function TabSkillsSavesRolls() {
                     setCurrentStatINT(currentCharacter.INT);
                     setCurrentStatWIS(currentCharacter.WIS);
                     setCurrentStatCHA(currentCharacter.CHA);
+                    setSTRSaveProf(currentCharacter.STRSaveProf);
+                    setDEXSaveProf(currentCharacter.DEXSaveProf);
+                    setCONSaveProf(currentCharacter.CONSaveProf);
+                    setINTSaveProf(currentCharacter.INTSaveProf);
+                    setWISSaveProf(currentCharacter.WISSaveProf);
+                    setCHASaveProf(currentCharacter.CHASaveProf);
                     setCurrentSTRMod(findCoreStatMod(currentCharacter.STR))
                     setCurrentDEXMod(findCoreStatMod(currentCharacter.DEX))
                     setCurrentCONMod(findCoreStatMod(currentCharacter.CON))
@@ -138,53 +150,8 @@ export default function TabSkillsSavesRolls() {
                 />
             }>
             <View style={{backgroundColor: 'black'}}>
-                <Pressable onPress={()=> {
-                    getNameAsString().then(nameString => {
-                        initializingName = nameString;
-                        getCurrentCharacterObjectStringPromise(initializingName).then(objectString => {
-                            let currentCharacterObjectString = objectString;
-                            if (currentCharacterObjectString != null) {
-                                currentCharacter = JSON.parse(currentCharacterObjectString);
-                            }
-
-                            setCurrentCharacterName(currentCharacter.charName);
-                            setCurrentStatSTR(currentCharacter.STR);
-                            setCurrentStatDEX(currentCharacter.DEX);
-                            setCurrentStatCON(currentCharacter.CON);
-                            setCurrentStatINT(currentCharacter.INT);
-                            setCurrentStatWIS(currentCharacter.WIS);
-                            setCurrentStatCHA(currentCharacter.CHA);
-                            setCurrentSTRMod(findCoreStatMod(currentCharacter.STR))
-                            setCurrentDEXMod(findCoreStatMod(currentCharacter.DEX))
-                            setCurrentCONMod(findCoreStatMod(currentCharacter.CON))
-                            setCurrentINTMod(findCoreStatMod(currentCharacter.INT))
-                            setCurrentWISMod(findCoreStatMod(currentCharacter.WIS))
-                            setCurrentCHAMod(findCoreStatMod(currentCharacter.CHA))
-                            setAthletics(currentCharacter.athletics);
-                            setAcrobatics(currentCharacter.acrobatics);
-                            setSleightOfHand(currentCharacter.sleightOfHand);
-                            setStealth(currentCharacter.stealth);
-                            setArcana(currentCharacter.arcana);
-                            setHistory(currentCharacter.history);
-                            setInvestigation(currentCharacter.investigation);
-                            setNature(currentCharacter.nature);
-                            setReligion(currentCharacter.religion);
-                            setAnimalHandling(currentCharacter.animalHandling);
-                            setInsight(currentCharacter.insight);
-                            setMedicine(currentCharacter.medicine);
-                            setPerception(currentCharacter.perception);
-                            setSurvival(currentCharacter.survival);
-                            setDeception(currentCharacter.deception);
-                            setIntimidation(currentCharacter.intimidation);
-                            setPerformance(currentCharacter.performance);
-                            setPersuasion(currentCharacter.persuasion);
-                            setCurrentProficiency(currentCharacter.proficiency);
-                        })});
-
-                }}>
                     <Text style={{color: "white", fontSize: 50, backgroundColor: "tan", textAlign: "center"}}>{currentCharacterName}
                     </Text>
-                </Pressable>
             </View>
 
             <Text style={{
@@ -214,7 +181,17 @@ export default function TabSkillsSavesRolls() {
                     <Text style={{color: "white", fontSize: 30, textAlign: "center"}}>{currentRollMod > 0 && "+"}{currentRollMod}</Text>
                 </View>
                 <Text style={{fontSize: 50, color: "white", marginTop: 16, flex: 0.2}}>=</Text>
-                <Text style={{fontSize: 25, color: "white", marginTop: 36, flex: 0.3}}>
+                <Text style={{
+                    fontSize: 25,
+                    color: "white",
+                    marginTop: 14,
+                    flex: 0.40,
+                    borderColor: "orange",
+                    borderWidth: 3,
+                    borderRadius: 15,
+                    textAlign: "center",
+                    textAlignVertical: "center",
+                }}>
                     {currentRollResult(currentRollMod, currentRollDie1, currentRollDie2, toggleAdvantage)}
                 </Text>
             </View>
@@ -253,7 +230,7 @@ export default function TabSkillsSavesRolls() {
 
 
 
-            <View style={{marginBottom: 20, backgroundColor: 'orange', flexDirection: "row"}}>
+            <View style={{backgroundColor: 'orange', flexDirection: "row"}}>
                 <Pressable style={[styles.coreSkillBoxes, {backgroundColor: "maroon"}]} onPress={()=> {
                     setCurrentRollMod(currentSTRMod);
                     setCurrentRollDie1(rollD20());
@@ -313,6 +290,94 @@ export default function TabSkillsSavesRolls() {
                     <Text style={styles.coreStatText}>CHA</Text>
                     <Text style={styles.coreStatText}>{currentStatCHA}</Text>
                     <Text style={styles.coreStatText}>{currentCHAMod > 0 && "+"}{currentCHAMod}</Text>
+                </Pressable>
+            </View>
+
+            <View style={{marginTop: -16, backgroundColor: 'orange', flexDirection: "row"}}>
+                <Pressable style={[styles.coreSkillBoxes, {backgroundColor: "maroon"}]} onPress={()=> {
+                    setCurrentRollMod(currentSTRMod);
+                    if (STRSaveProf) {setCurrentRollMod(currentSTRMod + currentProficiency);}
+                    setCurrentRollDie1(rollD20());
+                    setCurrentRollName("STR Save");
+                    if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
+                }}>
+                    {!STRSaveProf && <Text style={{fontSize: 7}}> </Text>}
+                    <Text style={styles.coreStatText}>Save</Text>
+                    {!STRSaveProf && <Text style={styles.coreStatText}>{currentSTRMod > 0 && "+"}{currentSTRMod}</Text>}
+                    {STRSaveProf && <Text style={styles.coreStatText}>{currentSTRMod + currentProficiency > 0 && "+"}{currentSTRMod + currentProficiency}</Text>}
+                    {STRSaveProf && <Text style={styles.coreStatText}>Prof</Text>}
+                    {!STRSaveProf && <Text style={{fontSize: 7}}> </Text>}
+
+                </Pressable>
+                <Pressable style={[styles.coreSkillBoxes, {backgroundColor: "green"}]} onPress={()=> {
+                    setCurrentRollMod(currentDEXMod);
+                    if (DEXSaveProf) {setCurrentRollMod(currentDEXMod + currentProficiency);}
+                    setCurrentRollDie1(rollD20());
+                    setCurrentRollName("DEX Save");
+                    if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
+                }}>
+                    {!DEXSaveProf && <Text style={{fontSize: 7}}> </Text>}
+                    <Text style={styles.coreStatText}>Save</Text>
+                    {!DEXSaveProf && <Text style={styles.coreStatText}>{currentDEXMod > 0 && "+"}{currentDEXMod}</Text>}
+                    {DEXSaveProf && <Text style={styles.coreStatText}>{currentDEXMod + currentProficiency > 0 && "+"}{currentDEXMod + currentProficiency}</Text>}
+                    {DEXSaveProf && <Text style={styles.coreStatText}>Prof</Text>}
+                    {!DEXSaveProf && <Text style={{fontSize: 7}}> </Text>}
+                </Pressable>
+                <Pressable style={styles.coreSkillBoxes} onPress={()=> {
+                    setCurrentRollMod(currentCONMod);
+                    if (CONSaveProf) {setCurrentRollMod(currentCONMod + currentProficiency);}
+                    setCurrentRollDie1(rollD20());
+                    setCurrentRollName("CON Save");
+                    if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
+                }}>
+                    {!CONSaveProf && <Text style={{fontSize: 7}}> </Text>}
+                    <Text style={styles.coreStatText}>Save</Text>
+                    {!CONSaveProf && <Text style={styles.coreStatText}>{currentCONMod > 0 && "+"}{currentCONMod}</Text>}
+                    {CONSaveProf && <Text style={styles.coreStatText}>{currentCONMod + currentProficiency > 0 && "+"}{currentCONMod + currentProficiency}</Text>}
+                    {CONSaveProf && <Text style={styles.coreStatText}>Prof</Text>}
+                    {!CONSaveProf && <Text style={{fontSize: 7}}> </Text>}
+                </Pressable>
+                <Pressable style={[styles.coreSkillBoxes, {backgroundColor: "blue"}]} onPress={()=> {
+                    setCurrentRollMod(currentINTMod);
+                    if (INTSaveProf) {setCurrentRollMod(currentINTMod + currentProficiency);}
+                    setCurrentRollDie1(rollD20());
+                    setCurrentRollName("INT Save");
+                    if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
+                }}>
+                    {!INTSaveProf && <Text style={{fontSize: 7}}> </Text>}
+                    <Text style={styles.coreStatText}>Save</Text>
+                    {!INTSaveProf && <Text style={styles.coreStatText}>{currentINTMod > 0 && "+"}{currentINTMod}</Text>}
+                    {INTSaveProf && <Text style={styles.coreStatText}>{currentINTMod + currentProficiency > 0 && "+"}{currentINTMod + currentProficiency}</Text>}
+                    {INTSaveProf && <Text style={styles.coreStatText}>Prof</Text>}
+                    {!INTSaveProf && <Text style={{fontSize: 7}}> </Text>}
+                </Pressable>
+                <Pressable style={[styles.coreSkillBoxes, {backgroundColor: "purple"}]} onPress={()=> {
+                    setCurrentRollMod(currentWISMod);
+                    if (WISSaveProf) {setCurrentRollMod(currentWISMod + currentProficiency);}
+                    setCurrentRollDie1(rollD20());
+                    setCurrentRollName("WIS Save");
+                    if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
+                }}>
+                    {!WISSaveProf && <Text style={{fontSize: 7}}> </Text>}
+                    <Text style={styles.coreStatText}>Save</Text>
+                    {!WISSaveProf && <Text style={styles.coreStatText}>{currentWISMod > 0 && "+"}{currentWISMod}</Text>}
+                    {WISSaveProf && <Text style={styles.coreStatText}>{currentWISMod + currentProficiency > 0 && "+"}{currentWISMod + currentProficiency}</Text>}
+                    {WISSaveProf && <Text style={styles.coreStatText}>Prof</Text>}
+                    {!WISSaveProf && <Text style={{fontSize: 7}}> </Text>}
+                </Pressable>
+                <Pressable style={[styles.coreSkillBoxes, {backgroundColor: "red"}]} onPress={()=> {
+                    setCurrentRollMod(currentCHAMod);
+                    if (CHASaveProf) {setCurrentRollMod(currentCHAMod + currentProficiency);}
+                    setCurrentRollDie1(rollD20());
+                    setCurrentRollName("CHA Save");
+                    if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
+                }}>
+                    {!CHASaveProf && <Text style={{fontSize: 7}}> </Text>}
+                    <Text style={styles.coreStatText}>Save</Text>
+                    {!CHASaveProf && <Text style={styles.coreStatText}>{currentCHAMod > 0 && "+"}{currentCHAMod}</Text>}
+                    {CHASaveProf && <Text style={styles.coreStatText}>{currentCHAMod + currentProficiency > 0 && "+"}{currentCHAMod + currentProficiency}</Text>}
+                    {CHASaveProf && <Text style={styles.coreStatText}>Prof</Text>}
+                    {!CHASaveProf && <Text style={{fontSize: 7}}> </Text>}
                 </Pressable>
             </View>
 
@@ -663,6 +728,7 @@ const styles = StyleSheet.create({
         backgroundColor: "teal",
         margin: 3,
         borderRadius: 6,
+        alignSelf: "center",
     },
     coreStatText: {
         color: "white",

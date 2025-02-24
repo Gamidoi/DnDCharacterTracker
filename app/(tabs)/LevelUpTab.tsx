@@ -2,10 +2,11 @@ import { Image, StyleSheet, Text, View, TextInput, Pressable} from 'react-native
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState} from "react";
-import {Character, updateProficiency, updateSpellcastingLevel} from '@/assets/objects/character';
+import {Character, updateProficiency, updateSpellcastingLevel} from '@/assets/classes/character';
 import {FontAwesome, MaterialCommunityIcons} from "@expo/vector-icons";
 import {useNavigation} from "@react-navigation/native";
-import newSpellCreationTool from "@/assets/objects/newSpellCreationTool";
+import newSpellCreationTool from "@/components/newSpellCreationTool";
+import AdjustCoreStatSaves from "@/components/adjustCoreStatSaves";
 
 
 
@@ -127,6 +128,37 @@ export default function levelUpTab() {
     }, [navigation]);
 
 
+    function displayCoreStats(){
+        return(
+        <View style={{flexDirection: "row", alignSelf: "center", backgroundColor: "grey"}}>
+            <View style={styles.coreStatBox}>
+                {<Text style={{color: "white", textAlign: "center"}}>STR</Text>}
+                {<Text style={{color: "white", textAlign: "center"}}>{currentStatSTR}</Text>}
+            </View>
+            <View style={styles.coreStatBox}>
+                {<Text style={{color: "white", textAlign: "center"}}>DEX</Text>}
+                {<Text style={{color: "white", textAlign: "center"}}>{currentStatDEX}</Text>}
+            </View>
+            <View style={styles.coreStatBox}>
+                {<Text style={{color: "white", textAlign: "center"}}>CON</Text>}
+                {<Text style={{color: "white", textAlign: "center"}}>{currentStatCON}</Text>}
+            </View>
+            <View style={styles.coreStatBox}>
+                {<Text style={{color: "white", textAlign: "center"}}>INT</Text>}
+                {<Text style={{color: "white", textAlign: "center"}}>{currentStatINT}</Text>}
+            </View>
+            <View style={styles.coreStatBox}>
+                {<Text style={{color: "white", textAlign: "center"}}>WIS</Text>}
+                {<Text style={{color: "white", textAlign: "center"}}>{currentStatWIS}</Text>}
+            </View>
+            <View style={styles.coreStatBox}>
+                {<Text style={{color: "white", textAlign: "center"}}>CHA</Text>}
+                {<Text style={{color: "white", textAlign: "center"}}>{currentStatCHA}</Text>}
+            </View>
+        </View>)
+    }
+
+
     function updateAllStatsToNewCharacter(){
         setCurrentCharacterName(currentCharacter.charName);
         setCurrentCharacterLevel(currentCharacter.characterLevel);
@@ -164,6 +196,16 @@ export default function levelUpTab() {
         return false;
     }
 
+    function getSpellCastingLevelAsString(){
+        let spellLevelString :number = parseInt(fullCasterLevelsChangeVariable) + (parseInt(halfCasterLevelsChangeVariable) / 2);
+        if (isNaN(spellLevelString)){
+            if (!isNaN(parseInt(fullCasterLevelsChangeVariable))){return (fullCasterLevelsChangeVariable);}
+            if (!isNaN(parseInt(halfCasterLevelsChangeVariable))){return ("" + Math.floor(parseInt(halfCasterLevelsChangeVariable) / 2));}
+            return "";
+        }
+        return ("" + spellLevelString);
+    }
+
 
 
     return (
@@ -184,10 +226,54 @@ export default function levelUpTab() {
                 <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}>Total Spellcasting Level: {spellCastingLevel}</Text>
                 <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}>Full caster: {fullCasterLevel} | Half Caster: {halfCasterLevel}</Text>
                 {warlockCastingLevel > 0 && <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}>Warlock Level: {warlockCastingLevel}</Text>}
+                {displayCoreStats()}
             </View>
 
 
 
+            <View style={styles.toolBoxStyle}>
+                <Pressable style={styles.toolBoxStyle} onPress={() =>
+                {setLoadCharacterBoxDisplayStatus(!loadCharacterBoxDisplayStatus);}
+                }><View>
+                    {!loadCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open Load Character Tool</Text>}
+                    {loadCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Close Load Character Tool</Text>}
+                    {loadCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Select Character Below</Text>}
+                </View></Pressable>
+                {(loadCharacterBoxDisplayStatus && (loadCharacterConfirmationCount > 0)) &&
+                    <Pressable style={styles.confirmationButton} onPress={() => {setLoadCharacterConfirmationCount(0);}}>
+                        <Text style={styles.confirmationBox}>Confirmed! Character</Text>
+                        <Text style={styles.confirmationBox}>"{currentCharacterName}"</Text>
+                        <Text style={styles.confirmationBox}>Loaded! {loadCharacterConfirmationCount} time(s)!</Text>
+                    </Pressable>}
+                <View style={{alignSelf: "center"}}>
+                    {allCharacterNames.map((pickedNameFromLoadCharacterTool) => {
+                        return(
+                            loadCharacterBoxDisplayStatus && <View><Pressable onPress={() => {
+                                setLoadCharacterConfirmationCount(loadCharacterConfirmationCount + 1);
+                                AsyncStorage.setItem("currentCharacterName", pickedNameFromLoadCharacterTool);
+                                getCurrentCharacterObjectStringPromise(pickedNameFromLoadCharacterTool).then((objectString :string|null) => {
+                                    currentCharacter = JSON.parse("" + objectString);
+                                    setDetectChange(true)
+                                });
+                            }}><Text style={{
+                                fontSize: 20,
+                                backgroundColor: "maroon",
+                                textAlign: "center",
+                                margin: 10,
+                                height: 50,
+                                borderRadius: 30,
+                                width: 260,
+                                color: "white",
+                                paddingTop: 10,
+                                borderColor: "orange",
+                                borderWidth: 3,
+                            }}>{pickedNameFromLoadCharacterTool}</Text></Pressable></View>
+                        )})}</View>
+            </View>
+
+
+
+            <View>{newSpellCreationTool(currentCharacter)}</View>
 
 
             <Pressable style={styles.toolBoxStyle} onPress={() =>
@@ -215,15 +301,11 @@ export default function levelUpTab() {
                             textAlign: "center"
                         }}/>}
                     {(addHPAdjustBoxDisplayStatus && (addHPAdjustConfirmationCount > 0)) &&
-                        <Pressable onPress={() => {setAddHPAdjustConfirmationCount(0);}}>
-                            <Text style={{
-                                textAlign: "center",
-                                color: "white",
-                                fontSize: 25,
-                                backgroundColor: "blue",
-                                margin: 15,
-                                borderRadius: 10
-                            }}>Confirmed! HP Updated {addHPAdjustConfirmationCount} time(s)!</Text></Pressable>}
+                        <Pressable style={styles.confirmationButton} onPress={() => {setAddHPAdjustConfirmationCount(0);}}>
+                            <Text style={styles.confirmationBox}>Confirmed! HP Updated</Text>
+                            <Text style={styles.confirmationBox}>Max HP = {HPChangeVariable}</Text>
+                            <Text style={styles.confirmationBox}>{addHPAdjustConfirmationCount} time(s)!</Text>
+                        </Pressable>}
                     {addHPAdjustBoxDisplayStatus && <Pressable
                         style={styles.toolBoxButton}
                         onPress={() => {{
@@ -234,7 +316,7 @@ export default function levelUpTab() {
                                 setMaxHP(parseInt(HPChangeVariable));
                                 setAddHPAdjustConfirmationCount(addHPAdjustConfirmationCount + 1);
                         }}}>
-                        <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust Max HP; {HPChangeVariable}</Text>
+                        <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust Max HP: {HPChangeVariable}</Text>
                     </Pressable>}
                 </View>
             </Pressable>
@@ -326,16 +408,15 @@ export default function levelUpTab() {
                             }}
                         />}</View>
                     </View>
+
                     {(addSpellAndCharacterLevelBoxDisplayStatus && (addSpellandCharacterLevelConfirmationCount > 0)) &&
-                        <Pressable onPress={() => {setAddSpellAndCharaterLevelConfirmationCount(0);}}>
-                            <Text style={{
-                                textAlign: "center",
-                                color: "white",
-                                fontSize: 25,
-                                backgroundColor: "blue",
-                                margin: 15,
-                                borderRadius: 10
-                            }}>Confirmed! Spellcasting and Character Level Updated {addSpellandCharacterLevelConfirmationCount} time(s)!</Text></Pressable>}
+                        <Pressable style={styles.confirmationButton} onPress={() => {setAddSpellAndCharaterLevelConfirmationCount(0);}}>
+                            <Text style={styles.confirmationBox}>Confirmed!</Text>
+                            <Text style={styles.confirmationBox}>Character Level: {characterLevelChangeVariable}</Text>
+                            <Text style={styles.confirmationBox}>Spellcasting Level: {getSpellCastingLevelAsString()}</Text>
+                            <Text style={styles.confirmationBox}>Updated {addSpellandCharacterLevelConfirmationCount} time(s)!</Text>
+                        </Pressable>}
+
                     {addSpellAndCharacterLevelBoxDisplayStatus && <Pressable
                         style={styles.toolBoxButton}
                         onPress={() => {
@@ -359,8 +440,9 @@ export default function levelUpTab() {
                             setAddSpellAndCharaterLevelConfirmationCount(addSpellandCharacterLevelConfirmationCount + 1);
                             AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter));
                         }}>
-                        <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust Character Level: {characterLevelChangeVariable} and Spellcasting Level: {parseInt(fullCasterLevelsChangeVariable) + (parseInt(halfCasterLevelsChangeVariable) / 2)} </Text>
-                        {(currentCharacter.warlockCasterLevel > 0 || parseInt("" + warlockCasterLevelsChangeVariable) > 0) && <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Warlock Level {warlockCasterLevelsChangeVariable}</Text>}
+                        <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust Character Level: {characterLevelChangeVariable}</Text>
+                        <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Spellcasting Level: {getSpellCastingLevelAsString()} </Text>
+                        {(currentCharacter.warlockCasterLevel > 0 || parseInt(warlockCasterLevelsChangeVariable) > 0) && <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Warlock Level: {warlockCasterLevelsChangeVariable}</Text>}
                     </Pressable>}
                 </View>
             </Pressable>
@@ -371,30 +453,10 @@ export default function levelUpTab() {
             <Pressable style={styles.toolBoxStyle} onPress={() =>
             {setAddAbilityScoreBoxDisplayStatus(!addAbilityScoreBoxDisplayStatus)}
             }>
-                <View style={{marginBottom: 10}}>
+                <View>
                     {!addAbilityScoreBoxDisplayStatus && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open Ability Score Tool</Text>}
                     {addAbilityScoreBoxDisplayStatus && <Text style={{color: "white", textAlign: "center", marginTop: 15, marginBottom: 18}}>Close Ability Score Tool</Text>}
-                    <View style={{flexDirection: "row", alignSelf: "center", backgroundColor: "grey"}}>
-                        <View style={styles.coreStatBox}>
-                            {<Text style={{color: "white", textAlign: "center"}}>STR</Text>}
-                            {<Text style={{color: "white", textAlign: "center"}}>{currentStatSTR}</Text>}
-                        </View><View style={styles.coreStatBox}>
-                            {<Text style={{color: "white", textAlign: "center"}}>DEX</Text>}
-                            {<Text style={{color: "white", textAlign: "center"}}>{currentStatDEX}</Text>}
-                    </View><View style={styles.coreStatBox}>
-                            {<Text style={{color: "white", textAlign: "center"}}>CON</Text>}
-                            {<Text style={{color: "white", textAlign: "center"}}>{currentStatCON}</Text>}
-                    </View><View style={styles.coreStatBox}>
-                            {<Text style={{color: "white", textAlign: "center"}}>INT</Text>}
-                            {<Text style={{color: "white", textAlign: "center"}}>{currentStatINT}</Text>}
-                    </View><View style={styles.coreStatBox}>
-                            {<Text style={{color: "white", textAlign: "center"}}>WIS</Text>}
-                            {<Text style={{color: "white", textAlign: "center"}}>{currentStatWIS}</Text>}
-                    </View><View style={styles.coreStatBox}>
-                            {<Text style={{color: "white", textAlign: "center"}}>CHA</Text>}
-                            {<Text style={{color: "white", textAlign: "center"}}>{currentStatCHA}</Text>}
-                    </View>
-                </View>
+                    {addAbilityScoreBoxDisplayStatus && <View>{displayCoreStats()}</View>}
                     {addAbilityScoreBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter stat Below</Text>}
                     {addAbilityScoreBoxDisplayStatus && <TextInput
                         onChangeText={setAbilityScoreChangeVariable}
@@ -425,7 +487,7 @@ export default function levelUpTab() {
                             AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
                             setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
                         }}>
-                        <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust STR; {abilityScoreChangeVariable}</Text>
+                        <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust STR: {abilityScoreChangeVariable}</Text>
                     </Pressable>}
                         {addAbilityScoreBoxDisplayStatus && <Pressable
                             style={styles.coreStatAdjustButton}
@@ -438,7 +500,7 @@ export default function levelUpTab() {
                                 AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
                                 setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
                             }}>
-                            <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust DEX; {abilityScoreChangeVariable}</Text>
+                            <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust DEX: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
                         {addAbilityScoreBoxDisplayStatus && <Pressable
                             style={styles.coreStatAdjustButton}
@@ -451,7 +513,7 @@ export default function levelUpTab() {
                                 AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
                                 setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
                             }}>
-                            <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust CON; {abilityScoreChangeVariable}</Text>
+                            <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust CON: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
                     </View>
                     <View style={{flexDirection: "row", alignSelf: "center"}}>
@@ -466,7 +528,7 @@ export default function levelUpTab() {
                                 AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
                                 setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
                             }}>
-                            <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust INT; {abilityScoreChangeVariable}</Text>
+                            <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust INT: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
                         {addAbilityScoreBoxDisplayStatus && <Pressable
                             style={styles.coreStatAdjustButton}
@@ -479,7 +541,7 @@ export default function levelUpTab() {
                                 AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
                                 setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
                             }}>
-                            <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust WIS; {abilityScoreChangeVariable}</Text>
+                            <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust WIS: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
                         {addAbilityScoreBoxDisplayStatus && <Pressable
                             style={styles.coreStatAdjustButton}
@@ -492,19 +554,14 @@ export default function levelUpTab() {
                                 AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
                                 setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
                             }}>
-                            <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust CHA; {abilityScoreChangeVariable}</Text>
+                            <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust CHA: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
                     </View>
                     {(addAbilityScoreBoxDisplayStatus && (addAbilityScoreConfirmationCount > 0)) &&
-                        <Pressable onPress={() => {setAddAbilityScoreConfirmationCount(0);}}>
-                            <Text style={{
-                                textAlign: "center",
-                                color: "white",
-                                fontSize: 25,
-                                backgroundColor: "blue",
-                                margin: 15,
-                                borderRadius: 10
-                            }}>Confirmed! Ability Scores Updated {addAbilityScoreConfirmationCount} time(s)!</Text></Pressable>}
+                        <Pressable style={styles.confirmationButton} onPress={() => {setAddAbilityScoreConfirmationCount(0);}}>
+                            <Text style={styles.confirmationBox}>Confirmed! Ability Scores Updated</Text>
+                            <Text style={styles.confirmationBox}>{addAbilityScoreConfirmationCount} time(s)!</Text>
+                        </Pressable>}
                 </View>
             </Pressable>
 
@@ -738,15 +795,10 @@ export default function levelUpTab() {
                         </View>
                     </View>}
                     {(addSkillsBoxDisplayStatus && (skillChangeConfirmationCount > 0)) &&
-                        <Pressable onPress={() => {setSkillChangeConfirmationCount(0);}}>
-                        <Text style={{
-                        textAlign: "center",
-                        color: "white",
-                        fontSize: 25,
-                        backgroundColor: "blue",
-                        margin: 15,
-                        borderRadius: 10
-                    }}>Confirmed! Skills Updated {skillChangeConfirmationCount} time(s)!</Text></Pressable>}
+                        <Pressable style={styles.confirmationButton} onPress={() => {setSkillChangeConfirmationCount(0);}}>
+                            <Text style={styles.confirmationBox}>Confirmed! Skills Updated</Text>
+                            <Text style={styles.confirmationBox}>{skillChangeConfirmationCount} time(s)!</Text>
+                        </Pressable>}
                     {addSkillsBoxDisplayStatus && <Pressable
                         style={styles.toolBoxButton}
                         onPress={() => {{
@@ -779,49 +831,8 @@ export default function levelUpTab() {
 
 
 
-            <View style={styles.toolBoxStyle}>
-                <Pressable style={styles.toolBoxStyle} onPress={() =>
-                    {setLoadCharacterBoxDisplayStatus(!loadCharacterBoxDisplayStatus);}
-                    }><View>
-                    {!loadCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open Load Character Tool</Text>}
-                    {loadCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Close Load Character Tool</Text>}
-                    {loadCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Select Character Below</Text>}
-                </View></Pressable>
-                {(loadCharacterBoxDisplayStatus && (loadCharacterConfirmationCount > 0)) &&
-                    <Pressable onPress={() => {setLoadCharacterConfirmationCount(0);}}>
-                        <Text style={{
-                            textAlign: "center",
-                            color: "white",
-                            fontSize: 25,
-                            backgroundColor: "blue",
-                            margin: 15,
-                            borderRadius: 10
-                        }}>Confirmed! Character {currentCharacterName} Loaded! {loadCharacterConfirmationCount} time(s)!</Text></Pressable>}
-                <View style={{alignSelf: "center"}}>
-                {allCharacterNames.map((pickedNameFromLoadCharacterTool) => {
-                return(
-                    loadCharacterBoxDisplayStatus && <View><Pressable onPress={() => {
-                        setLoadCharacterConfirmationCount(loadCharacterConfirmationCount + 1);
-                        AsyncStorage.setItem("currentCharacterName", pickedNameFromLoadCharacterTool);
-                        getCurrentCharacterObjectStringPromise(pickedNameFromLoadCharacterTool).then((objectString :string|null) => {
-                            currentCharacter = JSON.parse("" + objectString);
-                            updateAllStatsToNewCharacter();
-                        });
-                    }}><Text style={{
-                        fontSize: 20,
-                        backgroundColor: "maroon",
-                        textAlign: "center",
-                        margin: 10,
-                        height: 50,
-                        borderRadius: 30,
-                        width: 260,
-                        color: "white",
-                        paddingTop: 10,
-                        borderColor: "orange",
-                        borderWidth: 3,
-                    }}>{pickedNameFromLoadCharacterTool}</Text></Pressable></View>
-            )})}</View>
-            </View>
+
+            <View>{AdjustCoreStatSaves(currentCharacter, detectChange)}</View>
 
 
 
@@ -849,67 +860,63 @@ export default function levelUpTab() {
                             color: "white"
                         }}
                     />}
-                    <View style={{
+                    {addCharacterBoxDisplayStatus && <View style={{
                         flexDirection: "row",
                         alignSelf: "center",
                         margin: 10,}}>
                         <View>
-                    {addCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter initial</Text>}
+                            {addCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter initial</Text>}
                             {addCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>HP Below</Text>}
-                    {addCharacterBoxDisplayStatus && <TextInput
-                        onChangeText={setHPChangeVariable}
-                        keyboardType={"numeric"}
-                        maxLength={3}
-                        placeholder={"123"}
-                        placeholderTextColor={"grey"}
-                        style={{
-                            fontSize: 22,
-                            borderStyle: "solid",
-                            borderWidth: 3,
-                            borderColor: "white",
-                            width: 120,
-                            height: 60,
-                            alignSelf: "center",
-                            color: "white",
-                            marginLeft: 10,
-                            marginRight: 10,
-                        }}
-                    />}
+                            {addCharacterBoxDisplayStatus && <TextInput
+                                onChangeText={setHPChangeVariable}
+                                keyboardType={"numeric"}
+                                maxLength={3}
+                                placeholder={"123"}
+                                placeholderTextColor={"grey"}
+                                style={{
+                                    fontSize: 22,
+                                    borderStyle: "solid",
+                                    borderWidth: 3,
+                                    borderColor: "white",
+                                    width: 120,
+                                    height: 60,
+                                    alignSelf: "center",
+                                    color: "white",
+                                    marginLeft: 10,
+                                    marginRight: 10,
+                                }}
+                            />}
                         </View>
                         <View>
-                    {addCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter Character</Text>}
+                            {addCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter Character</Text>}
                             {addCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Level</Text>}
-                    {addCharacterBoxDisplayStatus && <TextInput
-                        onChangeText={setCharacterLevelChangeVariable}
-                        keyboardType={"numeric"}
-                        maxLength={2}
-                        placeholder={"12"}
-                        placeholderTextColor={"grey"}
-                        style={{
-                            fontSize: 22,
-                            borderStyle: "solid",
-                            borderWidth: 3,
-                            borderColor: "white",
-                            width: 120,
-                            height: 60,
-                            alignSelf: "center",
-                            color: "white",
-                            marginLeft: 10,
-                            marginRight: 10,
-                        }}
-                    />}
+                            {addCharacterBoxDisplayStatus && <TextInput
+                                onChangeText={setCharacterLevelChangeVariable}
+                                keyboardType={"numeric"}
+                                maxLength={2}
+                                placeholder={"12"}
+                                placeholderTextColor={"grey"}
+                                style={{
+                                    fontSize: 22,
+                                    borderStyle: "solid",
+                                    borderWidth: 3,
+                                    borderColor: "white",
+                                    width: 120,
+                                    height: 60,
+                                    alignSelf: "center",
+                                    color: "white",
+                                    marginLeft: 10,
+                                    marginRight: 10,
+                                }}
+                        />}
                     </View>
-                </View>
+                </View>}
                     {(addCharacterBoxDisplayStatus && (addCharacterConfirmationCount > 0)) &&
-                        <Pressable onPress={() => {setAddCharacterConfirmationCount(0);}}>
-                            <Text style={{
-                                textAlign: "center",
-                                color: "white",
-                                fontSize: 25,
-                                backgroundColor: "blue",
-                                margin: 15,
-                                borderRadius: 10
-                            }}>Confirmed! New Character {currentCharacterName} Created! {addCharacterConfirmationCount} time(s)!</Text></Pressable>}
+                        <Pressable style={styles.confirmationButton} onPress={() => {setAddCharacterConfirmationCount(0);}}>
+                            <Text style={styles.confirmationBox}>Confirmed! New Character</Text>
+                            <Text style={styles.confirmationBox}>"{currentCharacterName}"</Text>
+                            <Text style={styles.confirmationBox}>Created! {addCharacterConfirmationCount} time(s)!</Text>
+                        </Pressable>}
                     {addCharacterBoxDisplayStatus && <Pressable
                         style={styles.toolBoxButton}
                         onPress={() => {if (nameChangeVariable != ""){
@@ -979,19 +986,27 @@ export default function levelUpTab() {
                             }}>{pickedNameDeleteCharacterTool}</Text></Pressable></View>
                         )})}</View>
                 {(deleteCharacterBoxDisplayStatus && confirmDelete) &&
-                    <Pressable onPress={() => {
+                    <Pressable style={styles.confirmationButton} onPress={() => {
                         setDeleteCharacterConfirmationCount(0);
                         setConfirmDelete(!confirmDelete);}}>
-                        <Text style={{
-                            textAlign: "center",
-                            color: "white",
-                            fontSize: 25,
-                            backgroundColor: "blue",
-                            margin: 15,
-                            borderRadius: 10
-                        }}>Cancel Character {deletionName} Deletion?<FontAwesome size={28} name="smile-o" color={"green"} /></Text></Pressable>}
+                        <Text style={styles.confirmationBox}>Cancel Character Deletion?</Text>
+                        <Text style={styles.confirmationBox}>"{deletionName}"</Text>
+                        <Text style={styles.confirmationBox}>\---<FontAwesome size={40} name="smile-o" color={"green"} />---/</Text>
+                    </Pressable>}
+
+                {(deleteCharacterBoxDisplayStatus && confirmDelete && (currentCharacterName == deletionName)) && <View>
+                    <Text style={{
+                        backgroundColor: "yellow",
+                        borderColor: "red",
+                        borderWidth: 6,
+                        textAlign: "center",
+                        fontSize: 16,
+                        margin: 10
+                    }}>Warning! Deleting the Currently Loaded Character, will Create and Load a "default" Character</Text>
+                </View>}
+
                 {(deleteCharacterBoxDisplayStatus && confirmDelete) &&
-                    <Pressable onPress={() => {
+                    <Pressable style={styles.confirmationButton} onPress={() => {
                         setDeleteCharacterConfirmationCount(0);
                         setConfirmDelete(!confirmDelete);
                         AsyncStorage.removeItem("newCharacter" + deletionName);
@@ -1001,6 +1016,7 @@ export default function levelUpTab() {
                             AsyncStorage.setItem("newCharacter" + currentCharacter.charName, JSON.stringify(currentCharacter));
                             AsyncStorage.setItem("currentCharacterName", currentCharacter.charName);
                             setCurrentCharacterName(currentCharacter.charName);
+                            setDetectChange(true);
                         }
                         getAllCharacterNames().then(keysString => {
                             allCharacterNamesInitial = [];
@@ -1011,17 +1027,11 @@ export default function levelUpTab() {
                             setAllCharacterNames(allCharacterNamesInitial);
                         })
                     }}>
-                        <Text style={{
-                            textAlign: "center",
-                            color: "white",
-                            fontSize: 25,
-                            backgroundColor: "blue",
-                            margin: 15,
-                            borderRadius: 10
-                        }}>Confirm Character {deletionName} Deletion?<MaterialCommunityIcons size={28} name="skull-crossbones-outline" color={"red"} /></Text></Pressable>}
+                        <Text style={styles.confirmationBox}>Confirm Character Deletion?</Text>
+                        <Text style={styles.confirmationBox}>"{deletionName}"</Text>
+                        <Text style={styles.confirmationBox}>/---<MaterialCommunityIcons size={40} name="skull-crossbones-outline" color={"red"} />---\</Text>
+                    </Pressable>}
             </View>
-
-            <View>{newSpellCreationTool(currentCharacter)}</View>
 
             {detectChange && updateAllStatsToNewCharacter()}
         </ParallaxScrollView>
@@ -1072,7 +1082,6 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         margin: 3,
     },
-
     skillsText: {
         color: "white",
         fontSize: 20,
@@ -1102,5 +1111,15 @@ const styles = StyleSheet.create({
         height: 45,
         fontSize: 9,
         color: "white",
-    }
+    },
+    confirmationBox: {
+        textAlign: "center",
+        color: "white",
+        fontSize: 18,
+    },
+    confirmationButton: {
+        margin: 15,
+        backgroundColor: "blue",
+        borderRadius: 10,
+    },
 });

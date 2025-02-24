@@ -1,4 +1,4 @@
-import {Spell} from "@/assets/objects/spell";
+import {Spell} from "@/assets/classes/spell";
 
 export class Character {
     charName: string;
@@ -19,6 +19,12 @@ export class Character {
     INT: number;
     WIS: number;
     CHA: number;
+    STRSaveProf: boolean;
+    DEXSaveProf: boolean;
+    CONSaveProf: boolean;
+    INTSaveProf: boolean;
+    WISSaveProf: boolean;
+    CHASaveProf: boolean;
     proficiency: number;
 
     athletics: string
@@ -52,6 +58,7 @@ export class Character {
         this.abilities = [];
         this.spells = [];
         this.STR = this.DEX = this.CON = this.INT = this.WIS = this.CHA = 10;
+        this.STRSaveProf = this.DEXSaveProf = this.CONSaveProf = this.INTSaveProf = this.WISSaveProf = this.CHASaveProf= false;
         this.proficiency = this.updateProficiency(characterLevel);
 
         this.athletics = this.acrobatics = this.sleightOfHand = this.stealth = this.arcana = this.history = this.investigation = this.nature = this.religion =

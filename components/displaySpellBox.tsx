@@ -1,6 +1,6 @@
 import {StyleSheet, Text, View} from "react-native";
-import {Spell} from "@/assets/objects/spell";
-import {Character} from "@/assets/objects/character";
+import {Spell} from "@/assets/classes/spell";
+import {Character} from "@/assets/classes/character";
 
 
 

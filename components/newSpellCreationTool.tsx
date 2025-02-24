@@ -2,8 +2,8 @@ import {StyleSheet, Text, View, Pressable, TextInput} from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState} from "react";
-import {Spell} from "@/assets/objects/spell";
-import {Character} from "@/assets/objects/character";
+import {Spell} from "@/assets/classes/spell";
+import {Character} from "@/assets/classes/character";
 import {FontAwesome, MaterialCommunityIcons} from "@expo/vector-icons";
 
 
@@ -63,10 +63,10 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                                 borderWidth: 3,
                                 borderColor: "white",
                                 width: 250,
-                                height: 60,
                                 alignSelf: "center",
                                 color: "white",
-                                textAlign: "center"
+                                textAlign: "center",
+                                padding: 0,
                             }}/>
                     </View>
                     <View style={{flex: 0.3, alignSelf: "center"}}>
@@ -83,7 +83,7 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                                 borderWidth: 3,
                                 borderColor: "white",
                                 width: 100,
-                                height: 60,
+                                padding: 0,
                                 alignSelf: "center",
                                 color: "white",
                                 textAlign: "center",
@@ -92,63 +92,65 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                     </View>
                 </View>
                 <View style={{flexDirection: "row", alignSelf: "center", marginBottom: 5}}>
-                    <View style={{flex: 0.333}}>
-                        <Text style={styles.lables}>Requires Verbal Components?</Text>
+                    <View style={{flex: 0.2}}>
+                        <Text style={styles.lables}>Verbal</Text>
                         <Pressable
                             style={styles.newSpellToolToggleButtons}
                             onPress={() => {setSpellVerbalVariable(!spellVerbalVariable)}}>
                             <Text style={styles.toggleButtonLables}>{spellVerbalVariable ? "Yes" : "No"}</Text>
                         </Pressable>
                     </View>
-                    <View style={{flex: 0.333}}>
-                        <Text style={styles.lables}>Requires Somatic Components?</Text>
+                    <View style={{flex: 0.2}}>
+                        <Text style={styles.lables}>Somatic</Text>
                         <Pressable
                             style={styles.newSpellToolToggleButtons}
                             onPress={() => {setSpellSomaticVariable(!spellSomaticVariable)}}>
                             <Text style={styles.toggleButtonLables}>{spellSomaticVariable ? "Yes" : "No"}</Text>
                         </Pressable>
                     </View>
-                    <View style={{flex: 0.333}}>
-                        <Text style={styles.lables}>Requires Material Components?</Text>
+                    <View style={{flex: 0.2}}>
+                        <Text style={styles.lables}>Material</Text>
                         <Pressable
                             style={styles.newSpellToolToggleButtons}
                             onPress={() => {setSpellMaterialBooleanVariable(!spellMaterialBooleanVariable)}}>
                             <Text style={styles.toggleButtonLables}>{spellMaterialBooleanVariable ? "Yes" : "No"}</Text>
                         </Pressable>
                     </View>
+                    <View style={{flex: 0.2}}>
+                        <Text style={styles.lables}>Concentrate</Text>
+                        <Pressable
+                            style={styles.newSpellToolToggleButtons}
+                            onPress={() => {setSpellConcentrationVariable(!spellConcentrationVariable)}}>
+                            <Text style={styles.toggleButtonLables}>{spellConcentrationVariable ? "Yes" : "No"}</Text>
+                        </Pressable></View>
+                    <View style={{flex: 0.2}}>
+                        <Text style={styles.lables}>Ritual</Text>
+                        <Pressable
+                            style={styles.newSpellToolToggleButtons}
+                            onPress={() => {setSpellRitualVariable(!spellRitualVariable)}}>
+                            <Text style={styles.toggleButtonLables}>{spellRitualVariable ? "Yes" : "No"}</Text>
+                        </Pressable></View>
                 </View>
                 {spellMaterialBooleanVariable && <Text style={styles.lables}>If specified, what are the Material Components?</Text>}
                 {spellMaterialBooleanVariable && <TextInput
                     onChangeText={setSpellMaterialDescriptionVariable}
                     placeholder={"Bat Guano worth 25gp"}
                     placeholderTextColor={"grey"}
+                    multiline={true}
                     style={{
                         fontSize: 22,
                         borderStyle: "solid",
                         borderWidth: 3,
                         borderColor: "white",
                         width: 300,
-                        height: 60,
+                        padding: 0,
                         alignSelf: "center",
                         color: "white",
                         textAlign: "center",
                         marginBottom: 10
                 }}/>}
                 <View style={{flexDirection: "row", alignSelf: "center", marginBottom: 10}}>
-                    <View style={{flex: 0.333}}>
-                        <Text style={styles.lables}>Requires Concentration?</Text>
-                        <Pressable
-                            style={styles.newSpellToolToggleButtons}
-                            onPress={() => {setSpellConcentrationVariable(!spellConcentrationVariable)}}>
-                            <Text style={styles.toggleButtonLables}>{spellConcentrationVariable ? "Yes" : "No"}</Text>
-                        </Pressable></View>
-                    <View style={{flex: 0.333}}>
-                        <Text style={styles.lables}>Can be Cast as a Ritual?</Text>
-                        <Pressable
-                            style={styles.newSpellToolToggleButtons}
-                            onPress={() => {setSpellRitualVariable(!spellRitualVariable)}}>
-                            <Text style={styles.toggleButtonLables}>{spellRitualVariable ? "Yes" : "No"}</Text>
-                        </Pressable></View>
+                    -------------------------
                 </View>
                 <View style={{flexDirection: "row", alignSelf: "center", marginBottom: 5}}>
                     <View style={{flex: 0.5}}>
@@ -163,7 +165,7 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                                 borderWidth: 3,
                                 borderColor: "white",
                                 width: 180,
-                                height: 60,
+                                padding: 0,
                                 alignSelf: "center",
                                 color: "white",
                                 textAlign: "center"
@@ -181,7 +183,7 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                             borderWidth: 3,
                             borderColor: "white",
                             width: 180,
-                            height: 60,
+                            padding: 0,
                             alignSelf: "center",
                             color: "white",
                             textAlign: "center"
@@ -201,7 +203,7 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                                 borderWidth: 3,
                                 borderColor: "white",
                                 width: 180,
-                                height: 60,
+                                padding: 0,
                                 alignSelf: "center",
                                 color: "white",
                                 textAlign: "center"
@@ -219,7 +221,7 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                                 borderWidth: 3,
                                 borderColor: "white",
                                 width: 180,
-                                height: 60,
+                                padding: 0,
                                 alignSelf: "center",
                                 color: "white",
                                 textAlign: "center"
@@ -228,13 +230,13 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                 </View>
                 <Text style={styles.lables}>What Type of Roll?</Text>
                 <View style={{flexDirection: "row", alignSelf: "center", marginBottom: 10}}>
-                    {!spellIsAttack[0] && <Pressable style={styles.attackSaveNeitherButtonsOff} onPress={() => {
+                    {!spellIsAttack[0] && <Pressable style={[styles.attackSaveNeitherButtonsOff, {borderBottomStartRadius: 10, borderTopStartRadius: 10}]} onPress={() => {
                         setSpellIsAttack([true, spellIsAttack[1]]);
                         setSpellIsSaveDC([false, spellIsSaveDC[1]]);
                     }}>
                         <Text style={styles.toggleButtonLables}>Spell Attack</Text>
                     </Pressable>}
-                    {spellIsAttack[0] && <Pressable style={styles.attackSaveNeitherButtonsOn} onPress={() => {
+                    {spellIsAttack[0] && <Pressable style={[styles.attackSaveNeitherButtonsOn, {borderBottomStartRadius: 10, borderTopStartRadius: 10}]} onPress={() => {
                     setSpellIsAttack([false, spellIsAttack[1]]);
                     setSpellIsSaveDC([false, spellIsSaveDC[1]]);
                     }}>
@@ -245,22 +247,22 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                         setSpellIsAttack([false, spellIsAttack[1]]);
                         setSpellIsSaveDC([false, spellIsSaveDC[1]]);
                     }}>
-                        <Text style={[styles.toggleButtonLables, {marginTop: 15}]}>Neither</Text>
+                        <Text style={[styles.toggleButtonLables, {marginTop: 10}]}>Neither</Text>
                     </Pressable>}
                     {(spellIsSaveDC[0] || spellIsAttack[0]) && <Pressable style={styles.attackSaveNeitherButtonsOff} onPress={() => {
                         setSpellIsAttack([false, spellIsAttack[1]]);
                         setSpellIsSaveDC([false, spellIsSaveDC[1]]);
                     }}>
-                        <Text style={[styles.toggleButtonLables, {marginTop: 15}]}>Neither</Text>
+                        <Text style={[styles.toggleButtonLables, {marginTop: 10}]}>Neither</Text>
                     </Pressable>}
 
-                    {!spellIsSaveDC[0] && <Pressable style={styles.attackSaveNeitherButtonsOff} onPress={() => {
+                    {!spellIsSaveDC[0] && <Pressable style={[styles.attackSaveNeitherButtonsOff, {borderBottomEndRadius: 10, borderTopEndRadius: 10}]} onPress={() => {
                         setSpellIsAttack([false, spellIsAttack[1]]);
                         setSpellIsSaveDC([true, spellIsSaveDC[1]]);
                     }}>
                         <Text style={styles.toggleButtonLables}>Saving Throw</Text>
                     </Pressable>}
-                    {spellIsSaveDC[0] && <Pressable style={styles.attackSaveNeitherButtonsOn} onPress={() => {
+                    {spellIsSaveDC[0] && <Pressable style={[styles.attackSaveNeitherButtonsOn, {borderBottomEndRadius: 10, borderTopEndRadius: 10}]} onPress={() => {
                         setSpellIsAttack([false, spellIsAttack[1]]);
                         setSpellIsSaveDC([false, spellIsSaveDC[1]]);
                     }}>
@@ -270,9 +272,9 @@ export default function newSpellCreationTool(currentCharacter :Character) {
 
                 {spellIsSaveDC[0] && <Text style={styles.lables}>What is the Saving Throw?</Text>}
                 {spellIsSaveDC[0] && <View style={{flexDirection: "row", alignSelf: "center"}}>
-                    {spellSaveType == "STR" && <Pressable style={styles.saveTypeToggleON} onPress={() =>
+                    {spellSaveType == "STR" && <Pressable style={[styles.saveTypeToggleON, {borderBottomStartRadius: 10, borderTopStartRadius: 10}]} onPress={() =>
                     {setSpellSaveType("STR")}}><Text style={styles.saveStatLable}>STR</Text></Pressable>}
-                    {spellSaveType != "STR" && <Pressable style={styles.saveTypeToggleOff} onPress={() =>
+                    {spellSaveType != "STR" && <Pressable style={[styles.saveTypeToggleOff, {borderBottomStartRadius: 10, borderTopStartRadius: 10}]} onPress={() =>
                     {setSpellSaveType("STR")}}><Text style={styles.saveStatLable}>STR</Text></Pressable>}
                     {spellSaveType == "DEX" && <Pressable style={styles.saveTypeToggleON} onPress={() =>
                     {setSpellSaveType("DEX")}}><Text style={styles.saveStatLable}>DEX</Text></Pressable>}
@@ -290,96 +292,103 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                     {setSpellSaveType("WIS")}}><Text style={styles.saveStatLable}>WIS</Text></Pressable>}
                     {spellSaveType != "WIS" && <Pressable style={styles.saveTypeToggleOff} onPress={() =>
                     {setSpellSaveType("WIS")}}><Text style={styles.saveStatLable}>WIS</Text></Pressable>}
-                    {spellSaveType == "CHA" && <Pressable style={styles.saveTypeToggleON} onPress={() =>
+                    {spellSaveType == "CHA" && <Pressable style={[styles.saveTypeToggleON, {borderBottomEndRadius: 10, borderTopEndRadius: 10}]} onPress={() =>
                     {setSpellSaveType("CHA")}}><Text style={styles.saveStatLable}>CHA</Text></Pressable>}
-                    {spellSaveType != "CHA" && <Pressable style={styles.saveTypeToggleOff} onPress={() =>
+                    {spellSaveType != "CHA" && <Pressable style={[styles.saveTypeToggleOff, {borderBottomEndRadius: 10, borderTopEndRadius: 10}]} onPress={() =>
                     {setSpellSaveType("CHA")}}><Text style={styles.saveStatLable}>CHA</Text></Pressable>}
                 </View>}
 
 
                 <Text style={styles.lables}>Spell Casting Stat</Text>
                 <View style={{flexDirection: "row", alignSelf: "center"}}>
-                    {spellIsSaveDC[1] == "INT" && <Pressable style={styles.attackSaveNeitherButtonsOn} onPress={() => {
+                    {spellIsSaveDC[1] == "INT" && <Pressable style={[styles.spellCastingStatButtonsOn, {borderStartStartRadius: 10}]} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "INT"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "INT"]);
                     }}>
-                        <Text style={[styles.toggleButtonLables, {marginTop: 15}]}>INT</Text>
+                        <Text style={[styles.toggleButtonLables]}>INT</Text>
                     </Pressable>}
-                    {spellIsSaveDC[1] != "INT" && <Pressable style={styles.attackSaveNeitherButtonsOff} onPress={() => {
+                    {spellIsSaveDC[1] != "INT" && <Pressable style={[styles.spellCastingStatButtonsOff, {borderStartStartRadius: 10}]} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "INT"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "INT"]);
                     }}>
-                        <Text style={[styles.toggleButtonLables, {marginTop: 15}]}>INT</Text>
+                        <Text style={[styles.toggleButtonLables]}>INT</Text>
                     </Pressable>}
-                    {spellIsSaveDC[1] == "WIS" && <Pressable style={styles.attackSaveNeitherButtonsOn} onPress={() => {
+                    {spellIsSaveDC[1] == "WIS" && <Pressable style={styles.spellCastingStatButtonsOn} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "WIS"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "WIS"]);
                     }}>
-                        <Text style={[styles.toggleButtonLables, {marginTop: 15}]}>WIS</Text>
+                        <Text style={[styles.toggleButtonLables]}>WIS</Text>
                     </Pressable>}
-                    {spellIsSaveDC[1] != "WIS" && <Pressable style={styles.attackSaveNeitherButtonsOff} onPress={() => {
+                    {spellIsSaveDC[1] != "WIS" && <Pressable style={styles.spellCastingStatButtonsOff} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "WIS"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "WIS"]);
                     }}>
-                        <Text style={[styles.toggleButtonLables, {marginTop: 15}]}>WIS</Text>
+                        <Text style={[styles.toggleButtonLables]}>WIS</Text>
                     </Pressable>}
-                    {spellIsSaveDC[1] == "CHA" && <Pressable style={styles.attackSaveNeitherButtonsOn} onPress={() => {
+                    {spellIsSaveDC[1] == "CHA" && <Pressable style={[styles.spellCastingStatButtonsOn, {borderTopEndRadius: 10}]} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "CHA"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "CHA"]);
                     }}>
-                        <Text style={[styles.toggleButtonLables, {marginTop: 15}]}>CHA</Text>
+                        <Text style={[styles.toggleButtonLables]}>CHA</Text>
                     </Pressable>}
-                    {spellIsSaveDC[1] != "CHA" && <Pressable style={styles.attackSaveNeitherButtonsOff} onPress={() => {
+                    {spellIsSaveDC[1] != "CHA" && <Pressable style={[styles.spellCastingStatButtonsOff, {borderTopEndRadius: 10}]} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "CHA"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "CHA"]);
                     }}>
-                        <Text style={[styles.toggleButtonLables, {marginTop: 15}]}>CHA</Text>
+                        <Text style={[styles.toggleButtonLables]}>CHA</Text>
                     </Pressable>}
                 </View>
 
-                <Text style={[styles.lables, {backgroundColor: "grey", borderColor: "orange", borderWidth: 4}]}>Very Unusual Spell Casting Stats for Homebrew.</Text>
+                <Text style={
+                    [styles.lables, {
+                        backgroundColor: "grey",
+                        borderColor: "orange",
+                        borderWidth: 4,
+                        width: 330,
+                        alignSelf: "center",
+                    }]}>Very Unusual Spell Casting Stats for Homebrew.</Text>
                 <View style={{flexDirection: "row", alignSelf: "center", marginBottom: 10}}>
-                    {spellIsSaveDC[1] == "STR" && <Pressable style={styles.attackSaveNeitherButtonsOn} onPress={() => {
+                    {spellIsSaveDC[1] == "STR" && <Pressable style={[styles.spellCastingStatButtonsOn, {borderBottomStartRadius: 10}]} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "STR"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "STR"]);
                     }}>
-                        <Text style={[styles.toggleButtonLables, {marginTop: 15}]}>STR</Text>
+                        <Text style={[styles.toggleButtonLables]}>STR</Text>
                     </Pressable>}
-                    {spellIsSaveDC[1] != "STR" && <Pressable style={styles.attackSaveNeitherButtonsOff} onPress={() => {
+                    {spellIsSaveDC[1] != "STR" && <Pressable style={[styles.spellCastingStatButtonsOff, {borderBottomStartRadius: 10}]} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "STR"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "STR"]);
                     }}>
-                        <Text style={[styles.toggleButtonLables, {marginTop: 15}]}>STR</Text>
+                        <Text style={[styles.toggleButtonLables]}>STR</Text>
                     </Pressable>}
-                    {spellIsSaveDC[1] == "DEX" && <Pressable style={styles.attackSaveNeitherButtonsOn} onPress={() => {
+                    {spellIsSaveDC[1] == "DEX" && <Pressable style={styles.spellCastingStatButtonsOn} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "DEX"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "DEX"]);
                     }}>
-                        <Text style={[styles.toggleButtonLables, {marginTop: 15}]}>DEX</Text>
+                        <Text style={[styles.toggleButtonLables]}>DEX</Text>
                     </Pressable>}
-                    {spellIsSaveDC[1] != "DEX" && <Pressable style={styles.attackSaveNeitherButtonsOff} onPress={() => {
+                    {spellIsSaveDC[1] != "DEX" && <Pressable style={styles.spellCastingStatButtonsOff} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "DEX"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "DEX"]);
                     }}>
-                        <Text style={[styles.toggleButtonLables, {marginTop: 15}]}>DEX</Text>
+                        <Text style={[styles.toggleButtonLables]}>DEX</Text>
                     </Pressable>}
-                    {spellIsSaveDC[1] == "CON" && <Pressable style={styles.attackSaveNeitherButtonsOn} onPress={() => {
+                    {spellIsSaveDC[1] == "CON" && <Pressable style={[styles.spellCastingStatButtonsOn, {borderBottomEndRadius: 10}]} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "CON"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "CON"]);
                     }}>
-                        <Text style={[styles.toggleButtonLables, {marginTop: 15}]}>CON</Text>
+                        <Text style={[styles.toggleButtonLables]}>CON</Text>
                     </Pressable>}
-                    {spellIsSaveDC[1] != "CON" && <Pressable style={styles.attackSaveNeitherButtonsOff} onPress={() => {
+                    {spellIsSaveDC[1] != "CON" && <Pressable style={[styles.spellCastingStatButtonsOff, {borderBottomEndRadius: 10}]} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "CON"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "CON"]);
                     }}>
-                        <Text style={[styles.toggleButtonLables, {marginTop: 15}]}>CON</Text>
+                        <Text style={[styles.toggleButtonLables]}>CON</Text>
                     </Pressable>}
                 </View>
 
 
                 <View><Text style={styles.lables}>Does the Spell Roll for Damage/Healing/Other?</Text>
-                    <Pressable style={[styles.newSpellToolToggleButtons, {width: 250, height: 90}]} onPress={() => {
+                    <Pressable style={[styles.newSpellToolToggleButtons, {width: 150, height: 40}]} onPress={() => {
                         setSpellDamageVariable(!spellDamageVariable)
                     }}>
                         {spellDamageVariable && <Text style={styles.toggleButtonLables}>Yes</Text>}
@@ -393,17 +402,7 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                                 keyboardType={"numeric"}
                                 maxLength={2}
                                 placeholderTextColor={"grey"}
-                                style={{
-                                    fontSize: 22,
-                                    borderStyle: "solid",
-                                    borderWidth: 3,
-                                    borderColor: "white",
-                                    width: 60,
-                                    height: 60,
-                                    alignSelf: "center",
-                                    color: "white",
-                                    textAlign: "center",
-                                }}/></View>
+                                style={styles.damageDiceEntry}/></View>
                         <View style={{flex: 0.1666}}><Text style={styles.lables}>D6s</Text>
                             <TextInput
                                 onChangeText={setDamageD6}
@@ -411,17 +410,7 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                                 keyboardType={"numeric"}
                                 maxLength={2}
                                 placeholderTextColor={"grey"}
-                                style={{
-                                    fontSize: 22,
-                                    borderStyle: "solid",
-                                    borderWidth: 3,
-                                    borderColor: "white",
-                                    width: 60,
-                                    height: 60,
-                                    alignSelf: "center",
-                                    color: "white",
-                                    textAlign: "center",
-                                }}/></View>
+                                style={styles.damageDiceEntry}/></View>
                         <View style={{flex: 0.1666}}><Text style={styles.lables}>D8s</Text>
                             <TextInput
                                 onChangeText={setDamageD8}
@@ -429,17 +418,7 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                                 keyboardType={"numeric"}
                                 maxLength={2}
                                 placeholderTextColor={"grey"}
-                                style={{
-                                    fontSize: 22,
-                                    borderStyle: "solid",
-                                    borderWidth: 3,
-                                    borderColor: "white",
-                                    width: 60,
-                                    height: 60,
-                                    alignSelf: "center",
-                                    color: "white",
-                                    textAlign: "center",
-                                }}/></View>
+                                style={styles.damageDiceEntry}/></View>
                         <View style={{flex: 0.1666}}><Text style={styles.lables}>D10s</Text>
                             <TextInput
                                 onChangeText={setDamageD10}
@@ -447,17 +426,7 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                                 keyboardType={"numeric"}
                                 maxLength={2}
                                 placeholderTextColor={"grey"}
-                                style={{
-                                    fontSize: 22,
-                                    borderStyle: "solid",
-                                    borderWidth: 3,
-                                    borderColor: "white",
-                                    width: 60,
-                                    height: 60,
-                                    alignSelf: "center",
-                                    color: "white",
-                                    textAlign: "center",
-                                }}/></View>
+                                style={styles.damageDiceEntry}/></View>
                         <View style={{flex: 0.1666}}><Text style={styles.lables}>D12s</Text>
                             <TextInput
                                 onChangeText={setDamageD12}
@@ -465,17 +434,7 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                                 keyboardType={"numeric"}
                                 maxLength={2}
                                 placeholderTextColor={"grey"}
-                                style={{
-                                    fontSize: 22,
-                                    borderStyle: "solid",
-                                    borderWidth: 3,
-                                    borderColor: "white",
-                                    width: 60,
-                                    height: 60,
-                                    alignSelf: "center",
-                                    color: "white",
-                                    textAlign: "center",
-                                }}/></View>
+                                style={styles.damageDiceEntry}/></View>
                         <View style={{flex: 0.1666}}><Text style={styles.lables}>bonus</Text>
                             <TextInput
                                 onChangeText={setDamageBonus}
@@ -483,17 +442,7 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                                 keyboardType={"numeric"}
                                 maxLength={2}
                                 placeholderTextColor={"grey"}
-                                style={{
-                                    fontSize: 22,
-                                    borderStyle: "solid",
-                                    borderWidth: 3,
-                                    borderColor: "white",
-                                    width: 60,
-                                    height: 60,
-                                    alignSelf: "center",
-                                    color: "white",
-                                    textAlign: "center",
-                                }}/></View>
+                                style={styles.damageDiceEntry}/></View>
                     </View>}
                 </View>
 
@@ -506,7 +455,7 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                     textAlignVertical={"top"}
                     multiline={true}
                     style={{
-                        fontSize: 22,
+                        fontSize: 18,
                         borderStyle: "solid",
                         borderWidth: 3,
                         borderColor: "white",
@@ -518,15 +467,11 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                     }}/>
 
                 {(newSpellConfirmationCount > 0) &&
-                    <Pressable onPress={() => {setNewSpellConfirmationCount(0);}}>
-                        <Text style={{
-                            textAlign: "center",
-                            color: "white",
-                            fontSize: 25,
-                            backgroundColor: "blue",
-                            margin: 15,
-                            borderRadius: 10
-                        }}>Confirmed! New Spell {spellNameVariable} Created! {newSpellConfirmationCount} time(s)!</Text></Pressable>}
+                    <Pressable  style={styles.confirmationButton} onPress={() => {setNewSpellConfirmationCount(0);}}>
+                        <Text style={styles.confirmationBox}>Confirmed! New Spell</Text>
+                        <Text style={styles.confirmationBox}>"{spellNameVariable}"</Text>
+                        <Text style={styles.confirmationBox}>Created! {newSpellConfirmationCount} time(s)!</Text>
+                    </Pressable>}
 
 
                 <Pressable
@@ -632,33 +577,48 @@ const styles = StyleSheet.create({
     lables: {
         color: "white",
         textAlign: "center",
+        fontSize: 12,
     },
     toggleButtonLables: {
         color: "white",
         textAlign: "center",
-        fontSize: 25,
+        fontSize: 20,
     },
     attackSaveNeitherButtonsOff: {
-        flex: 0.333,
+        flex: 0.3,
         backgroundColor: "grey",
         borderColor: "orange",
         borderWidth: 4,
-        height: 80,
+        height: 65,
     },
     attackSaveNeitherButtonsOn: {
-        flex: 0.333,
+        flex: 0.3,
         backgroundColor: "maroon",
         borderColor: "orange",
         borderWidth: 4,
-        height: 80,
+        height: 65,
+    },
+    spellCastingStatButtonsOff: {
+        flex: 0.3,
+        backgroundColor: "grey",
+        borderColor: "orange",
+        borderWidth: 4,
+        height: 40,
+    },
+    spellCastingStatButtonsOn: {
+        flex: 0.3,
+        backgroundColor: "maroon",
+        borderColor: "orange",
+        borderWidth: 4,
+        height: 40,
     },
     newSpellToolToggleButtons: {
         backgroundColor: "maroon",
-        padding: 20,
-        height: 90,
-        width: 100,
-        borderRadius: 30,
-        borderWidth: 6,
+        height: 40,
+        width: 60,
+        padding: 2,
+        borderRadius: 8,
+        borderWidth: 3,
         borderColor: "orange",
         alignSelf: "center",
     },
@@ -681,5 +641,26 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: 12,
         marginTop: 8
-    }
+    },
+    damageDiceEntry: {
+        fontSize: 22,
+        borderStyle: "solid",
+        borderWidth: 3,
+        borderColor: "white",
+        width: 58,
+        padding: 0,
+        alignSelf: "center",
+        color: "white",
+        textAlign: "center"
+    },
+    confirmationBox: {
+    textAlign: "center",
+    color: "white",
+    fontSize: 18,
+    },
+    confirmationButton: {
+        margin: 15,
+        backgroundColor: "blue",
+        borderRadius: 10,
+    },
 })
