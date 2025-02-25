@@ -294,7 +294,7 @@ export default function levelUpTab() {
             <View>{newSpellCreationTool(currentCharacter)}</View>
 
 
-                <View>
+                <View style={styles.toolBoxStyle}>
                     <Pressable style={styles.toolBoxStyle} onPress={() =>
                         {SetAddHPAdjustBoxDisplayStatusStatus(!addHPAdjustBoxDisplayStatus)}
                     }>
@@ -342,7 +342,7 @@ export default function levelUpTab() {
 
 
 
-                <View>
+                <View style={styles.toolBoxStyle}>
                     <Pressable style={styles.toolBoxStyle} onPress={() =>
                         {SetAddSpellAndCharacterLevelBoxDisplayStatus(!addSpellAndCharacterLevelBoxDisplayStatus)}
                     }>

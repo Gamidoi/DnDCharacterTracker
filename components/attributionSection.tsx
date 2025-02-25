@@ -11,7 +11,7 @@ export default function AttributionSection() {
                 setAttributionSectionDisplay(!attributionSectionDisplay);
             }}>
                 {!attributionSectionDisplay && <Text style={[styles.standard, {height: 40, marginTop: 15, fontSize: 14}]}>Open Acknowledgments and Attributions Section</Text>}
-                {attributionSectionDisplay && <Text style={styles.standard}>Close Acknowledgments and Attributions Section</Text>}
+                {attributionSectionDisplay && <Text style={[styles.standard, {fontSize: 14}]}>Close Acknowledgments and Attributions Section</Text>}
 
             </Pressable>
             {attributionSectionDisplay && <View>
