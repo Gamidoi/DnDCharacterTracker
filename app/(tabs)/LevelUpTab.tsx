@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, View, TextInput, Pressable} from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Character, updateProficiency, updateSpellcastingLevel} from '@/assets/classes/character';
 import {FontAwesome, MaterialCommunityIcons} from "@expo/vector-icons";
 import {useNavigation} from "@react-navigation/native";
@@ -112,8 +112,8 @@ export default function levelUpTab() {
     let [persuasion,setPersuasion ] = useState(currentCharacter.persuasion);
 
     const navigation = useNavigation();
-    React.useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
+    useEffect(() => {
+        return navigation.addListener('focus', () => {
             getNameAsString().then(nameString => {
                 initializingName = nameString;
                 getCurrentCharacterObjectStringPromise(initializingName).then(objectString => {
@@ -124,7 +124,6 @@ export default function levelUpTab() {
                     setCurrentCharacterName(currentCharacter.charName);
                 })});
         });
-        return unsubscribe;
     }, [navigation]);
 
 
@@ -276,14 +275,15 @@ export default function levelUpTab() {
             <View>{newSpellCreationTool(currentCharacter)}</View>
 
 
-            <Pressable style={styles.toolBoxStyle} onPress={() =>
-            {SetAddHPAdjustBoxDisplayStatusStatus(!addHPAdjustBoxDisplayStatus)}
-            }>
                 <View>
+                    <Pressable style={styles.toolBoxStyle} onPress={() =>
+                        {SetAddHPAdjustBoxDisplayStatusStatus(!addHPAdjustBoxDisplayStatus)}
+                    }>
                     {!addHPAdjustBoxDisplayStatus && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open HP Adjustment Tool</Text>}
                     {addHPAdjustBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Close HP Adjustment Tool</Text>}
                     {addHPAdjustBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter Max HP Below</Text>}
-                    {addHPAdjustBoxDisplayStatus && <TextInput
+                    </Pressable>
+                        {addHPAdjustBoxDisplayStatus && <TextInput
                         onChangeText={setHPChangeVariable}
                         maxLength={3}
                         keyboardType='numeric'
@@ -319,18 +319,18 @@ export default function levelUpTab() {
                         <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust Max HP: {HPChangeVariable}</Text>
                     </Pressable>}
                 </View>
-            </Pressable>
 
 
 
 
-            <Pressable style={styles.toolBoxStyle} onPress={() =>
-            {SetAddSpellAndCharacterLevelBoxDisplayStatus(!addSpellAndCharacterLevelBoxDisplayStatus)}
-            }>
                 <View>
-                    {!addSpellAndCharacterLevelBoxDisplayStatus && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open Character and Spellcasting Level Tool</Text>}
-                    {addSpellAndCharacterLevelBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Close Character and Spellcasting Level Tool</Text>}
-                    {addSpellAndCharacterLevelBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter Total Character Level of All Classes Below</Text>}
+                    <Pressable style={styles.toolBoxStyle} onPress={() =>
+                        {SetAddSpellAndCharacterLevelBoxDisplayStatus(!addSpellAndCharacterLevelBoxDisplayStatus)}
+                    }>
+                        {!addSpellAndCharacterLevelBoxDisplayStatus && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open Character and Spellcasting Level Tool</Text>}
+                        {addSpellAndCharacterLevelBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Close Character and Spellcasting Level Tool</Text>}
+                        {addSpellAndCharacterLevelBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter Total Character Level of All Classes Below</Text>}
+                    </Pressable>
                     {addSpellAndCharacterLevelBoxDisplayStatus && <TextInput
                         onChangeText={setCharacterLevelChangeVariable}
                         maxLength={2}
@@ -445,19 +445,20 @@ export default function levelUpTab() {
                         {(currentCharacter.warlockCasterLevel > 0 || parseInt(warlockCasterLevelsChangeVariable) > 0) && <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Warlock Level: {warlockCasterLevelsChangeVariable}</Text>}
                     </Pressable>}
                 </View>
-            </Pressable>
 
 
 
 
-            <Pressable style={styles.toolBoxStyle} onPress={() =>
-            {setAddAbilityScoreBoxDisplayStatus(!addAbilityScoreBoxDisplayStatus)}
-            }>
-                <View>
-                    {!addAbilityScoreBoxDisplayStatus && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open Ability Score Tool</Text>}
-                    {addAbilityScoreBoxDisplayStatus && <Text style={{color: "white", textAlign: "center", marginTop: 15, marginBottom: 18}}>Close Ability Score Tool</Text>}
-                    {addAbilityScoreBoxDisplayStatus && <View>{displayCoreStats()}</View>}
-                    {addAbilityScoreBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter stat Below</Text>}
+
+                <View style={styles.toolBoxStyle}>
+                    <Pressable style={styles.toolBoxStyle} onPress={() =>
+                        {setAddAbilityScoreBoxDisplayStatus(!addAbilityScoreBoxDisplayStatus)}
+                    }>
+                        {!addAbilityScoreBoxDisplayStatus && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open Ability Score Tool</Text>}
+                        {addAbilityScoreBoxDisplayStatus && <Text style={{color: "white", textAlign: "center", marginTop: 15, marginBottom: 18}}>Close Ability Score Tool</Text>}
+                        {addAbilityScoreBoxDisplayStatus && <View>{displayCoreStats()}</View>}
+                        {addAbilityScoreBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter stat Below</Text>}
+                    </Pressable>
                     {addAbilityScoreBoxDisplayStatus && <TextInput
                         onChangeText={setAbilityScoreChangeVariable}
                         maxLength={2}
@@ -487,7 +488,7 @@ export default function levelUpTab() {
                             AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
                             setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
                         }}>
-                        <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust STR: {abilityScoreChangeVariable}</Text>
+                        <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  STR: {abilityScoreChangeVariable}</Text>
                     </Pressable>}
                         {addAbilityScoreBoxDisplayStatus && <Pressable
                             style={styles.coreStatAdjustButton}
@@ -500,7 +501,7 @@ export default function levelUpTab() {
                                 AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
                                 setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
                             }}>
-                            <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust DEX: {abilityScoreChangeVariable}</Text>
+                            <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  DEX: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
                         {addAbilityScoreBoxDisplayStatus && <Pressable
                             style={styles.coreStatAdjustButton}
@@ -513,7 +514,7 @@ export default function levelUpTab() {
                                 AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
                                 setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
                             }}>
-                            <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust CON: {abilityScoreChangeVariable}</Text>
+                            <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  CON: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
                     </View>
                     <View style={{flexDirection: "row", alignSelf: "center"}}>
@@ -528,7 +529,7 @@ export default function levelUpTab() {
                                 AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
                                 setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
                             }}>
-                            <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust INT: {abilityScoreChangeVariable}</Text>
+                            <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  INT: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
                         {addAbilityScoreBoxDisplayStatus && <Pressable
                             style={styles.coreStatAdjustButton}
@@ -541,7 +542,7 @@ export default function levelUpTab() {
                                 AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
                                 setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
                             }}>
-                            <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust WIS: {abilityScoreChangeVariable}</Text>
+                            <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  WIS: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
                         {addAbilityScoreBoxDisplayStatus && <Pressable
                             style={styles.coreStatAdjustButton}
@@ -554,7 +555,7 @@ export default function levelUpTab() {
                                 AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
                                 setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
                             }}>
-                            <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust CHA: {abilityScoreChangeVariable}</Text>
+                            <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  CHA: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
                     </View>
                     {(addAbilityScoreBoxDisplayStatus && (addAbilityScoreConfirmationCount > 0)) &&
@@ -563,7 +564,6 @@ export default function levelUpTab() {
                             <Text style={styles.confirmationBox}>{addAbilityScoreConfirmationCount} time(s)!</Text>
                         </Pressable>}
                 </View>
-            </Pressable>
 
 
 
@@ -837,14 +837,14 @@ export default function levelUpTab() {
 
 
 
-
-            <Pressable style={styles.toolBoxStyle} onPress={() =>
-            {SetAddCharacterBoxDisplayStatus(!addCharacterBoxDisplayStatus);}
-            }>
-                <View>
+                <View style={styles.toolBoxStyle}>
+                    <Pressable style={styles.toolBoxStyle} onPress={() =>
+                    {SetAddCharacterBoxDisplayStatus(!addCharacterBoxDisplayStatus);}
+                    }>
                     {!addCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open New Character Creator</Text>}
                     {addCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Close Character Creator</Text>}
                     {addCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter Name Below</Text>}
+                    </Pressable>
                     {addCharacterBoxDisplayStatus && <TextInput
                         onChangeText={setNameChangeVariable}
                         placeholder={"Name McBoatface"}
@@ -942,7 +942,6 @@ export default function levelUpTab() {
                         <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>HP; {HPChangeVariable} Character Level; {characterLevelChangeVariable}</Text>
                     </Pressable>}
                 </View>
-            </Pressable>
 
 
 
@@ -954,7 +953,8 @@ export default function levelUpTab() {
                     {!deleteCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open Delete Character Tool</Text>}
                     {deleteCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Close Delete Character Tool</Text>}
                     {deleteCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Select Character Below</Text>}
-                </View></Pressable>
+                </View>
+                </Pressable>
                 {(deleteCharacterBoxDisplayStatus && (deleteCharacterConfirmationCount > 0)) &&
                     <Pressable onPress={() => {setDeleteCharacterConfirmationCount(0);}}>
                         <Text style={{

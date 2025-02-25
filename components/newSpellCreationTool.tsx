@@ -150,7 +150,6 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                         marginBottom: 10
                 }}/>}
                 <View style={{flexDirection: "row", alignSelf: "center", marginBottom: 10}}>
-                    -------------------------
                 </View>
                 <View style={{flexDirection: "row", alignSelf: "center", marginBottom: 5}}>
                     <View style={{flex: 0.5}}>

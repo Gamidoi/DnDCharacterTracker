@@ -135,7 +135,7 @@ export default function DisplaySpellBox(currentCharacter :Character, spellLevel 
             <Text style={styles.descriptionText}>{spell.description}</Text>
         </View>
     )
-}})})</View>)}
+}})}</View>)}
 
 const styles = StyleSheet.create({
     vsmStyle: {
