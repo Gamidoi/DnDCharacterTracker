@@ -2,7 +2,7 @@ import {StyleSheet, Image, Text, View, Pressable} from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Character} from "@/assets/classes/character";
 import {useNavigation} from "@react-navigation/native";
 import DisplaySpellBox from "@/components/displaySpellBox";
@@ -13,7 +13,7 @@ let getNameAsString = async () => {
     return await AsyncStorage.getItem("currentCharacterName");
     }
 
-let currentCharacter = new Character("defaultSSR", 10, 5);
+let currentCharacter :Character;
 let getCurrentCharacterObjectStringPromise = async (nameString :string|null) => {
     return await AsyncStorage.getItem("newCharacter" + nameString);
 }
@@ -90,10 +90,29 @@ export default function SpellsAbilitiesScreen() {
         setHaveQuantity9thSpells(spells9);
     }
 
+    function headerRandomizer(){
+        let randomNumber = Math.random() * 4;
+        if (randomNumber < 1) {return (
+            <Image
+                source={require("@/assets/images/glowingWomanOutlineInForest.jpg")}
+                style={styles.headImage}/>)}
+        if (randomNumber < 2) {return (
+            <Image
+                source={require("@/assets/images/hatchingTechnoEggInGreenForest.jpg")}
+                style={styles.headImage}/>)}
+        if (randomNumber < 3) {return (
+            <Image
+                source={require("@/assets/images/manStaringDownRiotInChasm.jpg")}
+                style={styles.headImage}/>)}
+        return (
+            <Image
+                source={require("@/assets/images/spectralDragonAttackingVillage.jpg")}
+                style={styles.headImage}/>)}
+
 
     const navigation = useNavigation();
-    React.useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
+    useEffect(() => {
+        return  navigation.addListener('focus', () => {
             getNameAsString().then(nameString => {
                 getCurrentCharacterObjectStringPromise(nameString).then(objectString => {
                     if (objectString != null) {
@@ -104,7 +123,6 @@ export default function SpellsAbilitiesScreen() {
                 });
             });
         });
-        return unsubscribe;
     }, [navigation]);
 
 
@@ -113,10 +131,7 @@ export default function SpellsAbilitiesScreen() {
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#60D0D0', dark: '#353636' }}
       headerImage={
-          <Image
-              source={require('@/assets/images/headerImageDragons.jpg')}
-              style={styles.headImage}
-          />
+          headerRandomizer()
       }>
 
 

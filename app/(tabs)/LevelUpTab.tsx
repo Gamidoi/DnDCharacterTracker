@@ -7,6 +7,7 @@ import {FontAwesome, MaterialCommunityIcons} from "@expo/vector-icons";
 import {useNavigation} from "@react-navigation/native";
 import newSpellCreationTool from "@/components/newSpellCreationTool";
 import AdjustCoreStatSaves from "@/components/adjustCoreStatSaves";
+import AttributionSection from "@/components/attributionSection";
 
 
 
@@ -17,7 +18,7 @@ let initializingName :string|null;
 let getNameAsString = async () => {
     return await AsyncStorage.getItem("currentCharacterName");
 }
-let currentCharacter = new Character("defaultSSR", 10, 5);
+let currentCharacter :Character;
 let getCurrentCharacterObjectStringPromise = async (string :string|null) => {
     return await AsyncStorage.getItem("newCharacter" + string);
 }
@@ -126,6 +127,25 @@ export default function levelUpTab() {
         });
     }, [navigation]);
 
+    function headerRandomizer(){
+        let randomNumber = Math.random() * 4;
+        if (randomNumber < 1) {return (
+            <Image
+                source={require("@/assets/images/glowingWomanOutlineInForest.jpg")}
+                style={styles.headImage}/>)}
+        if (randomNumber < 2) {return (
+            <Image
+                source={require("@/assets/images/hatchingTechnoEggInGreenForest.jpg")}
+                style={styles.headImage}/>)}
+        if (randomNumber < 3) {return (
+            <Image
+                source={require("@/assets/images/manStaringDownRiotInChasm.jpg")}
+                style={styles.headImage}/>)}
+        return (
+            <Image
+                source={require("@/assets/images/spectralDragonAttackingVillage.jpg")}
+                style={styles.headImage}/>)}
+
 
     function displayCoreStats(){
 
@@ -214,10 +234,7 @@ export default function levelUpTab() {
         <ParallaxScrollView
             headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
             headerImage={
-                <Image
-                    source={require('@/assets/images/headerImageDragons.jpg')}
-                    style={styles.headImage}
-                />
+                headerRandomizer()
             }>
             <View>
                 <Text style={{color: "white", fontSize: 50, backgroundColor: "tan", textAlign: "center"}}>{currentCharacterName}</Text>
@@ -1034,6 +1051,9 @@ export default function levelUpTab() {
                         <Text style={styles.confirmationBox}>/---<MaterialCommunityIcons size={40} name="skull-crossbones-outline" color={"red"} />---\</Text>
                     </Pressable>}
             </View>
+
+
+            <View>{AttributionSection()}</View>
 
             {detectChange && updateAllStatsToNewCharacter()}
         </ParallaxScrollView>

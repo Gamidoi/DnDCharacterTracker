@@ -1,6 +1,6 @@
 import { Image, StyleSheet, TextInput, View, Text, Pressable} from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import React, {useState, useContext} from "react";
+import React, {useState, useContext, useEffect} from "react";
 import {spellSlotsByLevel} from '@/assets/classes/spellSlotsByLevel';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Character} from "@/assets/classes/character";
@@ -120,8 +120,8 @@ export default function MainCharacterSyndrome() {
 
 
     const navigation = useNavigation();
-    React.useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
+    useEffect(() => {
+        return  navigation.addListener('focus', () => {
             getNameAsString().then(nameString => {
                 initializingName = nameString;
                 getCurrentCharacterObjectStringPromise(initializingName).then(objectString => {
@@ -138,8 +138,28 @@ export default function MainCharacterSyndrome() {
                     if (currentHP > currentCharacter.maxHP){setCurrentHP(currentCharacter.maxHP);}
                 })});
         });
-        return unsubscribe;
     }, [navigation]);
+
+
+
+    function headerRandomizer(){
+        let randomNumber = Math.random() * 4;
+        if (randomNumber < 1) {return (
+            <Image
+                source={require("@/assets/images/glowingWomanOutlineInForest.jpg")}
+                style={styles.headImage}/>)}
+        if (randomNumber < 2) {return (
+            <Image
+                source={require("@/assets/images/hatchingTechnoEggInGreenForest.jpg")}
+                style={styles.headImage}/>)}
+        if (randomNumber < 3) {return (
+            <Image
+                source={require("@/assets/images/manStaringDownRiotInChasm.jpg")}
+                style={styles.headImage}/>)}
+        return (
+            <Image
+                source={require("@/assets/images/spectralDragonAttackingVillage.jpg")}
+                style={styles.headImage}/>)}
 
 
 
@@ -148,10 +168,7 @@ export default function MainCharacterSyndrome() {
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#1D3D47', dark: '#1D3D47' }}
       headerImage={
-        <Image
-          source={require('@/assets/images/headerImageDragons.jpg')}
-          style={styles.headImage}
-        />
+          headerRandomizer()
       }>
 
         <View style={{marginBottom: 20, backgroundColor: 'black'}}>

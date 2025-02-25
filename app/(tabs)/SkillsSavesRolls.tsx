@@ -1,6 +1,6 @@
 import {StyleSheet, Image, Text, View, Pressable} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import {Character} from '@/assets/classes/character';
 import {useNavigation} from "@react-navigation/native";
@@ -19,7 +19,7 @@ getNameAsString().then(nameString => {
         }
     })});
 
-let currentCharacter = new Character("defaultSSR", 10, 5);
+let currentCharacter :Character;
 let getCurrentCharacterObjectStringPromise = async (nameString :string|null) => {
     return await AsyncStorage.getItem("newCharacter" + nameString);
 }
@@ -85,8 +85,8 @@ export default function TabSkillsSavesRolls() {
 
 
     const navigation = useNavigation();
-    React.useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
+    useEffect(() => {
+        return navigation.addListener('focus', () => {
             getNameAsString().then(nameString => {
                 initializingName = nameString;
                 getCurrentCharacterObjectStringPromise(initializingName).then(objectString => {
@@ -135,8 +135,27 @@ export default function TabSkillsSavesRolls() {
                     setCurrentProficiency(currentCharacter.proficiency);
                 })});
         });
-        return unsubscribe;
     }, [navigation]);
+
+
+    function headerRandomizer(){
+        let randomNumber = Math.random() * 4;
+        if (randomNumber < 1) {return (
+            <Image
+                source={require("@/assets/images/glowingWomanOutlineInForest.jpg")}
+                style={styles.headImage}/>)}
+        if (randomNumber < 2) {return (
+            <Image
+                source={require("@/assets/images/hatchingTechnoEggInGreenForest.jpg")}
+                style={styles.headImage}/>)}
+        if (randomNumber < 3) {return (
+            <Image
+                source={require("@/assets/images/manStaringDownRiotInChasm.jpg")}
+                style={styles.headImage}/>)}
+        return (
+            <Image
+                source={require("@/assets/images/spectralDragonAttackingVillage.jpg")}
+                style={styles.headImage}/>)}
 
 
 
@@ -144,10 +163,7 @@ export default function TabSkillsSavesRolls() {
         <ParallaxScrollView
             headerBackgroundColor={{ light: '#60D0D0', dark: '#353636' }}
             headerImage={
-                <Image
-                    source={require('@/assets/images/headerImageDragons.jpg')}
-                    style={styles.headImage}
-                />
+                headerRandomizer()
             }>
             <View style={{backgroundColor: 'black'}}>
                     <Text style={{color: "white", fontSize: 50, backgroundColor: "tan", textAlign: "center"}}>{currentCharacterName}
@@ -186,6 +202,7 @@ export default function TabSkillsSavesRolls() {
                     color: "white",
                     marginTop: 14,
                     flex: 0.40,
+                    width: 40,
                     borderColor: "orange",
                     borderWidth: 3,
                     borderRadius: 15,
