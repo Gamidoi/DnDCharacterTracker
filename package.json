@@ -3,7 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "deploy:web": "npx expo export -p web",
+    "deploy:web": "expo export -p web",
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
@@ -12,7 +12,8 @@
     "lint": "expo lint"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "testMatch": [ "**/__tests__/**/*.[jt]s?(x)", "**/?(*.)+(spec|test).[jt]s?(x)" ]
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",

@@ -128,6 +128,8 @@ export default function levelUpTab() {
 
 
     function displayCoreStats(){
+
+
         return(
         <View style={{flexDirection: "row", alignSelf: "center", backgroundColor: "grey"}}>
             <View style={styles.coreStatBox}>
