@@ -3,8 +3,9 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, createContext } from 'react';
+import {useEffect, createContext} from 'react';
 import 'react-native-reanimated';
+import {CharacterInfoProvider} from "@/components/characterUpdater";
 
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -32,12 +33,15 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <ThingBadName.Provider value = "test string  tual used words"> <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      </Stack>
-      <StatusBar style="auto" />
-      </ThingBadName.Provider>
-    </ThemeProvider>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <ThingBadName.Provider value = "test string  tual used words">
+              <CharacterInfoProvider>
+            <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            </Stack>
+            <StatusBar style="auto" />
+              </CharacterInfoProvider>
+          </ThingBadName.Provider>
+        </ThemeProvider>
   );
 }

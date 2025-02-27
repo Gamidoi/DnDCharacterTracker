@@ -25,7 +25,7 @@ let getCurrentCharacterObjectStringPromise = async (string :string|null) => {
 
 getNameAsString().then(nameString => {
     initializingName = nameString;
-    getCurrentCharacterObjectStringPromise(initializingName).then((objectString :string|null) => {
+    getCurrentCharacterObjectStringPromise("newCharacterLucca").then((objectString :string|null) => {
         if (objectString != null) {
             currentCharacter = JSON.parse(objectString);
         }
@@ -117,7 +117,7 @@ export default function levelUpTab() {
         return navigation.addListener('focus', () => {
             getNameAsString().then(nameString => {
                 initializingName = nameString;
-                getCurrentCharacterObjectStringPromise(initializingName).then(objectString => {
+                getCurrentCharacterObjectStringPromise("newCharacterLucca").then(objectString => {
                     if (objectString != null) {
                         currentCharacter = JSON.parse(objectString);
                     }
