@@ -8,6 +8,7 @@ import {useNavigation} from "@react-navigation/native";
 import newSpellCreationTool from "@/components/newSpellCreationTool";
 import AdjustCoreStatSaves from "@/components/adjustCoreStatSaves";
 import AttributionSection from "@/components/attributionSection";
+import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 
 
 
@@ -18,7 +19,7 @@ let initializingName :string|null;
 let getNameAsString = async () => {
     return await AsyncStorage.getItem("currentCharacterName");
 }
-let currentCharacter :Character;
+let character :Character;
 let getCurrentCharacterObjectStringPromise = async (string :string|null) => {
     return await AsyncStorage.getItem("newCharacter" + string);
 }
@@ -27,7 +28,7 @@ getNameAsString().then(nameString => {
     initializingName = nameString;
     getCurrentCharacterObjectStringPromise("newCharacterLucca").then((objectString :string|null) => {
         if (objectString != null) {
-            currentCharacter = JSON.parse(objectString);
+            character = JSON.parse(objectString);
         }
     })});
 
@@ -47,16 +48,15 @@ getAllCharacterNames().then(keysString => {
 
 
 export default function levelUpTab() {
-    if (currentCharacter == null){currentCharacter =new Character("default", 10, 5);}
+    const character = useCharacter();
+    const characterUpdater = useCharacterUpdater();
 
-    let [maxHP, setMaxHP] = useState(currentCharacter.maxHP);
-    let [spellCastingLevel, setSpellCastingLevel] = useState(currentCharacter.spellcastingLevel);
-    let [warlockCastingLevel, setWarlockCastingLevel] = useState(currentCharacter.warlockCasterLevel);
-    let [fullCasterLevel, setFullCasterLevel] = useState(currentCharacter.fullCasterLevel);
-    let [halfCasterLevel, setHalfCasterLevel] = useState(currentCharacter.halfCasterLevel);
-    let [currentCharacterName, setCurrentCharacterName] = useState(currentCharacter.charName);
-    let [currentCharacterLevel, setCurrentCharacterLevel] = useState(currentCharacter.characterLevel);
-    let [currentProficiency, setCurrentProficiency] = useState(currentCharacter.proficiency);
+    let [spellCastingLevel, setSpellCastingLevel] = useState(character.spellcastingLevel);
+    let [warlockCastingLevel, setWarlockCastingLevel] = useState(character.warlockCasterLevel);
+    let [fullCasterLevel, setFullCasterLevel] = useState(character.fullCasterLevel);
+    let [halfCasterLevel, setHalfCasterLevel] = useState(character.halfCasterLevel);
+    let [currentCharacterLevel, setCurrentCharacterLevel] = useState(character.characterLevel);
+    let [currentProficiency, setCurrentProficiency] = useState(character.proficiency);
     let [allCharacterNames, setAllCharacterNames] = useState(allCharacterNamesInitial);
 
     let [detectChange, setDetectChange] = useState<boolean>(false);
@@ -86,46 +86,25 @@ export default function levelUpTab() {
     let [loadCharacterConfirmationCount, setLoadCharacterConfirmationCount] = useState(0);
     let [deleteCharacterConfirmationCount, setDeleteCharacterConfirmationCount] = useState(0);
 
-    let [currentStatSTR, setCurrentStatSTR] = useState(currentCharacter.STR);
-    let [currentStatDEX, setCurrentStatDEX] = useState(currentCharacter.DEX);
-    let [currentStatCON, setCurrentStatCON] = useState(currentCharacter.CON);
-    let [currentStatINT, setCurrentStatINT] = useState(currentCharacter.INT);
-    let [currentStatWIS, setCurrentStatWIS] = useState(currentCharacter.WIS);
-    let [currentStatCHA, setCurrentStatCHA] = useState(currentCharacter.CHA);
+    let [athletics, setAthletics ] = useState(character.athletics);
+    let [acrobatics, setAcrobatics] = useState(character.acrobatics);
+    let [sleightOfHand, setSleightOfHand] = useState(character.sleightOfHand);
+    let [stealth, setStealth ] = useState(character.stealth);
+    let [arcana, setArcana ] = useState(character.arcana);
+    let [history, setHistory ] = useState(character.history);
+    let [investigation, setInvestigation ] = useState(character.investigation);
+    let [nature, setNature ] = useState(character.nature);
+    let [religion, setReligion ] = useState(character.religion);
+    let [animalHandling, setAnimalHandling ] = useState(character.animalHandling);
+    let [insight, setInsight ] = useState(character.insight);
+    let [medicine, setMedicine ] = useState(character.medicine);
+    let [perception, setPerception ] = useState(character.perception);
+    let [survival, setSurvival ] = useState(character.survival);
+    let [deception, setDeception ] = useState(character.deception);
+    let [intimidation, setIntimidation ] = useState(character.intimidation);
+    let [performance, setPerformance ] = useState(character.performance);
+    let [persuasion,setPersuasion ] = useState(character.persuasion);
 
-    let [athletics, setAthletics ] = useState(currentCharacter.athletics);
-    let [acrobatics, setAcrobatics] = useState(currentCharacter.acrobatics);
-    let [sleightOfHand, setSleightOfHand] = useState(currentCharacter.sleightOfHand);
-    let [stealth, setStealth ] = useState(currentCharacter.stealth);
-    let [arcana, setArcana ] = useState(currentCharacter.arcana);
-    let [history, setHistory ] = useState(currentCharacter.history);
-    let [investigation, setInvestigation ] = useState(currentCharacter.investigation);
-    let [nature, setNature ] = useState(currentCharacter.nature);
-    let [religion, setReligion ] = useState(currentCharacter.religion);
-    let [animalHandling, setAnimalHandling ] = useState(currentCharacter.animalHandling);
-    let [insight, setInsight ] = useState(currentCharacter.insight);
-    let [medicine, setMedicine ] = useState(currentCharacter.medicine);
-    let [perception, setPerception ] = useState(currentCharacter.perception);
-    let [survival, setSurvival ] = useState(currentCharacter.survival);
-    let [deception, setDeception ] = useState(currentCharacter.deception);
-    let [intimidation, setIntimidation ] = useState(currentCharacter.intimidation);
-    let [performance, setPerformance ] = useState(currentCharacter.performance);
-    let [persuasion,setPersuasion ] = useState(currentCharacter.persuasion);
-
-    const navigation = useNavigation();
-    useEffect(() => {
-        return navigation.addListener('focus', () => {
-            getNameAsString().then(nameString => {
-                initializingName = nameString;
-                getCurrentCharacterObjectStringPromise("newCharacterLucca").then(objectString => {
-                    if (objectString != null) {
-                        currentCharacter = JSON.parse(objectString);
-                    }
-
-                    setCurrentCharacterName(currentCharacter.charName);
-                })});
-        });
-    }, [navigation]);
 
     function headerRandomizer(){
         let randomNumber = Math.random() * 4;
@@ -154,65 +133,57 @@ export default function levelUpTab() {
         <View style={{flexDirection: "row", alignSelf: "center", backgroundColor: "grey"}}>
             <View style={styles.coreStatBox}>
                 {<Text style={{color: "white", textAlign: "center"}}>STR</Text>}
-                {<Text style={{color: "white", textAlign: "center"}}>{currentStatSTR}</Text>}
+                {<Text style={{color: "white", textAlign: "center"}}>{character.STR}</Text>}
             </View>
             <View style={styles.coreStatBox}>
                 {<Text style={{color: "white", textAlign: "center"}}>DEX</Text>}
-                {<Text style={{color: "white", textAlign: "center"}}>{currentStatDEX}</Text>}
+                {<Text style={{color: "white", textAlign: "center"}}>{character.DEX}</Text>}
             </View>
             <View style={styles.coreStatBox}>
                 {<Text style={{color: "white", textAlign: "center"}}>CON</Text>}
-                {<Text style={{color: "white", textAlign: "center"}}>{currentStatCON}</Text>}
+                {<Text style={{color: "white", textAlign: "center"}}>{character.CON}</Text>}
             </View>
             <View style={styles.coreStatBox}>
                 {<Text style={{color: "white", textAlign: "center"}}>INT</Text>}
-                {<Text style={{color: "white", textAlign: "center"}}>{currentStatINT}</Text>}
+                {<Text style={{color: "white", textAlign: "center"}}>{character.INT}</Text>}
             </View>
             <View style={styles.coreStatBox}>
                 {<Text style={{color: "white", textAlign: "center"}}>WIS</Text>}
-                {<Text style={{color: "white", textAlign: "center"}}>{currentStatWIS}</Text>}
+                {<Text style={{color: "white", textAlign: "center"}}>{character.WIS}</Text>}
             </View>
             <View style={styles.coreStatBox}>
                 {<Text style={{color: "white", textAlign: "center"}}>CHA</Text>}
-                {<Text style={{color: "white", textAlign: "center"}}>{currentStatCHA}</Text>}
+                {<Text style={{color: "white", textAlign: "center"}}>{character.CHA}</Text>}
             </View>
         </View>)
     }
 
 
     function updateAllStatsToNewCharacter(){
-        setCurrentCharacterName(currentCharacter.charName);
-        setCurrentCharacterLevel(currentCharacter.characterLevel);
-        setCurrentProficiency(currentCharacter.proficiency)
-        setMaxHP(currentCharacter.maxHP);
-        setSpellCastingLevel(currentCharacter.spellcastingLevel);
-        setFullCasterLevel(currentCharacter.fullCasterLevel);
-        setHalfCasterLevel(currentCharacter.halfCasterLevel)
-        setWarlockCastingLevel(currentCharacter.warlockCasterLevel);
-        setCurrentStatSTR(currentCharacter.STR);
-        setCurrentStatDEX(currentCharacter.DEX);
-        setCurrentStatCON(currentCharacter.CON);
-        setCurrentStatINT(currentCharacter.INT);
-        setCurrentStatWIS(currentCharacter.WIS);
-        setCurrentStatCHA(currentCharacter.CHA);
-        setAthletics(currentCharacter.athletics);
-        setAcrobatics(currentCharacter.acrobatics);
-        setSleightOfHand(currentCharacter.sleightOfHand);
-        setStealth(currentCharacter.stealth);
-        setArcana(currentCharacter.arcana);
-        setHistory(currentCharacter.history);
-        setInvestigation(currentCharacter.investigation);
-        setNature(currentCharacter.nature);
-        setReligion(currentCharacter.religion);
-        setAnimalHandling(currentCharacter.animalHandling);
-        setInsight(currentCharacter.insight);
-        setMedicine(currentCharacter.medicine);
-        setPerception(currentCharacter.perception);
-        setSurvival(currentCharacter.survival);
-        setDeception(currentCharacter.deception);
-        setIntimidation(currentCharacter.intimidation);
-        setPerformance(currentCharacter.performance);
-        setPersuasion(currentCharacter.persuasion);
+        setCurrentCharacterLevel(character.characterLevel);
+        setCurrentProficiency(character.proficiency)
+        setSpellCastingLevel(character.spellcastingLevel);
+        setFullCasterLevel(character.fullCasterLevel);
+        setHalfCasterLevel(character.halfCasterLevel)
+        setWarlockCastingLevel(character.warlockCasterLevel);
+        setAthletics(character.athletics);
+        setAcrobatics(character.acrobatics);
+        setSleightOfHand(character.sleightOfHand);
+        setStealth(character.stealth);
+        setArcana(character.arcana);
+        setHistory(character.history);
+        setInvestigation(character.investigation);
+        setNature(character.nature);
+        setReligion(character.religion);
+        setAnimalHandling(character.animalHandling);
+        setInsight(character.insight);
+        setMedicine(character.medicine);
+        setPerception(character.perception);
+        setSurvival(character.survival);
+        setDeception(character.deception);
+        setIntimidation(character.intimidation);
+        setPerformance(character.performance);
+        setPersuasion(character.persuasion);
         setDetectChange(false)
         return false;
     }
@@ -237,8 +208,8 @@ export default function levelUpTab() {
                 headerRandomizer()
             }>
             <View>
-                <Text style={{color: "white", fontSize: 50, backgroundColor: "tan", textAlign: "center"}}>{currentCharacterName}</Text>
-                <Text style={{color: "white", fontSize: 30, backgroundColor: "black", textAlign: "center"}}> Max HP: {maxHP} </Text>
+                <Text style={{color: "white", fontSize: 50, backgroundColor: "tan", textAlign: "center"}}>{character.charName}</Text>
+                <Text style={{color: "white", fontSize: 30, backgroundColor: "black", textAlign: "center"}}> Max HP: {character.maxHP} </Text>
                 <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}> Character Level: {currentCharacterLevel}</Text>
                 <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}> Proficiency Bonus: +{currentProficiency} </Text>
                 <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}>Total Spellcasting Level: {spellCastingLevel}</Text>
@@ -260,7 +231,7 @@ export default function levelUpTab() {
                 {(loadCharacterBoxDisplayStatus && (loadCharacterConfirmationCount > 0)) &&
                     <Pressable style={styles.confirmationButton} onPress={() => {setLoadCharacterConfirmationCount(0);}}>
                         <Text style={styles.confirmationBox}>Confirmed! Character</Text>
-                        <Text style={styles.confirmationBox}>"{currentCharacterName}"</Text>
+                        <Text style={styles.confirmationBox}>"{character.charName}"</Text>
                         <Text style={styles.confirmationBox}>Loaded! {loadCharacterConfirmationCount} time(s)!</Text>
                     </Pressable>}
                 <View style={{alignSelf: "center"}}>
@@ -270,8 +241,7 @@ export default function levelUpTab() {
                                 setLoadCharacterConfirmationCount(loadCharacterConfirmationCount + 1);
                                 AsyncStorage.setItem("currentCharacterName", pickedNameFromLoadCharacterTool);
                                 getCurrentCharacterObjectStringPromise(pickedNameFromLoadCharacterTool).then((objectString :string|null) => {
-                                    currentCharacter = JSON.parse("" + objectString);
-                                    setDetectChange(true)
+                                    characterUpdater({type: "all", character: JSON.parse("" + objectString)});
                                 });
                             }}><Text style={{
                                 fontSize: 20,
@@ -291,7 +261,7 @@ export default function levelUpTab() {
 
 
 
-            <View>{newSpellCreationTool(currentCharacter)}</View>
+            <View>{newSpellCreationTool()}</View>
 
 
                 <View style={styles.toolBoxStyle}>
@@ -329,11 +299,7 @@ export default function levelUpTab() {
                         style={styles.toolBoxButton}
                         onPress={() => {{
                             if (HPChangeVariable == "" || isNaN(parseInt(HPChangeVariable))){HPChangeVariable = "10";}
-                                AsyncStorage.setItem("CurrentMaxHP", HPChangeVariable);
-                                currentCharacter.maxHP = parseInt(HPChangeVariable);
-                                AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter));
-                                setMaxHP(parseInt(HPChangeVariable));
-                                setAddHPAdjustConfirmationCount(addHPAdjustConfirmationCount + 1);
+                            characterUpdater({type: "updateMaxHP", value: parseInt(HPChangeVariable)});
                         }}}>
                         <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust Max HP: {HPChangeVariable}</Text>
                     </Pressable>}
@@ -439,29 +405,29 @@ export default function levelUpTab() {
                     {addSpellAndCharacterLevelBoxDisplayStatus && <Pressable
                         style={styles.toolBoxButton}
                         onPress={() => {
-                            if (isNaN(parseInt(characterLevelChangeVariable)) || (characterLevelChangeVariable == "")){characterLevelChangeVariable = "" + currentCharacter.characterLevel}
+                            if (isNaN(parseInt(characterLevelChangeVariable)) || (characterLevelChangeVariable == "")){characterLevelChangeVariable = "" + character.characterLevel}
                             if (parseInt(characterLevelChangeVariable) < 0){characterLevelChangeVariable = "0";}
                             if (parseInt(characterLevelChangeVariable) > 20){characterLevelChangeVariable = "20";}
                             if (fullCasterLevelsChangeVariable == "" || isNaN(parseInt(fullCasterLevelsChangeVariable)))
-                                {fullCasterLevelsChangeVariable = "" + currentCharacter.fullCasterLevel;}
+                                {fullCasterLevelsChangeVariable = "" + character.fullCasterLevel;}
                             if (halfCasterLevelsChangeVariable == "" || isNaN(parseInt(halfCasterLevelsChangeVariable)))
-                                {halfCasterLevelsChangeVariable = "" + currentCharacter.halfCasterLevel;}
+                                {halfCasterLevelsChangeVariable = "" + character.halfCasterLevel;}
                             if (warlockCasterLevelsChangeVariable == "" || isNaN(parseInt(warlockCasterLevelsChangeVariable)))
-                                {warlockCasterLevelsChangeVariable = "" + currentCharacter.warlockCasterLevel;}
-                            currentCharacter.characterLevel = parseInt(characterLevelChangeVariable);
+                                {warlockCasterLevelsChangeVariable = "" + character.warlockCasterLevel;}
+                            character.characterLevel = parseInt(characterLevelChangeVariable);
                             setCurrentCharacterLevel(parseInt(characterLevelChangeVariable));
-                            setCurrentProficiency(updateProficiency(currentCharacter, parseInt(characterLevelChangeVariable)));
-                            setSpellCastingLevel(updateSpellcastingLevel(currentCharacter, parseInt(fullCasterLevelsChangeVariable), parseInt(halfCasterLevelsChangeVariable)));
-                            currentCharacter.warlockCasterLevel = parseInt(warlockCasterLevelsChangeVariable);
+                            setCurrentProficiency(updateProficiency(character, parseInt(characterLevelChangeVariable)));
+                            setSpellCastingLevel(updateSpellcastingLevel(character, parseInt(fullCasterLevelsChangeVariable), parseInt(halfCasterLevelsChangeVariable)));
+                            character.warlockCasterLevel = parseInt(warlockCasterLevelsChangeVariable);
                             setWarlockCastingLevel(parseInt(warlockCasterLevelsChangeVariable));
                             setFullCasterLevel(parseInt(fullCasterLevelsChangeVariable));
                             setHalfCasterLevel(parseInt(halfCasterLevelsChangeVariable));
                             setAddSpellAndCharaterLevelConfirmationCount(addSpellandCharacterLevelConfirmationCount + 1);
-                            AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter));
+                            AsyncStorage.setItem("newCharacter" + character.charName, JSON.stringify(character));
                         }}>
                         <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust Character Level: {characterLevelChangeVariable}</Text>
                         <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Spellcasting Level: {getSpellCastingLevelAsString()} </Text>
-                        {(currentCharacter.warlockCasterLevel > 0 || parseInt(warlockCasterLevelsChangeVariable) > 0) && <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Warlock Level: {warlockCasterLevelsChangeVariable}</Text>}
+                        {(character.warlockCasterLevel > 0 || parseInt(warlockCasterLevelsChangeVariable) > 0) && <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Warlock Level: {warlockCasterLevelsChangeVariable}</Text>}
                     </Pressable>}
                 </View>
 
@@ -500,12 +466,9 @@ export default function levelUpTab() {
                         style={styles.coreStatAdjustButton}
                         onPress={() => {
                             if (isNaN(parseInt(abilityScoreChangeVariable)) || abilityScoreChangeVariable == ""){
-                                abilityScoreChangeVariable = "" + currentCharacter.STR;
+                                abilityScoreChangeVariable = "" + character.STR;
                             }
-                            currentCharacter.STR = parseInt(abilityScoreChangeVariable);
-                            setCurrentStatSTR(currentCharacter.STR);
-                            AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
-                            setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
+                            characterUpdater({type: "updateSTR", value: parseInt(abilityScoreChangeVariable)});
                         }}>
                         <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  STR: {abilityScoreChangeVariable}</Text>
                     </Pressable>}
@@ -513,12 +476,9 @@ export default function levelUpTab() {
                             style={styles.coreStatAdjustButton}
                             onPress={() => {
                                 if (isNaN(parseInt(abilityScoreChangeVariable)) || abilityScoreChangeVariable == ""){
-                                    abilityScoreChangeVariable = "" + currentCharacter.DEX;
+                                    abilityScoreChangeVariable = "" + character.DEX;
                                 }
-                                currentCharacter.DEX = parseInt(abilityScoreChangeVariable);
-                                setCurrentStatDEX(currentCharacter.DEX);
-                                AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
-                                setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
+                                characterUpdater({type: "updateDEX", value: parseInt(abilityScoreChangeVariable)});
                             }}>
                             <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  DEX: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
@@ -526,12 +486,9 @@ export default function levelUpTab() {
                             style={styles.coreStatAdjustButton}
                             onPress={() => {
                                 if (isNaN(parseInt(abilityScoreChangeVariable)) || abilityScoreChangeVariable == ""){
-                                    abilityScoreChangeVariable = "" + currentCharacter.CON;
+                                    abilityScoreChangeVariable = "" + character.CON;
                                 }
-                                currentCharacter.CON = parseInt(abilityScoreChangeVariable);
-                                setCurrentStatCON(currentCharacter.CON);
-                                AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
-                                setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
+                                characterUpdater({type: "updateCON", value: parseInt(abilityScoreChangeVariable)});
                             }}>
                             <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  CON: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
@@ -541,12 +498,9 @@ export default function levelUpTab() {
                             style={styles.coreStatAdjustButton}
                             onPress={() => {
                                 if (isNaN(parseInt(abilityScoreChangeVariable)) || abilityScoreChangeVariable == ""){
-                                    abilityScoreChangeVariable = "" + currentCharacter.INT;
+                                    abilityScoreChangeVariable = "" + character.INT;
                                 }
-                                currentCharacter.INT = parseInt(abilityScoreChangeVariable);
-                                setCurrentStatINT(currentCharacter.INT);
-                                AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
-                                setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
+                                characterUpdater({type: "updateINT", value: parseInt(abilityScoreChangeVariable)});
                             }}>
                             <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  INT: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
@@ -554,12 +508,9 @@ export default function levelUpTab() {
                             style={styles.coreStatAdjustButton}
                             onPress={() => {
                                 if (isNaN(parseInt(abilityScoreChangeVariable)) || abilityScoreChangeVariable == ""){
-                                    abilityScoreChangeVariable = "" + currentCharacter.WIS;
+                                    abilityScoreChangeVariable = "" + character.WIS;
                                 }
-                                currentCharacter.WIS = parseInt(abilityScoreChangeVariable);
-                                setCurrentStatWIS(currentCharacter.WIS);
-                                AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
-                                setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
+                                characterUpdater({type: "updateWIS", value: parseInt(abilityScoreChangeVariable)});
                             }}>
                             <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  WIS: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
@@ -567,12 +518,9 @@ export default function levelUpTab() {
                             style={styles.coreStatAdjustButton}
                             onPress={() => {
                                 if (isNaN(parseInt(abilityScoreChangeVariable)) || abilityScoreChangeVariable == ""){
-                                    abilityScoreChangeVariable = "" + currentCharacter.CHA;
+                                    abilityScoreChangeVariable = "" + character.CHA;
                                 }
-                                currentCharacter.CHA = parseInt(abilityScoreChangeVariable);
-                                setCurrentStatCHA(currentCharacter.CHA);
-                                AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
-                                setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
+                                characterUpdater({type: "updateCHA", value: parseInt(abilityScoreChangeVariable)});
                             }}>
                             <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  CHA: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
@@ -821,25 +769,25 @@ export default function levelUpTab() {
                     {addSkillsBoxDisplayStatus && <Pressable
                         style={styles.toolBoxButton}
                         onPress={() => {{
-                            currentCharacter.athletics = athletics;
-                            currentCharacter.acrobatics= acrobatics;
-                            currentCharacter.sleightOfHand = sleightOfHand;
-                            currentCharacter.stealth = stealth;
-                            currentCharacter.arcana = arcana;
-                            currentCharacter.history = history;
-                            currentCharacter.investigation= investigation;
-                            currentCharacter.nature = nature;
-                            currentCharacter.religion = religion;
-                            currentCharacter.animalHandling = animalHandling;
-                            currentCharacter.insight = insight;
-                            currentCharacter.medicine = medicine;
-                            currentCharacter.perception = perception;
-                            currentCharacter.survival = survival;
-                            currentCharacter.deception = deception;
-                            currentCharacter.intimidation = intimidation;
-                            currentCharacter.performance = performance;
-                            currentCharacter.persuasion = persuasion;
-                            AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
+                            character.athletics = athletics;
+                            character.acrobatics= acrobatics;
+                            character.sleightOfHand = sleightOfHand;
+                            character.stealth = stealth;
+                            character.arcana = arcana;
+                            character.history = history;
+                            character.investigation= investigation;
+                            character.nature = nature;
+                            character.religion = religion;
+                            character.animalHandling = animalHandling;
+                            character.insight = insight;
+                            character.medicine = medicine;
+                            character.perception = perception;
+                            character.survival = survival;
+                            character.deception = deception;
+                            character.intimidation = intimidation;
+                            character.performance = performance;
+                            character.persuasion = persuasion;
+                            AsyncStorage.setItem("newCharacter" + character.charName, JSON.stringify(character))
                             setSkillChangeConfirmationCount(skillChangeConfirmationCount + 1)
                         }}}>
                         <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Finalize Skills</Text>
@@ -851,7 +799,7 @@ export default function levelUpTab() {
 
 
 
-            <View>{AdjustCoreStatSaves(currentCharacter, detectChange)}</View>
+            <View>{AdjustCoreStatSaves(character, detectChange)}</View>
 
 
 
@@ -933,7 +881,7 @@ export default function levelUpTab() {
                     {(addCharacterBoxDisplayStatus && (addCharacterConfirmationCount > 0)) &&
                         <Pressable style={styles.confirmationButton} onPress={() => {setAddCharacterConfirmationCount(0);}}>
                             <Text style={styles.confirmationBox}>Confirmed! New Character</Text>
-                            <Text style={styles.confirmationBox}>"{currentCharacterName}"</Text>
+                            <Text style={styles.confirmationBox}>"{character.charName}"</Text>
                             <Text style={styles.confirmationBox}>Created! {addCharacterConfirmationCount} time(s)!</Text>
                         </Pressable>}
                     {addCharacterBoxDisplayStatus && <Pressable
@@ -943,10 +891,7 @@ export default function levelUpTab() {
                                 {characterLevelChangeVariable = "1";}
                             if (parseInt(characterLevelChangeVariable) > 20) {characterLevelChangeVariable = "20";}
                             if (isNaN(parseInt(HPChangeVariable)) || HPChangeVariable == "" || parseInt(HPChangeVariable) < 1){HPChangeVariable = "10";}
-                            currentCharacter = new Character(nameChangeVariable, parseInt(HPChangeVariable), parseInt(characterLevelChangeVariable));
-                            AsyncStorage.setItem("newCharacter" + nameChangeVariable, JSON.stringify(currentCharacter)).then(()=>{
-                                AsyncStorage.setItem("currentCharacterName", currentCharacter.charName).then(()=>{
-                                    setDetectChange(true);})})
+                            characterUpdater({type: "all", character: new Character(nameChangeVariable, parseInt(HPChangeVariable), parseInt(characterLevelChangeVariable))});
                             setAddCharacterConfirmationCount(addCharacterConfirmationCount + 1);
                             getAllCharacterNames().then(keysString => {
                                 allCharacterNamesInitial = [];
@@ -983,7 +928,7 @@ export default function levelUpTab() {
                             backgroundColor: "blue",
                             margin: 15,
                             borderRadius: 10
-                        }}>Confirmed! Character {currentCharacterName} Deleted <FontAwesome size={28} name="frown-o" color={"red"} /></Text></Pressable>}
+                        }}>Confirmed! Character {character.charName} Deleted <FontAwesome size={28} name="frown-o" color={"red"} /></Text></Pressable>}
                 <View style={{alignSelf: "center"}}>
                     {allCharacterNames.map((pickedNameDeleteCharacterTool) => {
                         return(
@@ -1013,7 +958,7 @@ export default function levelUpTab() {
                         <Text style={styles.confirmationBox}>\---<FontAwesome size={40} name="smile-o" color={"green"} />---/</Text>
                     </Pressable>}
 
-                {(deleteCharacterBoxDisplayStatus && confirmDelete && (currentCharacterName == deletionName)) && <View>
+                {(deleteCharacterBoxDisplayStatus && confirmDelete && (character.charName == deletionName)) && <View>
                     <Text style={{
                         backgroundColor: "yellow",
                         borderColor: "red",
@@ -1029,13 +974,8 @@ export default function levelUpTab() {
                         setDeleteCharacterConfirmationCount(0);
                         setConfirmDelete(!confirmDelete);
                         AsyncStorage.removeItem("newCharacter" + deletionName);
-                        if (currentCharacterName == deletionName){
-                            currentCharacter = new Character("default", 15, 5);
-                            updateAllStatsToNewCharacter();
-                            AsyncStorage.setItem("newCharacter" + currentCharacter.charName, JSON.stringify(currentCharacter));
-                            AsyncStorage.setItem("currentCharacterName", currentCharacter.charName);
-                            setCurrentCharacterName(currentCharacter.charName);
-                            setDetectChange(true);
+                        if (character.charName == deletionName){
+                            characterUpdater({type: "all", character: new Character("default", 15, 5)});
                         }
                         getAllCharacterNames().then(keysString => {
                             allCharacterNamesInitial = [];

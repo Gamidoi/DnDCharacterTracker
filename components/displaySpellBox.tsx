@@ -1,11 +1,15 @@
 import {StyleSheet, Text, View} from "react-native";
 import {Spell} from "@/assets/classes/spell";
 import {Character} from "@/assets/classes/character";
+import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 
 
 
 
-export default function DisplaySpellBox(currentCharacter :Character, spellLevel :number){
+export default function DisplaySpellBox(spellLevel :number){
+    const character = useCharacter();
+    const characterUpdater = useCharacterUpdater();
+
     function spellLevelToString(spellLevel :number){
         if (spellLevel == 9){ return "9th Level Spell"}
         if (spellLevel == 8){ return "8th Level Spell"}
@@ -19,35 +23,35 @@ export default function DisplaySpellBox(currentCharacter :Character, spellLevel 
         return "Cantrip"
     }
 
-    function spellAttackModifierToString(spellCastingStat :string, currentCharacter :Character):string{
+    function spellAttackModifierToString(spellCastingStat :string, character :Character):string{
         if (spellCastingStat == "STR"){
-            return ("+" + (Math.floor((currentCharacter.STR - 10) / 2) + currentCharacter.proficiency))}
+            return ("+" + (Math.floor((character.STR - 10) / 2) + character.proficiency))}
         if (spellCastingStat == "DEX"){
-            return ("+" + (Math.floor((currentCharacter.DEX - 10) / 2) + currentCharacter.proficiency))}
+            return ("+" + (Math.floor((character.DEX - 10) / 2) + character.proficiency))}
         if (spellCastingStat == "CON"){
-            return ("+" + (Math.floor((currentCharacter.CON - 10) / 2) + currentCharacter.proficiency))}
+            return ("+" + (Math.floor((character.CON - 10) / 2) + character.proficiency))}
         if (spellCastingStat == "INT"){
-            return ("+" + (Math.floor((currentCharacter.INT - 10) / 2) + currentCharacter.proficiency))}
+            return ("+" + (Math.floor((character.INT - 10) / 2) + character.proficiency))}
         if (spellCastingStat == "WIS"){
-            return ("+" + (Math.floor((currentCharacter.WIS - 10) / 2) + currentCharacter.proficiency))}
+            return ("+" + (Math.floor((character.WIS - 10) / 2) + character.proficiency))}
         if (spellCastingStat == "CHA"){
-            return ("+" + (Math.floor((currentCharacter.CHA - 10) / 2) + currentCharacter.proficiency))}
+            return ("+" + (Math.floor((character.CHA - 10) / 2) + character.proficiency))}
         return "";
     }
 
-    function spellSaveDCToString(spellCastingStat :string, currentCharacter :Character):string{
+    function spellSaveDCToString(spellCastingStat :string, character :Character):string{
         if (spellCastingStat == "STR"){
-            return ("" + (8 + Math.floor((currentCharacter.STR - 10) / 2) + currentCharacter.proficiency))}
+            return ("" + (8 + Math.floor((character.STR - 10) / 2) + character.proficiency))}
         if (spellCastingStat == "DEX"){
-            return ("" + (8 + Math.floor((currentCharacter.DEX - 10) / 2) + currentCharacter.proficiency))}
+            return ("" + (8 + Math.floor((character.DEX - 10) / 2) + character.proficiency))}
         if (spellCastingStat == "CON"){
-            return ("" + (8 + Math.floor((currentCharacter.CON - 10) / 2) + currentCharacter.proficiency))}
+            return ("" + (8 + Math.floor((character.CON - 10) / 2) + character.proficiency))}
         if (spellCastingStat == "INT"){
-            return ("" + (8 + Math.floor((currentCharacter.INT - 10) / 2) + currentCharacter.proficiency))}
+            return ("" + (8 + Math.floor((character.INT - 10) / 2) + character.proficiency))}
         if (spellCastingStat == "WIS"){
-            return ("" + (8 + Math.floor((currentCharacter.WIS - 10) / 2) + currentCharacter.proficiency))}
+            return ("" + (8 + Math.floor((character.WIS - 10) / 2) + character.proficiency))}
         if (spellCastingStat == "CHA"){
-            return ("" + (8 + Math.floor((currentCharacter.CHA - 10) / 2) + currentCharacter.proficiency))}
+            return ("" + (8 + Math.floor((character.CHA - 10) / 2) + character.proficiency))}
         return "";
     }
 
@@ -67,7 +71,7 @@ export default function DisplaySpellBox(currentCharacter :Character, spellLevel 
     }
 
     return(<View>
-        {currentCharacter.spells.map((spell :Spell) => {
+        {character.spells.map((spell :Spell) => {
             if (spell.spellLevel == spellLevel){
 
             return (
@@ -112,7 +116,7 @@ export default function DisplaySpellBox(currentCharacter :Character, spellLevel 
                     alignSelf: "center",
                 }}>
                     <Text style={{color: "white", textAlign: "center"}}>Spell Attack: Casting Ability {spell.isAttack[1]}</Text>
-                    <Text style={{color: "white", textAlign: "center", fontSize: 20}}>{spellAttackModifierToString(spell.isAttack[1], currentCharacter)}</Text>
+                    <Text style={{color: "white", textAlign: "center", fontSize: 20}}>{spellAttackModifierToString(spell.isAttack[1], character)}</Text>
                 </View>}
             {spell.isSaveDC[0] &&
                 <View style={{
@@ -125,7 +129,7 @@ export default function DisplaySpellBox(currentCharacter :Character, spellLevel 
                 }}>
                     <Text style={{color: "white", textAlign: "center"}}>Saving Throw: Casting Ability {spell.isSaveDC[1]}</Text>
                     <Text style={{color: "white", textAlign: "center", fontSize: 20}}>
-                        DC {spellSaveDCToString(spell.isSaveDC[1], currentCharacter)} {spell.isSaveDC[2]} Saving Throw</Text>
+                        DC {spellSaveDCToString(spell.isSaveDC[1], character)} {spell.isSaveDC[2]} Saving Throw</Text>
                 </View>}
 
             <View style={{flexDirection: "row", alignSelf: "center"}}>

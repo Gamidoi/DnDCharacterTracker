@@ -1,57 +1,19 @@
 import {StyleSheet, Image, Text, View, Pressable} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useEffect, useState} from "react";
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import {Character} from '@/assets/classes/character';
-import {useNavigation} from "@react-navigation/native";
+import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 
-let initializingName :string|null;
-let getNameAsString = async () => {
-    return await AsyncStorage.getItem("currentCharacterName");
-    }
-
-getNameAsString().then(nameString => {
-    initializingName = nameString;
-    getCurrentCharacterObjectStringPromise(initializingName).then(objectString => {
-        let currentCharacterObjectString = objectString;
-        if (currentCharacterObjectString != null) {
-            currentCharacter = JSON.parse(currentCharacterObjectString);
-        }
-    })});
-
-let currentCharacter :Character;
-let getCurrentCharacterObjectStringPromise = async (nameString :string|null) => {
-    return await AsyncStorage.getItem("newCharacter" + nameString);
-}
 
 
 
 
 
 export default function TabSkillsSavesRolls() {
-    if (currentCharacter == null){currentCharacter = new Character("default", 10, 5)}
+    const character = useCharacter();
+    const characterUpdater = useCharacterUpdater();
 
-    let [currentCharacterName, setCurrentCharacterName] = useState(currentCharacter.charName);
     let [currentRollName, setCurrentRollName] = useState("");
 
-    let [currentStatSTR, setCurrentStatSTR] = useState(currentCharacter.STR);
-    let [currentSTRMod, setCurrentSTRMod] = useState(findCoreStatMod(currentStatSTR))
-    let [STRSaveProf, setSTRSaveProf] = useState(currentCharacter.STRSaveProf);
-    let [currentStatDEX, setCurrentStatDEX] = useState(currentCharacter.DEX);
-    let [currentDEXMod, setCurrentDEXMod] = useState(findCoreStatMod(currentStatDEX))
-    let [DEXSaveProf, setDEXSaveProf] = useState(currentCharacter.DEXSaveProf);
-    let [currentStatCON, setCurrentStatCON] = useState(currentCharacter.CON);
-    let [currentCONMod, setCurrentCONMod] = useState(findCoreStatMod(currentStatCON))
-    let [CONSaveProf, setCONSaveProf] = useState(currentCharacter.CONSaveProf);
-    let [currentStatINT, setCurrentStatINT] = useState(currentCharacter.INT);
-    let [currentINTMod, setCurrentINTMod] = useState(findCoreStatMod(currentStatINT))
-    let [INTSaveProf, setINTSaveProf] = useState(currentCharacter.INTSaveProf);
-    let [currentStatWIS, setCurrentStatWIS] = useState(currentCharacter.WIS);
-    let [currentWISMod, setCurrentWISMod] = useState(findCoreStatMod(currentStatWIS))
-    let [WISSaveProf, setWISSaveProf] = useState(currentCharacter.WISSaveProf);
-    let [currentStatCHA, setCurrentStatCHA] = useState(currentCharacter.CHA);
-    let [currentCHAMod, setCurrentCHAMod] = useState(findCoreStatMod(currentStatCHA))
-    let [CHASaveProf, setCHASaveProf] = useState(currentCharacter.CHASaveProf);
 
 
     let [currentRollDie1, setCurrentRollDie1] = useState(20);
@@ -61,82 +23,9 @@ export default function TabSkillsSavesRolls() {
     let [toggleAdvantage, setToggleAdvantage] = useState(false);
     let [toggleDisadvantage, setToggleDisadvantage] = useState(false);
 
-    let [currentProficiency, setCurrentProficiency] = useState(currentCharacter.proficiency);
-
-    let [athletics, setAthletics ] = useState(currentCharacter.athletics);
-    let [acrobatics, setAcrobatics] = useState(currentCharacter.acrobatics);
-    let [sleightOfHand, setSleightOfHand] = useState(currentCharacter.sleightOfHand);
-    let [stealth, setStealth ] = useState(currentCharacter.stealth);
-    let [arcana, setArcana ] = useState(currentCharacter.arcana);
-    let [history, setHistory ] = useState(currentCharacter.history);
-    let [investigation, setInvestigation ] = useState(currentCharacter.investigation);
-    let [nature, setNature ] = useState(currentCharacter.nature);
-    let [religion, setReligion ] = useState(currentCharacter.religion);
-    let [animalHandling, setAnimalHandling ] = useState(currentCharacter.animalHandling);
-    let [insight, setInsight ] = useState(currentCharacter.insight);
-    let [medicine, setMedicine ] = useState(currentCharacter.medicine);
-    let [perception, setPerception ] = useState(currentCharacter.perception);
-    let [survival, setSurvival ] = useState(currentCharacter.survival);
-    let [deception, setDeception ] = useState(currentCharacter.deception);
-    let [intimidation, setIntimidation ] = useState(currentCharacter.intimidation);
-    let [performance, setPerformance ] = useState(currentCharacter.performance);
-    let [persuasion,setPersuasion ] = useState(currentCharacter.persuasion);
-
-
-
-    const navigation = useNavigation();
-    useEffect(() => {
-        return navigation.addListener('focus', () => {
-            getNameAsString().then(nameString => {
-                initializingName = nameString;
-                getCurrentCharacterObjectStringPromise(initializingName).then(objectString => {
-                    let currentCharacterObjectString = objectString;
-                    if (currentCharacterObjectString != null) {
-                        currentCharacter = JSON.parse(currentCharacterObjectString);
-                    }
-
-                    setCurrentCharacterName(currentCharacter.charName);
-                    setCurrentStatSTR(currentCharacter.STR);
-                    setCurrentStatDEX(currentCharacter.DEX);
-                    setCurrentStatCON(currentCharacter.CON);
-                    setCurrentStatINT(currentCharacter.INT);
-                    setCurrentStatWIS(currentCharacter.WIS);
-                    setCurrentStatCHA(currentCharacter.CHA);
-                    setSTRSaveProf(currentCharacter.STRSaveProf);
-                    setDEXSaveProf(currentCharacter.DEXSaveProf);
-                    setCONSaveProf(currentCharacter.CONSaveProf);
-                    setINTSaveProf(currentCharacter.INTSaveProf);
-                    setWISSaveProf(currentCharacter.WISSaveProf);
-                    setCHASaveProf(currentCharacter.CHASaveProf);
-                    setCurrentSTRMod(findCoreStatMod(currentCharacter.STR))
-                    setCurrentDEXMod(findCoreStatMod(currentCharacter.DEX))
-                    setCurrentCONMod(findCoreStatMod(currentCharacter.CON))
-                    setCurrentINTMod(findCoreStatMod(currentCharacter.INT))
-                    setCurrentWISMod(findCoreStatMod(currentCharacter.WIS))
-                    setCurrentCHAMod(findCoreStatMod(currentCharacter.CHA))
-                    setAthletics(currentCharacter.athletics);
-                    setAcrobatics(currentCharacter.acrobatics);
-                    setSleightOfHand(currentCharacter.sleightOfHand);
-                    setStealth(currentCharacter.stealth);
-                    setArcana(currentCharacter.arcana);
-                    setHistory(currentCharacter.history);
-                    setInvestigation(currentCharacter.investigation);
-                    setNature(currentCharacter.nature);
-                    setReligion(currentCharacter.religion);
-                    setAnimalHandling(currentCharacter.animalHandling);
-                    setInsight(currentCharacter.insight);
-                    setMedicine(currentCharacter.medicine);
-                    setPerception(currentCharacter.perception);
-                    setSurvival(currentCharacter.survival);
-                    setDeception(currentCharacter.deception);
-                    setIntimidation(currentCharacter.intimidation);
-                    setPerformance(currentCharacter.performance);
-                    setPersuasion(currentCharacter.persuasion);
-                    setCurrentProficiency(currentCharacter.proficiency);
-                })});
-        });
-    }, [navigation]);
-
+    function findStatModifier(coreStat: number){
+        return Math.floor((coreStat - 10)/2);
+    }
 
     function headerRandomizer(){
         let randomNumber = Math.random() * 4;
@@ -166,7 +55,7 @@ export default function TabSkillsSavesRolls() {
                 headerRandomizer()
             }>
             <View style={{backgroundColor: 'black'}}>
-                    <Text style={{color: "white", fontSize: 50, backgroundColor: "tan", textAlign: "center"}}>{currentCharacterName}
+                    <Text style={{color: "white", fontSize: 50, backgroundColor: "tan", textAlign: "center"}}>{character.charName}
                     </Text>
             </View>
 
@@ -249,470 +138,470 @@ export default function TabSkillsSavesRolls() {
 
             <View style={{backgroundColor: 'orange', flexDirection: "row"}}>
                 <Pressable style={[styles.coreSkillBoxes, {backgroundColor: "maroon"}]} onPress={()=> {
-                    setCurrentRollMod(currentSTRMod);
+                    setCurrentRollMod(findStatModifier(character.STR));
                     setCurrentRollDie1(rollD20());
                     setCurrentRollName("flat STR");
                     if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                 }}>
                     <Text style={styles.coreStatText}>STR</Text>
-                    <Text style={styles.coreStatText}>{currentStatSTR}</Text>
-                    <Text style={styles.coreStatText}>{currentSTRMod > 0 && "+"}{currentSTRMod}</Text>
+                    <Text style={styles.coreStatText}>{character.STR}</Text>
+                    <Text style={styles.coreStatText}>{findStatModifier(character.STR) > 0 && "+"}{findStatModifier(character.STR)}</Text>
                 </Pressable>
                 <Pressable style={[styles.coreSkillBoxes, {backgroundColor: "green"}]} onPress={()=> {
-                    setCurrentRollMod(currentDEXMod);
+                    setCurrentRollMod(findStatModifier(character.DEX));
                     setCurrentRollDie1(rollD20());
                     setCurrentRollName("flat DEX");
                     if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                 }}>
                     <Text style={styles.coreStatText}>DEX</Text>
-                    <Text style={styles.coreStatText}>{currentStatDEX}</Text>
-                    <Text style={styles.coreStatText}>{currentDEXMod > 0 && "+"}{currentDEXMod}</Text>
+                    <Text style={styles.coreStatText}>{character.DEX}</Text>
+                    <Text style={styles.coreStatText}>{findStatModifier(character.DEX) > 0 && "+"}{findStatModifier(character.DEX)}</Text>
                 </Pressable>
                 <Pressable style={styles.coreSkillBoxes} onPress={()=> {
-                    setCurrentRollMod(currentCONMod);
+                    setCurrentRollMod(findStatModifier(character.CON));
                     setCurrentRollDie1(rollD20());
                     setCurrentRollName("flat CON");
                     if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                 }}>
                     <Text style={styles.coreStatText}>CON</Text>
-                    <Text style={styles.coreStatText}>{currentStatCON}</Text>
-                    <Text style={styles.coreStatText}>{currentCONMod > 0 && "+"}{currentCONMod}</Text>
+                    <Text style={styles.coreStatText}>{character.CON}</Text>
+                    <Text style={styles.coreStatText}>{findStatModifier(character.CON) > 0 && "+"}{findStatModifier(character.CON)}</Text>
                 </Pressable>
                 <Pressable style={[styles.coreSkillBoxes, {backgroundColor: "blue"}]} onPress={()=> {
-                    setCurrentRollMod(currentINTMod);
+                    setCurrentRollMod(findStatModifier(character.INT));
                     setCurrentRollDie1(rollD20());
                     setCurrentRollName("flat INT");
                     if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                 }}>
                     <Text style={styles.coreStatText}>INT</Text>
-                    <Text style={styles.coreStatText}>{currentStatINT}</Text>
-                    <Text style={styles.coreStatText}>{currentINTMod > 0 && "+"}{currentINTMod}</Text>
+                    <Text style={styles.coreStatText}>{character.INT}</Text>
+                    <Text style={styles.coreStatText}>{findStatModifier(character.INT) > 0 && "+"}{findStatModifier(character.INT)}</Text>
                 </Pressable>
                 <Pressable style={[styles.coreSkillBoxes, {backgroundColor: "purple"}]} onPress={()=> {
-                    setCurrentRollMod(currentWISMod);
+                    setCurrentRollMod(findStatModifier(character.WIS));
                     setCurrentRollDie1(rollD20());
                     setCurrentRollName("flat WIS");
                     if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                 }}>
                     <Text style={styles.coreStatText}>WIS</Text>
-                    <Text style={styles.coreStatText}>{currentStatWIS}</Text>
-                    <Text style={styles.coreStatText}>{currentWISMod > 0 && "+"}{currentWISMod}</Text>
+                    <Text style={styles.coreStatText}>{character.WIS}</Text>
+                    <Text style={styles.coreStatText}>{findStatModifier(character.WIS) > 0 && "+"}{findStatModifier(character.WIS)}</Text>
                 </Pressable>
                 <Pressable style={[styles.coreSkillBoxes, {backgroundColor: "red"}]} onPress={()=> {
-                    setCurrentRollMod(currentCHAMod);
+                    setCurrentRollMod(findStatModifier(character.CHA));
                     setCurrentRollDie1(rollD20());
                     setCurrentRollName("flat CHA");
                     if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                 }}>
                     <Text style={styles.coreStatText}>CHA</Text>
-                    <Text style={styles.coreStatText}>{currentStatCHA}</Text>
-                    <Text style={styles.coreStatText}>{currentCHAMod > 0 && "+"}{currentCHAMod}</Text>
+                    <Text style={styles.coreStatText}>{character.CHA}</Text>
+                    <Text style={styles.coreStatText}>{findStatModifier(character.CHA) > 0 && "+"}{findStatModifier(character.CHA)}</Text>
                 </Pressable>
             </View>
 
             <View style={{marginTop: -16, backgroundColor: 'orange', flexDirection: "row"}}>
                 <Pressable style={[styles.coreSkillBoxes, {backgroundColor: "maroon"}]} onPress={()=> {
-                    setCurrentRollMod(currentSTRMod);
-                    if (STRSaveProf) {setCurrentRollMod(currentSTRMod + currentProficiency);}
+                    setCurrentRollMod(findStatModifier(character.STR));
+                    if (character.STRSaveProf) {setCurrentRollMod((findStatModifier(character.STR) + character.proficiency));}
                     setCurrentRollDie1(rollD20());
                     setCurrentRollName("STR Save");
                     if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                 }}>
-                    {!STRSaveProf && <Text style={{fontSize: 7}}> </Text>}
+                    {!character.STRSaveProf && <Text style={{fontSize: 7}}> </Text>}
                     <Text style={styles.coreStatText}>Save</Text>
-                    {!STRSaveProf && <Text style={styles.coreStatText}>{currentSTRMod > 0 && "+"}{currentSTRMod}</Text>}
-                    {STRSaveProf && <Text style={styles.coreStatText}>{currentSTRMod + currentProficiency > 0 && "+"}{currentSTRMod + currentProficiency}</Text>}
-                    {STRSaveProf && <Text style={styles.coreStatText}>Prof</Text>}
-                    {!STRSaveProf && <Text style={{fontSize: 7}}> </Text>}
+                    {!character.STRSaveProf && <Text style={styles.coreStatText}>{findStatModifier(character.STR) > 0 && "+"}{findStatModifier(character.STR)}</Text>}
+                    {character.STRSaveProf && <Text style={styles.coreStatText}>{findStatModifier(character.STR) + character.proficiency > 0 && "+"}{findStatModifier(character.STR) + character.proficiency}</Text>}
+                    {character.STRSaveProf && <Text style={styles.coreStatText}>Prof</Text>}
+                    {!character.STRSaveProf && <Text style={{fontSize: 7}}> </Text>}
 
                 </Pressable>
                 <Pressable style={[styles.coreSkillBoxes, {backgroundColor: "green"}]} onPress={()=> {
-                    setCurrentRollMod(currentDEXMod);
-                    if (DEXSaveProf) {setCurrentRollMod(currentDEXMod + currentProficiency);}
+                    setCurrentRollMod(findStatModifier(character.DEX));
+                    if (character.DEXSaveProf) {setCurrentRollMod(findStatModifier(character.DEX) + character.proficiency);}
                     setCurrentRollDie1(rollD20());
                     setCurrentRollName("DEX Save");
                     if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                 }}>
-                    {!DEXSaveProf && <Text style={{fontSize: 7}}> </Text>}
+                    {!character.DEXSaveProf && <Text style={{fontSize: 7}}> </Text>}
                     <Text style={styles.coreStatText}>Save</Text>
-                    {!DEXSaveProf && <Text style={styles.coreStatText}>{currentDEXMod > 0 && "+"}{currentDEXMod}</Text>}
-                    {DEXSaveProf && <Text style={styles.coreStatText}>{currentDEXMod + currentProficiency > 0 && "+"}{currentDEXMod + currentProficiency}</Text>}
-                    {DEXSaveProf && <Text style={styles.coreStatText}>Prof</Text>}
-                    {!DEXSaveProf && <Text style={{fontSize: 7}}> </Text>}
+                    {!character.DEXSaveProf && <Text style={styles.coreStatText}>{findStatModifier(character.DEX) > 0 && "+"}{findStatModifier(character.DEX)}</Text>}
+                    {character.DEXSaveProf && <Text style={styles.coreStatText}>{findStatModifier(character.DEX) + character.proficiency > 0 && "+"}{findStatModifier(character.DEX) + character.proficiency}</Text>}
+                    {character.DEXSaveProf && <Text style={styles.coreStatText}>Prof</Text>}
+                    {!character.DEXSaveProf && <Text style={{fontSize: 7}}> </Text>}
                 </Pressable>
                 <Pressable style={styles.coreSkillBoxes} onPress={()=> {
-                    setCurrentRollMod(currentCONMod);
-                    if (CONSaveProf) {setCurrentRollMod(currentCONMod + currentProficiency);}
+                    setCurrentRollMod(findStatModifier(character.CON));
+                    if (character.CONSaveProf) {setCurrentRollMod(findStatModifier(character.CON) + character.proficiency);}
                     setCurrentRollDie1(rollD20());
                     setCurrentRollName("CON Save");
                     if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                 }}>
-                    {!CONSaveProf && <Text style={{fontSize: 7}}> </Text>}
+                    {!character.CONSaveProf && <Text style={{fontSize: 7}}> </Text>}
                     <Text style={styles.coreStatText}>Save</Text>
-                    {!CONSaveProf && <Text style={styles.coreStatText}>{currentCONMod > 0 && "+"}{currentCONMod}</Text>}
-                    {CONSaveProf && <Text style={styles.coreStatText}>{currentCONMod + currentProficiency > 0 && "+"}{currentCONMod + currentProficiency}</Text>}
-                    {CONSaveProf && <Text style={styles.coreStatText}>Prof</Text>}
-                    {!CONSaveProf && <Text style={{fontSize: 7}}> </Text>}
+                    {!character.CONSaveProf && <Text style={styles.coreStatText}>{findStatModifier(character.CON) > 0 && "+"}{findStatModifier(character.CON)}</Text>}
+                    {character.CONSaveProf && <Text style={styles.coreStatText}>{findStatModifier(character.CON) + character.proficiency > 0 && "+"}{findStatModifier(character.CON) + character.proficiency}</Text>}
+                    {character.CONSaveProf && <Text style={styles.coreStatText}>Prof</Text>}
+                    {!character.CONSaveProf && <Text style={{fontSize: 7}}> </Text>}
                 </Pressable>
                 <Pressable style={[styles.coreSkillBoxes, {backgroundColor: "blue"}]} onPress={()=> {
-                    setCurrentRollMod(currentINTMod);
-                    if (INTSaveProf) {setCurrentRollMod(currentINTMod + currentProficiency);}
+                    setCurrentRollMod(findStatModifier(character.INT));
+                    if (character.INTSaveProf) {setCurrentRollMod(findStatModifier(character.INT) + character.proficiency);}
                     setCurrentRollDie1(rollD20());
                     setCurrentRollName("INT Save");
                     if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                 }}>
-                    {!INTSaveProf && <Text style={{fontSize: 7}}> </Text>}
+                    {!character.INTSaveProf && <Text style={{fontSize: 7}}> </Text>}
                     <Text style={styles.coreStatText}>Save</Text>
-                    {!INTSaveProf && <Text style={styles.coreStatText}>{currentINTMod > 0 && "+"}{currentINTMod}</Text>}
-                    {INTSaveProf && <Text style={styles.coreStatText}>{currentINTMod + currentProficiency > 0 && "+"}{currentINTMod + currentProficiency}</Text>}
-                    {INTSaveProf && <Text style={styles.coreStatText}>Prof</Text>}
-                    {!INTSaveProf && <Text style={{fontSize: 7}}> </Text>}
+                    {!character.INTSaveProf && <Text style={styles.coreStatText}>{findStatModifier(character.INT) > 0 && "+"}{findStatModifier(character.INT)}</Text>}
+                    {character.INTSaveProf && <Text style={styles.coreStatText}>{findStatModifier(character.INT) + character.proficiency > 0 && "+"}{findStatModifier(character.INT) + character.proficiency}</Text>}
+                    {character.INTSaveProf && <Text style={styles.coreStatText}>Prof</Text>}
+                    {!character.INTSaveProf && <Text style={{fontSize: 7}}> </Text>}
                 </Pressable>
                 <Pressable style={[styles.coreSkillBoxes, {backgroundColor: "purple"}]} onPress={()=> {
-                    setCurrentRollMod(currentWISMod);
-                    if (WISSaveProf) {setCurrentRollMod(currentWISMod + currentProficiency);}
+                    setCurrentRollMod(findStatModifier(character.WIS));
+                    if (character.WISSaveProf) {setCurrentRollMod(findStatModifier(character.WIS) + character.proficiency);}
                     setCurrentRollDie1(rollD20());
                     setCurrentRollName("WIS Save");
                     if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                 }}>
-                    {!WISSaveProf && <Text style={{fontSize: 7}}> </Text>}
+                    {!character.WISSaveProf && <Text style={{fontSize: 7}}> </Text>}
                     <Text style={styles.coreStatText}>Save</Text>
-                    {!WISSaveProf && <Text style={styles.coreStatText}>{currentWISMod > 0 && "+"}{currentWISMod}</Text>}
-                    {WISSaveProf && <Text style={styles.coreStatText}>{currentWISMod + currentProficiency > 0 && "+"}{currentWISMod + currentProficiency}</Text>}
-                    {WISSaveProf && <Text style={styles.coreStatText}>Prof</Text>}
-                    {!WISSaveProf && <Text style={{fontSize: 7}}> </Text>}
+                    {!character.WISSaveProf && <Text style={styles.coreStatText}>{findStatModifier(character.WIS) > 0 && "+"}{findStatModifier(character.WIS)}</Text>}
+                    {character.WISSaveProf && <Text style={styles.coreStatText}>{findStatModifier(character.WIS) + character.proficiency > 0 && "+"}{findStatModifier(character.WIS) + character.proficiency}</Text>}
+                    {character.WISSaveProf && <Text style={styles.coreStatText}>Prof</Text>}
+                    {!character.WISSaveProf && <Text style={{fontSize: 7}}> </Text>}
                 </Pressable>
                 <Pressable style={[styles.coreSkillBoxes, {backgroundColor: "red"}]} onPress={()=> {
-                    setCurrentRollMod(currentCHAMod);
-                    if (CHASaveProf) {setCurrentRollMod(currentCHAMod + currentProficiency);}
+                    setCurrentRollMod(findStatModifier(character.WIS));
+                    if (character.CHASaveProf) {setCurrentRollMod(findStatModifier(character.WIS) + character.proficiency);}
                     setCurrentRollDie1(rollD20());
                     setCurrentRollName("CHA Save");
                     if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                 }}>
-                    {!CHASaveProf && <Text style={{fontSize: 7}}> </Text>}
+                    {!character.CHASaveProf && <Text style={{fontSize: 7}}> </Text>}
                     <Text style={styles.coreStatText}>Save</Text>
-                    {!CHASaveProf && <Text style={styles.coreStatText}>{currentCHAMod > 0 && "+"}{currentCHAMod}</Text>}
-                    {CHASaveProf && <Text style={styles.coreStatText}>{currentCHAMod + currentProficiency > 0 && "+"}{currentCHAMod + currentProficiency}</Text>}
-                    {CHASaveProf && <Text style={styles.coreStatText}>Prof</Text>}
-                    {!CHASaveProf && <Text style={{fontSize: 7}}> </Text>}
+                    {!character.CHASaveProf && <Text style={styles.coreStatText}>{findStatModifier(character.WIS) > 0 && "+"}{findStatModifier(character.WIS)}</Text>}
+                    {character.CHASaveProf && <Text style={styles.coreStatText}>{findStatModifier(character.WIS) + character.proficiency > 0 && "+"}{findStatModifier(character.WIS) + character.proficiency}</Text>}
+                    {character.CHASaveProf && <Text style={styles.coreStatText}>Prof</Text>}
+                    {!character.CHASaveProf && <Text style={{fontSize: 7}}> </Text>}
                 </Pressable>
             </View>
 
 
 
 
-            <Text style={{color: "white", textAlign: "center", fontSize: 25}}>Proficiency {currentProficiency}</Text>
+            <Text style={{color: "white", textAlign: "center", fontSize: 25}}>Proficiency {character.proficiency}</Text>
             <View style={{flexDirection: "row"}}>
                 <View style={styles.skillRollColumn}>
                     <Pressable style={[styles.skillBoxes, {backgroundColor: "green"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (stealth == "P") {proficiencyBonus = currentProficiency;}
-                        if (stealth == "E") {proficiencyBonus = (2 * currentProficiency);}
-                        setCurrentRollMod(currentDEXMod + proficiencyBonus);
+                        if (character.stealth == "P") {proficiencyBonus = character.proficiency;}
+                        if (character.stealth == "E") {proficiencyBonus = (2 * character.proficiency);}
+                        setCurrentRollMod(findStatModifier(character.DEX) + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Stealth");
                         if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                     }}>
                     <Text style={styles.coreStatText}>Stealth</Text>
-                        {stealth == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
-                            <Text style={styles.coreStatText}>{currentDEXMod > 0 && "+"}{currentDEXMod}</Text></View>}
-                        {stealth == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentDEXMod + currentProficiency > 0 && "+"}{currentDEXMod + currentProficiency}</Text></View>}
-                        {stealth == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentDEXMod + (2 * currentProficiency) > 0 && "+"}{currentDEXMod + (2 * currentProficiency)}</Text></View>}
+                        {character.stealth == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.DEX) > 0 && "+"}{findStatModifier(character.DEX)}</Text></View>}
+                        {character.stealth == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.DEX) + character.proficiency > 0 && "+"}{findStatModifier(character.DEX) + character.proficiency}</Text></View>}
+                        {character.stealth == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.DEX) + (2 * character.proficiency) > 0 && "+"}{findStatModifier(character.DEX) + (2 * character.proficiency)}</Text></View>}
                     </Pressable>
                     <Pressable style={[styles.skillBoxes, {backgroundColor: "maroon"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (athletics == "P") {proficiencyBonus = currentProficiency;}
-                        if (athletics == "E") {proficiencyBonus = (2 * currentProficiency);}
-                        setCurrentRollMod(currentSTRMod + proficiencyBonus);
+                        if (character.athletics == "P") {proficiencyBonus = character.proficiency;}
+                        if (character.athletics == "E") {proficiencyBonus = (2 * character.proficiency);}
+                        setCurrentRollMod(findStatModifier(character.STR) + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Athletics");
                         if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                     }}>
                     <Text style={styles.coreStatText}>Athletics</Text>
-                        {athletics == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
-                            <Text style={styles.coreStatText}>{currentSTRMod > 0 && "+"}{currentSTRMod}</Text></View>}
-                        {athletics == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentSTRMod + currentProficiency > 0 && "+"}{currentSTRMod + currentProficiency}</Text></View>}
-                        {athletics == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentSTRMod + (2 * currentProficiency) > 0 && "+"}{currentSTRMod + (2 * currentProficiency)}</Text></View>}
+                        {character.athletics == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.STR) > 0 && "+"}{findStatModifier(character.STR)}</Text></View>}
+                        {character.athletics == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.STR) + character.proficiency > 0 && "+"}{findStatModifier(character.STR) + character.proficiency}</Text></View>}
+                        {character.athletics == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.STR) + (2 * character.proficiency) > 0 && "+"}{findStatModifier(character.STR) + (2 * character.proficiency)}</Text></View>}
                     </Pressable>
                     <Pressable style={[styles.skillBoxes, {backgroundColor: "red"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (deception == "P") {proficiencyBonus = currentProficiency;}
-                        if (deception == "E") {proficiencyBonus = (2 * currentProficiency);}
-                        setCurrentRollMod(currentCHAMod + proficiencyBonus);
+                        if (character.deception == "P") {proficiencyBonus = character.proficiency;}
+                        if (character.deception == "E") {proficiencyBonus = (2 * character.proficiency);}
+                        setCurrentRollMod(findStatModifier(character.CHA) + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Deception");
                         if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                     }}>
                         <Text style={styles.coreStatText}>Deception</Text>
-                        {deception == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
-                            <Text style={styles.coreStatText}>{currentCHAMod > 0 && "+"}{currentCHAMod}</Text></View>}
-                        {deception == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentCHAMod + currentProficiency > 0 && "+"}{currentCHAMod + currentProficiency}</Text></View>}
-                        {deception == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentCHAMod + (2 * currentProficiency) > 0 && "+"}{currentCHAMod + (2 * currentProficiency)}</Text></View>}
+                        {character.deception == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.CHA) > 0 && "+"}{findStatModifier(character.CHA)}</Text></View>}
+                        {character.deception == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.CHA) + character.proficiency > 0 && "+"}{findStatModifier(character.CHA) + character.proficiency}</Text></View>}
+                        {character.deception == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.CHA) + (2 * character.proficiency) > 0 && "+"}{findStatModifier(character.CHA) + (2 * character.proficiency)}</Text></View>}
                     </Pressable>
                     <Pressable style={[styles.skillBoxes, {backgroundColor: "red"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (intimidation == "P") {proficiencyBonus = currentProficiency;}
-                        if (intimidation == "E") {proficiencyBonus = (2 * currentProficiency);}
-                        setCurrentRollMod(currentCHAMod + proficiencyBonus);
+                        if (character.intimidation == "P") {proficiencyBonus = character.proficiency;}
+                        if (character.intimidation == "E") {proficiencyBonus = (2 * character.proficiency);}
+                        setCurrentRollMod(findStatModifier(character.CHA) + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Intimidation");
                         if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                     }}>
                         <Text style={styles.coreStatText}>Intimidation</Text>
-                        {intimidation == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
-                            <Text style={styles.coreStatText}>{currentCHAMod > 0 && "+"}{currentCHAMod}</Text></View>}
-                        {intimidation == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentCHAMod + currentProficiency > 0 && "+"}{currentCHAMod + currentProficiency}</Text></View>}
-                        {intimidation == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentCHAMod + (2 * currentProficiency) > 0 && "+"}{currentCHAMod + (2 * currentProficiency)}</Text></View>}
+                        {character.intimidation == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.CHA) > 0 && "+"}{findStatModifier(character.CHA)}</Text></View>}
+                        {character.intimidation == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.CHA) + character.proficiency > 0 && "+"}{findStatModifier(character.CHA) + character.proficiency}</Text></View>}
+                        {character.intimidation == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.CHA) + (2 * character.proficiency) > 0 && "+"}{findStatModifier(character.CHA) + (2 * character.proficiency)}</Text></View>}
                     </Pressable>
                     <Pressable style={[styles.skillBoxes, {backgroundColor: "red"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (performance == "P") {proficiencyBonus = currentProficiency;}
-                        if (performance == "E") {proficiencyBonus = (2 * currentProficiency);}
-                        setCurrentRollMod(currentCHAMod + proficiencyBonus);
+                        if (character.performance == "P") {proficiencyBonus = character.proficiency;}
+                        if (character.performance == "E") {proficiencyBonus = (2 * character.proficiency);}
+                        setCurrentRollMod(findStatModifier(character.CHA) + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Performance");
                         if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                     }}>
                         <Text style={styles.coreStatText}>Performance</Text>
-                        {performance == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
-                            <Text style={styles.coreStatText}>{currentCHAMod > 0 && "+"}{currentCHAMod}</Text></View>}
-                        {performance == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentCHAMod + currentProficiency > 0 && "+"}{currentCHAMod + currentProficiency}</Text></View>}
-                        {performance == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentCHAMod + (2 * currentProficiency) > 0 && "+"}{currentCHAMod + (2 * currentProficiency)}</Text></View>}
+                        {character.performance == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.CHA) > 0 && "+"}{findStatModifier(character.CHA)}</Text></View>}
+                        {character.performance == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.CHA) + character.proficiency > 0 && "+"}{findStatModifier(character.CHA) + character.proficiency}</Text></View>}
+                        {character.performance == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.CHA) + (2 * character.proficiency) > 0 && "+"}{findStatModifier(character.CHA) + (2 * character.proficiency)}</Text></View>}
                     </Pressable>
                     <Pressable style={[styles.skillBoxes, {backgroundColor: "red"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (persuasion == "P") {proficiencyBonus = currentProficiency;}
-                        if (persuasion == "E") {proficiencyBonus = (2 * currentProficiency);}
-                        setCurrentRollMod(currentCHAMod + proficiencyBonus);
+                        if (character.persuasion == "P") {proficiencyBonus = character.proficiency;}
+                        if (character.persuasion == "E") {proficiencyBonus = (2 * character.proficiency);}
+                        setCurrentRollMod(findStatModifier(character.CHA) + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Persuasion");
                         if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                     }}>
                         <Text style={styles.coreStatText}>Persuasion</Text>
-                        {persuasion == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
-                            <Text style={styles.coreStatText}>{currentCHAMod > 0 && "+"}{currentCHAMod}</Text></View>}
-                        {persuasion == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentCHAMod + currentProficiency > 0 && "+"}{currentCHAMod + currentProficiency}</Text></View>}
-                        {persuasion == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentCHAMod + (2 * currentProficiency) > 0 && "+"}{currentCHAMod + (2 * currentProficiency)}</Text></View>}
+                        {character.persuasion == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.CHA) > 0 && "+"}{findStatModifier(character.CHA)}</Text></View>}
+                        {character.persuasion == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.CHA) + character.proficiency > 0 && "+"}{findStatModifier(character.CHA) + character.proficiency}</Text></View>}
+                        {character.persuasion == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.CHA) + (2 * character.proficiency) > 0 && "+"}{findStatModifier(character.CHA) + (2 * character.proficiency)}</Text></View>}
                     </Pressable>
                 </View>
                 <View style={styles.skillRollColumn}>
                     <Pressable style={[styles.skillBoxes, {backgroundColor: "green"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (acrobatics == "P") {proficiencyBonus = currentProficiency;}
-                        if (acrobatics == "E") {proficiencyBonus = (2 * currentProficiency);}
-                        setCurrentRollMod(currentDEXMod + proficiencyBonus);
+                        if (character.acrobatics == "P") {proficiencyBonus = character.proficiency;}
+                        if (character.acrobatics == "E") {proficiencyBonus = (2 * character.proficiency);}
+                        setCurrentRollMod(findStatModifier(character.DEX) + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Acrobatics");
                         if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                     }}>
                         <Text style={styles.coreStatText}>Acrobatics</Text>
-                        {acrobatics == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
-                            <Text style={styles.coreStatText}>{currentDEXMod > 0 && "+"}{currentDEXMod}</Text></View>}
-                        {acrobatics == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentDEXMod + currentProficiency > 0 && "+"}{currentDEXMod + currentProficiency}</Text></View>}
-                        {acrobatics == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentDEXMod + (2 * currentProficiency) > 0 && "+"}{currentDEXMod + (2 * currentProficiency)}</Text></View>}
+                        {character.acrobatics == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.DEX) > 0 && "+"}{findStatModifier(character.DEX)}</Text></View>}
+                        {character.acrobatics == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.DEX) + character.proficiency > 0 && "+"}{findStatModifier(character.DEX) + character.proficiency}</Text></View>}
+                        {character.acrobatics == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.DEX) + (2 * character.proficiency) > 0 && "+"}{findStatModifier(character.DEX) + (2 * character.proficiency)}</Text></View>}
                     </Pressable>
                     <Pressable style={[styles.skillBoxes, {backgroundColor: "blue"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (arcana == "P") {proficiencyBonus = currentProficiency;}
-                        if (arcana == "E") {proficiencyBonus = (2 * currentProficiency);}
-                        setCurrentRollMod(currentINTMod + proficiencyBonus);
+                        if (character.arcana == "P") {proficiencyBonus = character.proficiency;}
+                        if (character.arcana == "E") {proficiencyBonus = (2 * character.proficiency);}
+                        setCurrentRollMod(findStatModifier(character.INT) + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Arcana");
                         if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                     }}>
                         <Text style={styles.coreStatText}>Arcana</Text>
-                        {arcana == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod > 0 && "+"}{currentINTMod}</Text></View>}
-                        {arcana == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod + currentProficiency > 0 && "+"}{currentINTMod + currentProficiency}</Text></View>}
-                        {arcana == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod + (2 * currentProficiency) > 0 && "+"}{currentINTMod + (2 * currentProficiency)}</Text></View>}
+                        {character.arcana == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.INT) > 0 && "+"}{findStatModifier(character.INT)}</Text></View>}
+                        {character.arcana == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.INT) + character.proficiency > 0 && "+"}{findStatModifier(character.INT) + character.proficiency}</Text></View>}
+                        {character.arcana == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.INT) + (2 * character.proficiency) > 0 && "+"}{findStatModifier(character.INT) + (2 * character.proficiency)}</Text></View>}
                     </Pressable>
                     <Pressable style={[styles.skillBoxes, {backgroundColor: "blue"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (history == "P") {proficiencyBonus = currentProficiency;}
-                        if (history == "E") {proficiencyBonus = (2 * currentProficiency);}
-                        setCurrentRollMod(currentINTMod + proficiencyBonus);
+                        if (character.history == "P") {proficiencyBonus = character.proficiency;}
+                        if (character.history == "E") {proficiencyBonus = (2 * character.proficiency);}
+                        setCurrentRollMod(findStatModifier(character.INT) + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("History");
                         if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                     }}>
                         <Text style={styles.coreStatText}>History</Text>
-                        {history == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod > 0 && "+"}{currentINTMod}</Text></View>}
-                        {history == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod + currentProficiency > 0 && "+"}{currentINTMod + currentProficiency}</Text></View>}
-                        {history == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod + (2 * currentProficiency) > 0 && "+"}{currentINTMod + (2 * currentProficiency)}</Text></View>}
+                        {character.history == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.INT) > 0 && "+"}{findStatModifier(character.INT)}</Text></View>}
+                        {character.history == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.INT) + character.proficiency > 0 && "+"}{findStatModifier(character.INT) + character.proficiency}</Text></View>}
+                        {character.history == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.INT) + (2 * character.proficiency) > 0 && "+"}{findStatModifier(character.INT) + (2 * character.proficiency)}</Text></View>}
                     </Pressable>
                     <Pressable style={[styles.skillBoxes, {backgroundColor: "blue"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (investigation == "P") {proficiencyBonus = currentProficiency;}
-                        if (investigation == "E") {proficiencyBonus = (2 * currentProficiency);}
-                        setCurrentRollMod(currentINTMod + proficiencyBonus);
+                        if (character.investigation == "P") {proficiencyBonus = character.proficiency;}
+                        if (character.investigation == "E") {proficiencyBonus = (2 * character.proficiency);}
+                        setCurrentRollMod(findStatModifier(character.INT) + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Investigation");
                         if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                     }}>
                         <Text style={styles.coreStatText}>Investigation</Text>
-                        {investigation == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod > 0 && "+"}{currentINTMod}</Text></View>}
-                        {investigation == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod + currentProficiency > 0 && "+"}{currentINTMod + currentProficiency}</Text></View>}
-                        {investigation == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod + (2 * currentProficiency) > 0 && "+"}{currentINTMod + (2 * currentProficiency)}</Text></View>}
+                        {character.investigation == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.INT) > 0 && "+"}{findStatModifier(character.INT)}</Text></View>}
+                        {character.investigation == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.INT) + character.proficiency > 0 && "+"}{findStatModifier(character.INT) + character.proficiency}</Text></View>}
+                        {character.investigation == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.INT) + (2 * character.proficiency) > 0 && "+"}{findStatModifier(character.INT) + (2 * character.proficiency)}</Text></View>}
                     </Pressable>
                     <Pressable style={[styles.skillBoxes, {backgroundColor: "blue"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (nature == "P") {proficiencyBonus = currentProficiency;}
-                        if (nature == "E") {proficiencyBonus = (2 * currentProficiency);}
-                        setCurrentRollMod(currentINTMod + proficiencyBonus);
+                        if (character.nature == "P") {proficiencyBonus = character.proficiency;}
+                        if (character.nature == "E") {proficiencyBonus = (2 * character.proficiency);}
+                        setCurrentRollMod(findStatModifier(character.INT) + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Nature");
                         if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                     }}>
                         <Text style={styles.coreStatText}>Nature</Text>
-                        {nature == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod > 0 && "+"}{currentINTMod}</Text></View>}
-                        {nature == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod + currentProficiency > 0 && "+"}{currentINTMod + currentProficiency}</Text></View>}
-                        {nature == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod + (2 * currentProficiency) > 0 && "+"}{currentINTMod + (2 * currentProficiency)}</Text></View>}
+                        {character.nature == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.INT) > 0 && "+"}{findStatModifier(character.INT)}</Text></View>}
+                        {character.nature == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.INT) + character.proficiency > 0 && "+"}{findStatModifier(character.INT) + character.proficiency}</Text></View>}
+                        {character.nature == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.INT) + (2 * character.proficiency) > 0 && "+"}{findStatModifier(character.INT) + (2 * character.proficiency)}</Text></View>}
                     </Pressable>
                     <Pressable style={[styles.skillBoxes, {backgroundColor: "blue"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (religion == "P") {proficiencyBonus = currentProficiency;}
-                        if (religion == "E") {proficiencyBonus = (2 * currentProficiency);}
-                        setCurrentRollMod(currentINTMod + proficiencyBonus);
+                        if (character.religion == "P") {proficiencyBonus = character.proficiency;}
+                        if (character.religion == "E") {proficiencyBonus = (2 * character.proficiency);}
+                        setCurrentRollMod(findStatModifier(character.INT) + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Religion");
                         if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                     }}>
                         <Text style={styles.coreStatText}>Religion</Text>
-                        {religion == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod > 0 && "+"}{currentINTMod}</Text></View>}
-                        {religion == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod + currentProficiency > 0 && "+"}{currentINTMod + currentProficiency}</Text></View>}
-                        {religion == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentINTMod + (2 * currentProficiency) > 0 && "+"}{currentINTMod + (2 * currentProficiency)}</Text></View>}
+                        {character.religion == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.INT) > 0 && "+"}{findStatModifier(character.INT)}</Text></View>}
+                        {character.religion == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.INT) + character.proficiency > 0 && "+"}{findStatModifier(character.INT) + character.proficiency}</Text></View>}
+                        {character.religion == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.INT) + (2 * character.proficiency) > 0 && "+"}{findStatModifier(character.INT) + (2 * character.proficiency)}</Text></View>}
                     </Pressable>
                 </View>
                 <View style={styles.skillRollColumn}>
                     <Pressable style={[styles.skillBoxes, {backgroundColor: "green"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (sleightOfHand == "P") {proficiencyBonus = currentProficiency;}
-                        if (sleightOfHand == "E") {proficiencyBonus = (2 * currentProficiency);}
-                        setCurrentRollMod(currentDEXMod + proficiencyBonus);
+                        if (character.sleightOfHand == "P") {proficiencyBonus = character.proficiency;}
+                        if (character.sleightOfHand == "E") {proficiencyBonus = (2 * character.proficiency);}
+                        setCurrentRollMod(findStatModifier(character.DEX) + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Sleight of Hand");
                         if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                     }}>
                         <Text style={styles.coreStatText}>Sleight of Hand</Text>
-                        {sleightOfHand == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
-                            <Text style={styles.coreStatText}>{currentDEXMod > 0 && "+"}{currentDEXMod}</Text></View>}
-                        {sleightOfHand == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentDEXMod + currentProficiency > 0 && "+"}{currentDEXMod + currentProficiency}</Text></View>}
-                        {sleightOfHand == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentDEXMod + (2 * currentProficiency) > 0 && "+"}{currentDEXMod + (2 * currentProficiency)}</Text></View>}
+                        {character.sleightOfHand == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.DEX) > 0 && "+"}{findStatModifier(character.DEX)}</Text></View>}
+                        {character.sleightOfHand == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.DEX) + character.proficiency > 0 && "+"}{findStatModifier(character.DEX) + character.proficiency}</Text></View>}
+                        {character.sleightOfHand == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.DEX) + (2 * character.proficiency) > 0 && "+"}{findStatModifier(character.DEX) + (2 * character.proficiency)}</Text></View>}
                     </Pressable>
                     <Pressable style={[styles.skillBoxes, {backgroundColor: "purple"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (animalHandling == "P") {proficiencyBonus = currentProficiency;}
-                        if (animalHandling == "E") {proficiencyBonus = (2 * currentProficiency);}
-                        setCurrentRollMod(currentWISMod + proficiencyBonus);
+                        if (character.animalHandling == "P") {proficiencyBonus = character.proficiency;}
+                        if (character.animalHandling == "E") {proficiencyBonus = (2 * character.proficiency);}
+                        setCurrentRollMod(findStatModifier(character.WIS) + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Animal Handling");
                         if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                     }}>
                         <Text style={styles.coreStatText}>Animal Handling</Text>
-                        {animalHandling == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod > 0 && "+"}{currentWISMod}</Text></View>}
-                        {animalHandling == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod + currentProficiency > 0 && "+"}{currentWISMod + currentProficiency}</Text></View>}
-                        {animalHandling == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod + (2 * currentProficiency) > 0 && "+"}{currentWISMod + (2 * currentProficiency)}</Text></View>}
+                        {character.animalHandling == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.WIS) > 0 && "+"}{findStatModifier(character.WIS)}</Text></View>}
+                        {character.animalHandling == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.WIS) + character.proficiency > 0 && "+"}{findStatModifier(character.WIS) + character.proficiency}</Text></View>}
+                        {character.animalHandling == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.WIS) + (2 * character.proficiency) > 0 && "+"}{findStatModifier(character.WIS) + (2 * character.proficiency)}</Text></View>}
                     </Pressable>
                     <Pressable style={[styles.skillBoxes, {backgroundColor: "purple"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (insight == "P") {proficiencyBonus = currentProficiency;}
-                        if (insight == "E") {proficiencyBonus = (2 * currentProficiency);}
-                        setCurrentRollMod(currentWISMod + proficiencyBonus);
+                        if (character.insight == "P") {proficiencyBonus = character.proficiency;}
+                        if (character.insight == "E") {proficiencyBonus = (2 * character.proficiency);}
+                        setCurrentRollMod(findStatModifier(character.WIS) + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Insight");
                         if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                     }}>
                         <Text style={styles.coreStatText}>Insight</Text>
-                        {insight == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod > 0 && "+"}{currentWISMod}</Text></View>}
-                        {insight == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod + currentProficiency > 0 && "+"}{currentWISMod + currentProficiency}</Text></View>}
-                        {insight == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod + (2 * currentProficiency) > 0 && "+"}{currentWISMod + (2 * currentProficiency)}</Text></View>}
+                        {character.insight == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.WIS) > 0 && "+"}{findStatModifier(character.WIS)}</Text></View>}
+                        {character.insight == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.WIS) + character.proficiency > 0 && "+"}{findStatModifier(character.WIS) + character.proficiency}</Text></View>}
+                        {character.insight == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.WIS) + (2 * character.proficiency) > 0 && "+"}{findStatModifier(character.WIS) + (2 * character.proficiency)}</Text></View>}
                     </Pressable>
                     <Pressable style={[styles.skillBoxes, {backgroundColor: "purple"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (medicine == "P") {proficiencyBonus = currentProficiency;}
-                        if (medicine == "E") {proficiencyBonus = (2 * currentProficiency);}
-                        setCurrentRollMod(currentWISMod + proficiencyBonus);
+                        if (character.medicine == "P") {proficiencyBonus = character.proficiency;}
+                        if (character.medicine == "E") {proficiencyBonus = (2 * character.proficiency);}
+                        setCurrentRollMod(findStatModifier(character.WIS) + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Medicine");
                         if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                     }}>
                         <Text style={styles.coreStatText}>Medicine</Text>
-                        {medicine == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod > 0 && "+"}{currentWISMod}</Text></View>}
-                        {medicine == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod + currentProficiency > 0 && "+"}{currentWISMod + currentProficiency}</Text></View>}
-                        {medicine == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod + (2 * currentProficiency) > 0 && "+"}{currentWISMod + (2 * currentProficiency)}</Text></View>}
+                        {character.medicine == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.WIS) > 0 && "+"}{findStatModifier(character.WIS)}</Text></View>}
+                        {character.medicine == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.WIS) + character.proficiency > 0 && "+"}{findStatModifier(character.WIS) + character.proficiency}</Text></View>}
+                        {character.medicine == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.WIS) + (2 * character.proficiency) > 0 && "+"}{findStatModifier(character.WIS) + (2 * character.proficiency)}</Text></View>}
                     </Pressable>
                     <Pressable style={[styles.skillBoxes, {backgroundColor: "purple"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (perception == "P") {proficiencyBonus = currentProficiency;}
-                        if (perception == "E") {proficiencyBonus = (2 * currentProficiency);}
-                        setCurrentRollMod(currentWISMod + proficiencyBonus);
+                        if (character.perception == "P") {proficiencyBonus = character.proficiency;}
+                        if (character.perception == "E") {proficiencyBonus = (2 * character.proficiency);}
+                        setCurrentRollMod(findStatModifier(character.WIS) + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Perception");
                         if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                     }}>
                         <Text style={styles.coreStatText}>Perception</Text>
-                        {perception == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod > 0 && "+"}{currentWISMod}</Text></View>}
-                        {perception == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod + currentProficiency > 0 && "+"}{currentWISMod + currentProficiency}</Text></View>}
-                        {perception == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod + (2 * currentProficiency) > 0 && "+"}{currentWISMod + (2 * currentProficiency)}</Text></View>}
+                        {character.perception == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.WIS) > 0 && "+"}{findStatModifier(character.WIS)}</Text></View>}
+                        {character.perception == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.WIS) + character.proficiency > 0 && "+"}{findStatModifier(character.WIS) + character.proficiency}</Text></View>}
+                        {character.perception == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.WIS) + (2 * character.proficiency) > 0 && "+"}{findStatModifier(character.WIS) + (2 * character.proficiency)}</Text></View>}
                     </Pressable>
                     <Pressable style={[styles.skillBoxes, {backgroundColor: "purple"}]} onPress={()=> {
                         let proficiencyBonus = 0;
-                        if (survival == "P") {proficiencyBonus = currentProficiency;}
-                        if (survival == "E") {proficiencyBonus = (2 * currentProficiency);}
-                        setCurrentRollMod(currentWISMod + proficiencyBonus);
+                        if (character.survival == "P") {proficiencyBonus = character.proficiency;}
+                        if (character.survival == "E") {proficiencyBonus = (2 * character.proficiency);}
+                        setCurrentRollMod(findStatModifier(character.WIS) + proficiencyBonus);
                         setCurrentRollDie1(rollD20());
                         setCurrentRollName("Survival");
                         if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                     }}>
                         <Text style={styles.coreStatText}>Survival</Text>
-                        {survival == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod > 0 && "+"}{currentWISMod}</Text></View>}
-                        {survival == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod + currentProficiency > 0 && "+"}{currentWISMod + currentProficiency}</Text></View>}
-                        {survival == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
-                            <Text style={styles.coreStatText}>{currentWISMod + (2 * currentProficiency) > 0 && "+"}{currentWISMod + (2 * currentProficiency)}</Text></View>}
+                        {character.survival == "X" && <View><Text style={styles.coreStatText}>Not Prof</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.WIS) > 0 && "+"}{findStatModifier(character.WIS)}</Text></View>}
+                        {character.survival == "P" && <View><Text style={styles.coreStatText}>Proficient</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.WIS) + character.proficiency > 0 && "+"}{findStatModifier(character.WIS) + character.proficiency}</Text></View>}
+                        {character.survival == "E" && <View><Text style={styles.coreStatText}>Expert</Text>
+                            <Text style={styles.coreStatText}>{findStatModifier(character.WIS) + (2 * character.proficiency) > 0 && "+"}{findStatModifier(character.WIS) + (2 * character.proficiency)}</Text></View>}
                     </Pressable>
                 </View>
             </View>
@@ -833,10 +722,6 @@ const styles = StyleSheet.create({
     }
 });
 
-function findCoreStatMod(int : number) {
-    let ans = (int-10) / 2;
-    return Math.floor(ans);
-}
 function rollD20() {
     let max = 20;
     let roll = (max * Math.random());

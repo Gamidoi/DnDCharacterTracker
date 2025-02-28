@@ -6,33 +6,16 @@ import React, {useEffect, useState} from "react";
 import {Character} from "@/assets/classes/character";
 import {useNavigation} from "@react-navigation/native";
 import DisplaySpellBox from "@/components/displaySpellBox";
+import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 
 
-let initializingName :string|null;
-let getNameAsString = async () => {
-    return await AsyncStorage.getItem("currentCharacterName");
-    }
-
-let currentCharacter :Character;
-let getCurrentCharacterObjectStringPromise = async (nameString :string|null) => {
-    return await AsyncStorage.getItem("newCharacter" + nameString);
-}
-getNameAsString().then(nameString => {
-    initializingName = nameString;
-    getCurrentCharacterObjectStringPromise(initializingName).then(objectString => {
-        let currentCharacterObjectString = objectString;
-        if (currentCharacterObjectString != null) {
-            currentCharacter = JSON.parse(currentCharacterObjectString);
-        }
-    })
-});
 
 
 
 export default function SpellsAbilitiesScreen() {
-    if (currentCharacter == null){currentCharacter = new Character("default", 10, 5)}
+    const character = useCharacter();
+    const characterUpdater = useCharacterUpdater();
 
-    let [currentCharacterName, setCurrentCharacterName] = useState(currentCharacter.charName);
     let [display0thSpells, setDisplay0thSpells] = useState(false);
     let [display1stSpells, setDisplay1stSpells] = useState(false);
     let [display2ndSpells, setDisplay2ndSpells] = useState(false);
@@ -66,7 +49,7 @@ export default function SpellsAbilitiesScreen() {
         let spells7 = 0;
         let spells8 = 0;
         let spells9 = 0;
-        currentCharacter.spells.map(spell => {
+        character.spells.map(spell => {
             if (spell.spellLevel == 0){spells0++;}
             if (spell.spellLevel == 1){spells1++;}
             if (spell.spellLevel == 2){spells2++;}
@@ -110,23 +93,6 @@ export default function SpellsAbilitiesScreen() {
                 style={styles.headImage}/>)}
 
 
-    const navigation = useNavigation();
-    useEffect(() => {
-        return  navigation.addListener('focus', () => {
-            getNameAsString().then(nameString => {
-                getCurrentCharacterObjectStringPromise(nameString).then(objectString => {
-                    if (objectString != null) {
-                        currentCharacter = JSON.parse(objectString);
-                    }
-                    setCurrentCharacterName(currentCharacter.charName);
-                    updateQuantityOfSpellsByLevel();
-                });
-            });
-        });
-    }, [navigation]);
-
-
-
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#60D0D0', dark: '#353636' }}
@@ -136,22 +102,8 @@ export default function SpellsAbilitiesScreen() {
 
 
         <View style={{marginBottom: 20, backgroundColor: 'black'}}>
-            <Pressable onPress={()=> {
-                getNameAsString().then(nameString => {
-                    initializingName = nameString;
-                    getCurrentCharacterObjectStringPromise(initializingName).then(objectString => {
-                        let currentCharacterObjectString = objectString;
-                        if (currentCharacterObjectString != null) {
-                            currentCharacter = JSON.parse(currentCharacterObjectString);
-                        }
-                        setCurrentCharacterName(currentCharacter.charName);
-                        updateQuantityOfSpellsByLevel();
-                    });
-                });
-            }}>
-                <Text style={{color: "white", fontSize: 50, backgroundColor: "tan", textAlign: "center"}}>{currentCharacterName}
+                <Text style={{color: "white", fontSize: 50, backgroundColor: "tan", textAlign: "center"}}>{character.charName}
                 </Text>
-            </Pressable>
         </View>
         <Pressable onPress={()=> {
             setDisplayAllSpells(!displayAllSpells);
@@ -165,52 +117,52 @@ export default function SpellsAbilitiesScreen() {
                 {!display0thSpells && <Text style={styles.displaySpells}>Open Cantrips: {haveQuantity0thSpells}</Text>}
                 {display0thSpells && <Text style={styles.displaySpells}>Close Cantrips: {haveQuantity0thSpells}</Text>}
             </Pressable>
-        {display0thSpells && <View>{DisplaySpellBox(currentCharacter, 0)}</View>}
+        {display0thSpells && <View>{DisplaySpellBox(0)}</View>}
             <Pressable onPress={()=> {setDisplay1stSpells(!display1stSpells)}}>
                 {!display1stSpells && <Text style={styles.displaySpells}>Open 1st Level Spells: {haveQuantity1stSpells}</Text>}
                 {display1stSpells && <Text style={styles.displaySpells}>Close 1st Level Spells: {haveQuantity1stSpells}</Text>}
             </Pressable>
-        {display1stSpells && <View>{DisplaySpellBox(currentCharacter, 1)}</View>}
+        {display1stSpells && <View>{DisplaySpellBox(1)}</View>}
             <Pressable onPress={()=> {setDisplay2ndSpells(!display2ndSpells)}}>
                 {!display2ndSpells && <Text style={styles.displaySpells}>Open 2nd Level Spells: {haveQuantity2ndSpells}</Text>}
                 {display2ndSpells && <Text style={styles.displaySpells}>Close 2nd Level Spells: {haveQuantity2ndSpells}</Text>}
             </Pressable>
-        {display2ndSpells && <View>{DisplaySpellBox(currentCharacter, 2)}</View>}
+        {display2ndSpells && <View>{DisplaySpellBox(2)}</View>}
             <Pressable onPress={()=> {setDisplay3rdSpells(!display3rdSpells)}}>
                 {!display3rdSpells && <Text style={styles.displaySpells}>Open 3rd Level Spells: {haveQuantity3rdSpells}</Text>}
                 {display3rdSpells && <Text style={styles.displaySpells}>Close 3rd Level Spells: {haveQuantity3rdSpells}</Text>}
             </Pressable>
-        {display3rdSpells && <View>{DisplaySpellBox(currentCharacter, 3)}</View>}
+        {display3rdSpells && <View>{DisplaySpellBox(3)}</View>}
             <Pressable onPress={()=> {setDisplay4thSpells(!display4thSpells)}}>
                 {!display4thSpells && <Text style={styles.displaySpells}>Open 4th Level Spells: {haveQuantity4thSpells}</Text>}
                 {display4thSpells && <Text style={styles.displaySpells}>Close 4th Level Spells: {haveQuantity4thSpells}</Text>}
             </Pressable>
-        {display4thSpells && <View>{DisplaySpellBox(currentCharacter, 4)}</View>}
+        {display4thSpells && <View>{DisplaySpellBox(4)}</View>}
             <Pressable onPress={()=> {setDisplay5thSpells(!display5thSpells)}}>
                 {!display5thSpells && <Text style={styles.displaySpells}>Open 5th Level Spells: {haveQuantity5thSpells}</Text>}
                 {display5thSpells && <Text style={styles.displaySpells}>Close 5th Level Spells: {haveQuantity5thSpells}</Text>}
             </Pressable>
-        {display5thSpells && <View>{DisplaySpellBox(currentCharacter, 5)}</View>}
+        {display5thSpells && <View>{DisplaySpellBox(5)}</View>}
             <Pressable onPress={()=> {setDisplay6thSpells(!display6thSpells)}}>
                 {!display6thSpells && <Text style={styles.displaySpells}>Open 6th Level Spells: {haveQuantity6thSpells}</Text>}
                 {display6thSpells && <Text style={styles.displaySpells}>Close 6th Level Spells: {haveQuantity6thSpells}</Text>}
             </Pressable>
-        {display6thSpells && <View>{DisplaySpellBox(currentCharacter, 6)}</View>}
+        {display6thSpells && <View>{DisplaySpellBox(6)}</View>}
             <Pressable onPress={()=> {setDisplay7thSpells(!display7thSpells)}}>
                 {!display7thSpells && <Text style={styles.displaySpells}>Open 7th Level Spells: {haveQuantity7thSpells}</Text>}
                 {display7thSpells && <Text style={styles.displaySpells}>Close 7th Level Spells: {haveQuantity7thSpells}</Text>}
             </Pressable>
-        {display7thSpells && <View>{DisplaySpellBox(currentCharacter, 7)}</View>}
+        {display7thSpells && <View>{DisplaySpellBox(7)}</View>}
             <Pressable onPress={()=> {setDisplay8thSpells(!display8thSpells)}}>
                 {!display8thSpells && <Text style={styles.displaySpells}>Open 8th Level Spells: {haveQuantity8thSpells}</Text>}
                 {display8thSpells && <Text style={styles.displaySpells}>Close 8th Level Spells: {haveQuantity8thSpells}</Text>}
             </Pressable>
-        {display8thSpells && <View>{DisplaySpellBox(currentCharacter, 8)}</View>}
+        {display8thSpells && <View>{DisplaySpellBox(8)}</View>}
             <Pressable onPress={()=> {setDisplay9thSpells(!display9thSpells)}}>
                 {!display9thSpells && <Text style={styles.displaySpells}>Open 9th Level Spells: {haveQuantity9thSpells}</Text>}
                 {display9thSpells && <Text style={styles.displaySpells}>Close 9th Level Spells: {haveQuantity9thSpells}</Text>}
             </Pressable>
-        {display9thSpells && <View>{DisplaySpellBox(currentCharacter, 9)}</View>}
+        {display9thSpells && <View>{DisplaySpellBox(9)}</View>}
         </View>}
 
 

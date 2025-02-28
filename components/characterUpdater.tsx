@@ -1,6 +1,7 @@
 import {createContext, Dispatch, PropsWithChildren, useContext, useEffect, useReducer} from "react";
 import {Character} from "@/assets/classes/character";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {Spell} from "@/assets/classes/spell";
 
 
 interface UpdateAll {
@@ -9,7 +10,7 @@ interface UpdateAll {
 }
 
 interface UpdateMaxHpEvent {
-    type: "updateMaxHp";
+    type: "updateMaxHP";
     value: number;
 }
 interface UpdateCurrentHP {
@@ -26,6 +27,62 @@ interface UpdateWarlockSpellSlots {
     type: "updateWarlockSpellSlots";
     spellSlot: number;
 }
+interface updateSTR {
+    type: "updateSTR";
+    value: number;
+}
+interface updateDEX {
+    type: "updateDEX";
+    value: number;
+}
+interface updateCON {
+    type: "updateCON";
+    value: number;
+}
+interface updateINT {
+    type: "updateINT";
+    value: number;
+}
+interface updateWIS {
+    type: "updateWIS";
+    value: number;
+}
+interface updateCHA {
+    type: "updateCHA";
+    value: number;
+}
+interface updateSTRSaveProf {
+    type: "updateSTRSaveProf";
+    value: boolean;
+}
+interface updateDEXSaveProf {
+    type: "updateDEXSaveProf";
+    value: boolean;
+}
+interface updateCONSaveProf{
+    type: "updateCONSaveProf";
+    value: boolean;
+}
+interface updateINTSaveProf{
+    type: "updateINTSaveProf";
+    value: boolean;
+}
+interface updateWISSaveProf{
+    type: "updateWISSaveProf";
+    value: boolean;
+}
+interface updateCHASaveProf{
+    type: "updateCHASaveProf";
+    value: boolean;
+}
+interface updateProficiency {
+    type: "updateProficiency";
+    value: boolean;
+}
+interface updateKnownSpells{
+    type: "updateKnownSpells";
+    knownSpells: Spell[];
+}
 
 type CharacterEvent =
     UpdateMaxHpEvent
@@ -33,14 +90,28 @@ type CharacterEvent =
     | UpdateSpellSlots
     | UpdateAll
     | UpdateWarlockSpellSlots
+    | updateSTR
+    | updateDEX
+    | updateCON
+    | updateINT
+    | updateWIS
+    | updateCHA
+    | updateSTRSaveProf
+    | updateDEXSaveProf
+    | updateCONSaveProf
+    | updateINTSaveProf
+    | updateWISSaveProf
+    | updateCHASaveProf
+    | updateProficiency
+    | updateKnownSpells
 
 
 const characterDispatch: (current: Character, event: CharacterEvent) => Character = (currentCharacter, event) => {
 
     if (event.type === "all"){
-        return {...(event.character)}
+        return {...event.character}
     }
-    if (event.type === "updateMaxHp") {
+    if (event.type === "updateMaxHP") {
         return {
             ...currentCharacter,
             maxHP: event.value
@@ -71,7 +142,7 @@ const characterDispatch: (current: Character, event: CharacterEvent) => Characte
         let spellString = "";
         for (let i = 0; i < 4; i++) {
             if (i === event.spellSlot) {
-                if (currentCharacter.warlockCurrentUsedSpells[event.spellSlot] === "X") {spellString += "0"
+                if (currentCharacter.warlockCurrentUsedSpells[i] === "X") {spellString += "0"
                 } else {spellString += "X"}
             } else {
                 spellString += currentCharacter.warlockCurrentUsedSpells[i]
@@ -79,7 +150,13 @@ const characterDispatch: (current: Character, event: CharacterEvent) => Characte
         }
         return{
             ...currentCharacter,
-            currentUsedSpells: spellString
+            warlockCurrentUsedSpells: spellString
+        }
+    }
+    if (event.type === "updateKnownSpells"){
+        return{
+            ...currentCharacter,
+            spells: event.knownSpells
         }
     }
 
@@ -112,5 +189,5 @@ export const CharacterInfoProvider = ({children}: PropsWithChildren) => {
     </CharacterContext.Provider>
         ;
 }
-export const useCharacter = useContext(CharacterContext);
-export const useCharacterUpdater = useContext(CharacterUpdaterContext);
+export const useCharacter = () => useContext(CharacterContext);
+export const useCharacterUpdater = () => useContext(CharacterUpdaterContext);

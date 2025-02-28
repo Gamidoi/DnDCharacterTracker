@@ -1,19 +1,20 @@
 import {StyleSheet, Text, View, Pressable, TextInput} from 'react-native';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState} from "react";
 import {Spell} from "@/assets/classes/spell";
-import {Character} from "@/assets/classes/character";
 import {FontAwesome, MaterialCommunityIcons} from "@expo/vector-icons";
+import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 
 
 
-export default function newSpellCreationTool(currentCharacter :Character) {
+export default function newSpellCreationTool() {
+    const character = useCharacter();
+    const characterUpdater = useCharacterUpdater();
+
     let [newSpellCreationToolDisplay, setNewSpellCreationToolDisplay] = useState(false);
     let [newSpellConfirmationCount, setNewSpellConfirmationCount] = useState(0);
     let [deleteSpellToolDisplay, setDeleteSpellToolDisplay] = useState(false);
     let [deleteSpellName, setDeleteSpellName] = useState("");
-    let [deleteSpellIndex, setDeleteSpellIndex] = useState(0);
     let [spellConfirmDelete, setSpellConfirmDelete] = useState(false);
 
     let [spellNameVariable, setSpellNameVariable] = useState("");
@@ -483,11 +484,10 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                                 [spellDamageVariable, parseInt(damageD4), parseInt(damageD6), parseInt(damageD8), parseInt(damageD10), parseInt(damageD12), parseInt(damageBonus)],
                                 [true, spellDescription]);
                             setNewSpellConfirmationCount(newSpellConfirmationCount + 1);
-                            currentCharacter.spells.push(newSpell);
-                            AsyncStorage.setItem("newCharacter" + currentCharacter.charName, JSON.stringify(currentCharacter));
+                            characterUpdater({type: "updateKnownSpells", knownSpells: [...character.spells, newSpell]})
                     }}}>
                     <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Create New Spell: {spellNameVariable}</Text>
-                    <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>For {currentCharacter.charName}</Text>
+                    <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>For {character.charName}</Text>
                 </Pressable>
             </View>}
         </View>
@@ -500,12 +500,11 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                 {deleteSpellToolDisplay && <Text style={{color: "white", textAlign: "center", marginBottom: 20}}>Choose Spell Below</Text>}
             </Pressable>
             <View style={{alignSelf: "center"}}>
-            {currentCharacter.spells.map((pickedSpellForDeletion :Spell, pickedSpellIndex :number) => {
+            {character.spells.map((pickedSpellForDeletion :Spell) => {
                 return(
                     deleteSpellToolDisplay && <View><Pressable onPress={() => {
                         setSpellConfirmDelete(!spellConfirmDelete);
                         setDeleteSpellName(pickedSpellForDeletion.name);
-                        setDeleteSpellIndex(pickedSpellIndex);
                     }}><Text style={{
                         fontSize: 20,
                         backgroundColor: "maroon",
@@ -534,9 +533,13 @@ export default function newSpellCreationTool(currentCharacter :Character) {
             {(deleteSpellToolDisplay && spellConfirmDelete) &&
                 <Pressable onPress={() => {
                     setSpellConfirmDelete(false);
-                    currentCharacter.spells.splice(deleteSpellIndex, 1)
-                    AsyncStorage.setItem("newCharacter" + currentCharacter.charName, JSON.stringify(currentCharacter));
-
+                    let knownSpells :Spell[] = [];
+                    character.spells.forEach((spell) => {
+                        if (spell.name != deleteSpellName) {
+                            knownSpells.push(spell);
+                        }
+                    });
+                    characterUpdater({type: "updateKnownSpells", knownSpells: knownSpells})
                 }}>
                     <Text style={{
                         textAlign: "center",
