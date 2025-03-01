@@ -1,19 +1,20 @@
 import {StyleSheet, Text, View, Pressable, TextInput} from 'react-native';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState} from "react";
 import {Spell} from "@/assets/classes/spell";
-import {Character} from "@/assets/classes/character";
 import {FontAwesome, MaterialCommunityIcons} from "@expo/vector-icons";
+import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 
 
 
-export default function newSpellCreationTool(currentCharacter :Character) {
+export default function newSpellCreationTool() {
+    const character = useCharacter();
+    const characterUpdater = useCharacterUpdater();
+
     let [newSpellCreationToolDisplay, setNewSpellCreationToolDisplay] = useState(false);
     let [newSpellConfirmationCount, setNewSpellConfirmationCount] = useState(0);
     let [deleteSpellToolDisplay, setDeleteSpellToolDisplay] = useState(false);
     let [deleteSpellName, setDeleteSpellName] = useState("");
-    let [deleteSpellIndex, setDeleteSpellIndex] = useState(0);
     let [spellConfirmDelete, setSpellConfirmDelete] = useState(false);
 
     let [spellNameVariable, setSpellNameVariable] = useState("");
@@ -149,8 +150,6 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                         textAlign: "center",
                         marginBottom: 10
                 }}/>}
-                <View style={{flexDirection: "row", alignSelf: "center", marginBottom: 10}}>
-                </View>
                 <View style={{flexDirection: "row", alignSelf: "center", marginBottom: 5}}>
                     <View style={{flex: 0.5}}>
                         <Text style={styles.lables}>Casting Time</Text>
@@ -299,7 +298,7 @@ export default function newSpellCreationTool(currentCharacter :Character) {
 
 
                 <Text style={styles.lables}>Spell Casting Stat</Text>
-                <View style={{flexDirection: "row", alignSelf: "center"}}>
+                <View style={{flexDirection: "row", alignSelf: "center", }}>
                     {spellIsSaveDC[1] == "INT" && <Pressable style={[styles.spellCastingStatButtonsOn, {borderStartStartRadius: 10}]} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "INT"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "INT"]);
@@ -485,11 +484,10 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                                 [spellDamageVariable, parseInt(damageD4), parseInt(damageD6), parseInt(damageD8), parseInt(damageD10), parseInt(damageD12), parseInt(damageBonus)],
                                 [true, spellDescription]);
                             setNewSpellConfirmationCount(newSpellConfirmationCount + 1);
-                            currentCharacter.spells.push(newSpell);
-                            AsyncStorage.setItem("newCharacter" + currentCharacter.charName, JSON.stringify(currentCharacter));
+                            characterUpdater({type: "updateKnownSpells", knownSpells: [...character.spells, newSpell]})
                     }}}>
                     <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Create New Spell: {spellNameVariable}</Text>
-                    <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>For {currentCharacter.charName}</Text>
+                    <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>For {character.charName}</Text>
                 </Pressable>
             </View>}
         </View>
@@ -502,12 +500,11 @@ export default function newSpellCreationTool(currentCharacter :Character) {
                 {deleteSpellToolDisplay && <Text style={{color: "white", textAlign: "center", marginBottom: 20}}>Choose Spell Below</Text>}
             </Pressable>
             <View style={{alignSelf: "center"}}>
-            {currentCharacter.spells.map((pickedSpellForDeletion :Spell, pickedSpellIndex :number) => {
+            {character.spells?.map((pickedSpellForDeletion :Spell) => {
                 return(
                     deleteSpellToolDisplay && <View><Pressable onPress={() => {
                         setSpellConfirmDelete(!spellConfirmDelete);
                         setDeleteSpellName(pickedSpellForDeletion.name);
-                        setDeleteSpellIndex(pickedSpellIndex);
                     }}><Text style={{
                         fontSize: 20,
                         backgroundColor: "maroon",
@@ -536,9 +533,13 @@ export default function newSpellCreationTool(currentCharacter :Character) {
             {(deleteSpellToolDisplay && spellConfirmDelete) &&
                 <Pressable onPress={() => {
                     setSpellConfirmDelete(false);
-                    currentCharacter.spells.splice(deleteSpellIndex, 1)
-                    AsyncStorage.setItem("newCharacter" + currentCharacter.charName, JSON.stringify(currentCharacter));
-
+                    let knownSpells :Spell[] = [];
+                    character.spells.forEach((spell) => {
+                        if (spell.name != deleteSpellName) {
+                            knownSpells.push(spell);
+                        }
+                    });
+                    characterUpdater({type: "updateKnownSpells", knownSpells: knownSpells})
                 }}>
                     <Text style={{
                         textAlign: "center",
@@ -584,28 +585,28 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     attackSaveNeitherButtonsOff: {
-        flex: 0.3,
+        width: 120,
         backgroundColor: "grey",
         borderColor: "orange",
         borderWidth: 4,
         height: 65,
     },
     attackSaveNeitherButtonsOn: {
-        flex: 0.3,
+        width: 120,
         backgroundColor: "maroon",
         borderColor: "orange",
         borderWidth: 4,
         height: 65,
     },
     spellCastingStatButtonsOff: {
-        flex: 0.3,
+        width: 120,
         backgroundColor: "grey",
         borderColor: "orange",
         borderWidth: 4,
         height: 40,
     },
     spellCastingStatButtonsOn: {
-        flex: 0.3,
+        width: 120,
         backgroundColor: "maroon",
         borderColor: "orange",
         borderWidth: 4,
@@ -615,21 +616,22 @@ const styles = StyleSheet.create({
         backgroundColor: "maroon",
         height: 40,
         width: 60,
-        padding: 2,
+        padding: 4,
+        marginHorizontal: 6,
         borderRadius: 8,
         borderWidth: 3,
         borderColor: "orange",
         alignSelf: "center",
     },
     saveTypeToggleON: {
-        flex: 0.15,
+        width: 55,
         backgroundColor: "maroon",
         height: 40,
         borderColor: "orange",
         borderWidth: 3,
     },
     saveTypeToggleOff: {
-        flex: 0.15,
+        width: 55,
         backgroundColor: "grey",
         height: 40,
         borderColor: "orange",
@@ -648,6 +650,7 @@ const styles = StyleSheet.create({
         borderColor: "white",
         width: 58,
         padding: 0,
+        margin: 1,
         alignSelf: "center",
         color: "white",
         textAlign: "center"

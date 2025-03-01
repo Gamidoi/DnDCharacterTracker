@@ -3,6 +3,7 @@ import {Spell} from "@/assets/classes/spell";
 export class Character {
     charName: string;
     maxHP: number;
+    currentHP: number;
     spellcastingLevel: number;
     characterLevel: number;
     fullCasterLevel: number;
@@ -50,6 +51,7 @@ export class Character {
     constructor(character: string, HPMax = 10, characterLevel = 0) {
         this.charName = character;
         this.maxHP = HPMax;
+        this.currentHP = HPMax;
         this.spellcastingLevel = 0;
         this.characterLevel = characterLevel;
         this.fullCasterLevel = this.warlockCasterLevel = this.halfCasterLevel = 0;
@@ -59,31 +61,10 @@ export class Character {
         this.spells = [];
         this.STR = this.DEX = this.CON = this.INT = this.WIS = this.CHA = 10;
         this.STRSaveProf = this.DEXSaveProf = this.CONSaveProf = this.INTSaveProf = this.WISSaveProf = this.CHASaveProf= false;
-        this.proficiency = this.updateProficiency(characterLevel);
+        this.proficiency = Math.ceil((4+characterLevel)/4);
 
         this.athletics = this.acrobatics = this.sleightOfHand = this.stealth = this.arcana = this.history = this.investigation = this.nature = this.religion =
             this.animalHandling = this.insight = this.medicine = this.perception = this.survival = this.deception = this.intimidation = this.performance =
                 this.persuasion = "X";
     }
-
-    public updateProficiency(characterLevel :number) :number {
-        this.proficiency = Math.ceil((4+characterLevel)/4);
-        return  this.proficiency;
-    }
-    public updateSpellcastingLevel(fullCasterLevel :number, halfCasterLevel :number) :number {
-        this.fullCasterLevel = fullCasterLevel;
-        this.halfCasterLevel = halfCasterLevel;
-        this.spellcastingLevel = Math.floor(fullCasterLevel + (halfCasterLevel / 2));
-        return  this.spellcastingLevel;
-    }
-}
-export function updateProficiency(thisCharacter :Character, characterLevel :number) :number {
-    thisCharacter.proficiency = Math.ceil((4+characterLevel)/4);
-    return  thisCharacter.proficiency;
-}
-export function updateSpellcastingLevel(thisCharacter :Character, fullCasterLevel :number, halfCasterLevel :number) :number {
-    thisCharacter.fullCasterLevel = fullCasterLevel;
-    thisCharacter.halfCasterLevel = halfCasterLevel;
-    thisCharacter.spellcastingLevel = Math.floor(fullCasterLevel + (halfCasterLevel / 2));
-    return  thisCharacter.spellcastingLevel;
 }

@@ -1,37 +1,20 @@
-import { Image, StyleSheet, Text, View, TextInput, Pressable} from 'react-native';
+import { StyleSheet, Text, View, TextInput, Pressable} from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, {useEffect, useState} from "react";
-import {Character, updateProficiency, updateSpellcastingLevel} from '@/assets/classes/character';
+import React, { useState} from "react";
+import {Character} from '@/assets/classes/character';
 import {FontAwesome, MaterialCommunityIcons} from "@expo/vector-icons";
-import {useNavigation} from "@react-navigation/native";
 import newSpellCreationTool from "@/components/newSpellCreationTool";
 import AdjustCoreStatSaves from "@/components/adjustCoreStatSaves";
 import AttributionSection from "@/components/attributionSection";
+import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
+import headerRandomizer from "@/components/headerRandomizer";
 
 
 
-
-
-
-let initializingName :string|null;
-let getNameAsString = async () => {
-    return await AsyncStorage.getItem("currentCharacterName");
-}
-let currentCharacter :Character;
 let getCurrentCharacterObjectStringPromise = async (string :string|null) => {
     return await AsyncStorage.getItem("newCharacter" + string);
 }
-
-getNameAsString().then(nameString => {
-    initializingName = nameString;
-    getCurrentCharacterObjectStringPromise(initializingName).then((objectString :string|null) => {
-        if (objectString != null) {
-            currentCharacter = JSON.parse(objectString);
-        }
-    })});
-
-
 let allCharacterNamesInitial :string[] = [];
 let getAllCharacterNames = async () => {
     return await AsyncStorage.getAllKeys();
@@ -45,21 +28,13 @@ getAllCharacterNames().then(keysString => {
 
 
 
-
+let headerImage :React.JSX.Element = headerRandomizer();
 export default function levelUpTab() {
-    if (currentCharacter == null){currentCharacter =new Character("default", 10, 5);}
+    const character = useCharacter();
+    const characterUpdater = useCharacterUpdater();
 
-    let [maxHP, setMaxHP] = useState(currentCharacter.maxHP);
-    let [spellCastingLevel, setSpellCastingLevel] = useState(currentCharacter.spellcastingLevel);
-    let [warlockCastingLevel, setWarlockCastingLevel] = useState(currentCharacter.warlockCasterLevel);
-    let [fullCasterLevel, setFullCasterLevel] = useState(currentCharacter.fullCasterLevel);
-    let [halfCasterLevel, setHalfCasterLevel] = useState(currentCharacter.halfCasterLevel);
-    let [currentCharacterName, setCurrentCharacterName] = useState(currentCharacter.charName);
-    let [currentCharacterLevel, setCurrentCharacterLevel] = useState(currentCharacter.characterLevel);
-    let [currentProficiency, setCurrentProficiency] = useState(currentCharacter.proficiency);
     let [allCharacterNames, setAllCharacterNames] = useState(allCharacterNamesInitial);
 
-    let [detectChange, setDetectChange] = useState<boolean>(false);
     let [nameChangeVariable, setNameChangeVariable] = useState("");
     let [abilityScoreChangeVariable, setAbilityScoreChangeVariable] = useState("");
     let [fullCasterLevelsChangeVariable, setFullCasterLevelsChangeVariable] = useState("");
@@ -86,65 +61,10 @@ export default function levelUpTab() {
     let [loadCharacterConfirmationCount, setLoadCharacterConfirmationCount] = useState(0);
     let [deleteCharacterConfirmationCount, setDeleteCharacterConfirmationCount] = useState(0);
 
-    let [currentStatSTR, setCurrentStatSTR] = useState(currentCharacter.STR);
-    let [currentStatDEX, setCurrentStatDEX] = useState(currentCharacter.DEX);
-    let [currentStatCON, setCurrentStatCON] = useState(currentCharacter.CON);
-    let [currentStatINT, setCurrentStatINT] = useState(currentCharacter.INT);
-    let [currentStatWIS, setCurrentStatWIS] = useState(currentCharacter.WIS);
-    let [currentStatCHA, setCurrentStatCHA] = useState(currentCharacter.CHA);
 
-    let [athletics, setAthletics ] = useState(currentCharacter.athletics);
-    let [acrobatics, setAcrobatics] = useState(currentCharacter.acrobatics);
-    let [sleightOfHand, setSleightOfHand] = useState(currentCharacter.sleightOfHand);
-    let [stealth, setStealth ] = useState(currentCharacter.stealth);
-    let [arcana, setArcana ] = useState(currentCharacter.arcana);
-    let [history, setHistory ] = useState(currentCharacter.history);
-    let [investigation, setInvestigation ] = useState(currentCharacter.investigation);
-    let [nature, setNature ] = useState(currentCharacter.nature);
-    let [religion, setReligion ] = useState(currentCharacter.religion);
-    let [animalHandling, setAnimalHandling ] = useState(currentCharacter.animalHandling);
-    let [insight, setInsight ] = useState(currentCharacter.insight);
-    let [medicine, setMedicine ] = useState(currentCharacter.medicine);
-    let [perception, setPerception ] = useState(currentCharacter.perception);
-    let [survival, setSurvival ] = useState(currentCharacter.survival);
-    let [deception, setDeception ] = useState(currentCharacter.deception);
-    let [intimidation, setIntimidation ] = useState(currentCharacter.intimidation);
-    let [performance, setPerformance ] = useState(currentCharacter.performance);
-    let [persuasion,setPersuasion ] = useState(currentCharacter.persuasion);
 
-    const navigation = useNavigation();
-    useEffect(() => {
-        return navigation.addListener('focus', () => {
-            getNameAsString().then(nameString => {
-                initializingName = nameString;
-                getCurrentCharacterObjectStringPromise(initializingName).then(objectString => {
-                    if (objectString != null) {
-                        currentCharacter = JSON.parse(objectString);
-                    }
 
-                    setCurrentCharacterName(currentCharacter.charName);
-                })});
-        });
-    }, [navigation]);
 
-    function headerRandomizer(){
-        let randomNumber = Math.random() * 4;
-        if (randomNumber < 1) {return (
-            <Image
-                source={require("@/assets/images/glowingWomanOutlineInForest.jpg")}
-                style={styles.headImage}/>)}
-        if (randomNumber < 2) {return (
-            <Image
-                source={require("@/assets/images/hatchingTechnoEggInGreenForest.jpg")}
-                style={styles.headImage}/>)}
-        if (randomNumber < 3) {return (
-            <Image
-                source={require("@/assets/images/manStaringDownRiotInChasm.jpg")}
-                style={styles.headImage}/>)}
-        return (
-            <Image
-                source={require("@/assets/images/spectralDragonAttackingVillage.jpg")}
-                style={styles.headImage}/>)}
 
 
     function displayCoreStats(){
@@ -154,68 +74,31 @@ export default function levelUpTab() {
         <View style={{flexDirection: "row", alignSelf: "center", backgroundColor: "grey"}}>
             <View style={styles.coreStatBox}>
                 {<Text style={{color: "white", textAlign: "center"}}>STR</Text>}
-                {<Text style={{color: "white", textAlign: "center"}}>{currentStatSTR}</Text>}
+                {<Text style={{color: "white", textAlign: "center"}}>{character.STR}</Text>}
             </View>
             <View style={styles.coreStatBox}>
                 {<Text style={{color: "white", textAlign: "center"}}>DEX</Text>}
-                {<Text style={{color: "white", textAlign: "center"}}>{currentStatDEX}</Text>}
+                {<Text style={{color: "white", textAlign: "center"}}>{character.DEX}</Text>}
             </View>
             <View style={styles.coreStatBox}>
                 {<Text style={{color: "white", textAlign: "center"}}>CON</Text>}
-                {<Text style={{color: "white", textAlign: "center"}}>{currentStatCON}</Text>}
+                {<Text style={{color: "white", textAlign: "center"}}>{character.CON}</Text>}
             </View>
             <View style={styles.coreStatBox}>
                 {<Text style={{color: "white", textAlign: "center"}}>INT</Text>}
-                {<Text style={{color: "white", textAlign: "center"}}>{currentStatINT}</Text>}
+                {<Text style={{color: "white", textAlign: "center"}}>{character.INT}</Text>}
             </View>
             <View style={styles.coreStatBox}>
                 {<Text style={{color: "white", textAlign: "center"}}>WIS</Text>}
-                {<Text style={{color: "white", textAlign: "center"}}>{currentStatWIS}</Text>}
+                {<Text style={{color: "white", textAlign: "center"}}>{character.WIS}</Text>}
             </View>
             <View style={styles.coreStatBox}>
                 {<Text style={{color: "white", textAlign: "center"}}>CHA</Text>}
-                {<Text style={{color: "white", textAlign: "center"}}>{currentStatCHA}</Text>}
+                {<Text style={{color: "white", textAlign: "center"}}>{character.CHA}</Text>}
             </View>
         </View>)
     }
 
-
-    function updateAllStatsToNewCharacter(){
-        setCurrentCharacterName(currentCharacter.charName);
-        setCurrentCharacterLevel(currentCharacter.characterLevel);
-        setCurrentProficiency(currentCharacter.proficiency)
-        setMaxHP(currentCharacter.maxHP);
-        setSpellCastingLevel(currentCharacter.spellcastingLevel);
-        setFullCasterLevel(currentCharacter.fullCasterLevel);
-        setHalfCasterLevel(currentCharacter.halfCasterLevel)
-        setWarlockCastingLevel(currentCharacter.warlockCasterLevel);
-        setCurrentStatSTR(currentCharacter.STR);
-        setCurrentStatDEX(currentCharacter.DEX);
-        setCurrentStatCON(currentCharacter.CON);
-        setCurrentStatINT(currentCharacter.INT);
-        setCurrentStatWIS(currentCharacter.WIS);
-        setCurrentStatCHA(currentCharacter.CHA);
-        setAthletics(currentCharacter.athletics);
-        setAcrobatics(currentCharacter.acrobatics);
-        setSleightOfHand(currentCharacter.sleightOfHand);
-        setStealth(currentCharacter.stealth);
-        setArcana(currentCharacter.arcana);
-        setHistory(currentCharacter.history);
-        setInvestigation(currentCharacter.investigation);
-        setNature(currentCharacter.nature);
-        setReligion(currentCharacter.religion);
-        setAnimalHandling(currentCharacter.animalHandling);
-        setInsight(currentCharacter.insight);
-        setMedicine(currentCharacter.medicine);
-        setPerception(currentCharacter.perception);
-        setSurvival(currentCharacter.survival);
-        setDeception(currentCharacter.deception);
-        setIntimidation(currentCharacter.intimidation);
-        setPerformance(currentCharacter.performance);
-        setPersuasion(currentCharacter.persuasion);
-        setDetectChange(false)
-        return false;
-    }
 
     function getSpellCastingLevelAsString(){
         let spellLevelString :number = parseInt(fullCasterLevelsChangeVariable) + (parseInt(halfCasterLevelsChangeVariable) / 2);
@@ -234,16 +117,16 @@ export default function levelUpTab() {
         <ParallaxScrollView
             headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
             headerImage={
-                headerRandomizer()
+                headerImage
             }>
             <View>
-                <Text style={{color: "white", fontSize: 50, backgroundColor: "tan", textAlign: "center"}}>{currentCharacterName}</Text>
-                <Text style={{color: "white", fontSize: 30, backgroundColor: "black", textAlign: "center"}}> Max HP: {maxHP} </Text>
-                <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}> Character Level: {currentCharacterLevel}</Text>
-                <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}> Proficiency Bonus: +{currentProficiency} </Text>
-                <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}>Total Spellcasting Level: {spellCastingLevel}</Text>
-                <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}>Full caster: {fullCasterLevel} | Half Caster: {halfCasterLevel}</Text>
-                {warlockCastingLevel > 0 && <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}>Warlock Level: {warlockCastingLevel}</Text>}
+                <Text style={{color: "white", fontSize: 50, backgroundColor: "tan", textAlign: "center"}}>{character.charName}</Text>
+                <Text style={{color: "white", fontSize: 30, backgroundColor: "black", textAlign: "center"}}> Max HP: {character.maxHP} </Text>
+                <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}> Character Level: {character.characterLevel}</Text>
+                <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}> Proficiency Bonus: +{character.proficiency} </Text>
+                <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}>Total Spellcasting Level: {character.spellcastingLevel}</Text>
+                <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}>Full caster: {character.fullCasterLevel} | Half Caster: {character.halfCasterLevel}</Text>
+                {character.warlockCasterLevel > 0 && <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}>Warlock Level: {character.warlockCasterLevel}</Text>}
                 {displayCoreStats()}
             </View>
 
@@ -260,7 +143,7 @@ export default function levelUpTab() {
                 {(loadCharacterBoxDisplayStatus && (loadCharacterConfirmationCount > 0)) &&
                     <Pressable style={styles.confirmationButton} onPress={() => {setLoadCharacterConfirmationCount(0);}}>
                         <Text style={styles.confirmationBox}>Confirmed! Character</Text>
-                        <Text style={styles.confirmationBox}>"{currentCharacterName}"</Text>
+                        <Text style={styles.confirmationBox}>"{character.charName}"</Text>
                         <Text style={styles.confirmationBox}>Loaded! {loadCharacterConfirmationCount} time(s)!</Text>
                     </Pressable>}
                 <View style={{alignSelf: "center"}}>
@@ -270,8 +153,7 @@ export default function levelUpTab() {
                                 setLoadCharacterConfirmationCount(loadCharacterConfirmationCount + 1);
                                 AsyncStorage.setItem("currentCharacterName", pickedNameFromLoadCharacterTool);
                                 getCurrentCharacterObjectStringPromise(pickedNameFromLoadCharacterTool).then((objectString :string|null) => {
-                                    currentCharacter = JSON.parse("" + objectString);
-                                    setDetectChange(true)
+                                    characterUpdater({type: "all", character: JSON.parse("" + objectString)});
                                 });
                             }}><Text style={{
                                 fontSize: 20,
@@ -291,7 +173,7 @@ export default function levelUpTab() {
 
 
 
-            <View>{newSpellCreationTool(currentCharacter)}</View>
+            <View>{newSpellCreationTool()}</View>
 
 
                 <View style={styles.toolBoxStyle}>
@@ -329,11 +211,7 @@ export default function levelUpTab() {
                         style={styles.toolBoxButton}
                         onPress={() => {{
                             if (HPChangeVariable == "" || isNaN(parseInt(HPChangeVariable))){HPChangeVariable = "10";}
-                                AsyncStorage.setItem("CurrentMaxHP", HPChangeVariable);
-                                currentCharacter.maxHP = parseInt(HPChangeVariable);
-                                AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter));
-                                setMaxHP(parseInt(HPChangeVariable));
-                                setAddHPAdjustConfirmationCount(addHPAdjustConfirmationCount + 1);
+                            characterUpdater({type: "updateMaxHP", value: parseInt(HPChangeVariable)});
                         }}}>
                         <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust Max HP: {HPChangeVariable}</Text>
                     </Pressable>}
@@ -439,29 +317,26 @@ export default function levelUpTab() {
                     {addSpellAndCharacterLevelBoxDisplayStatus && <Pressable
                         style={styles.toolBoxButton}
                         onPress={() => {
-                            if (isNaN(parseInt(characterLevelChangeVariable)) || (characterLevelChangeVariable == "")){characterLevelChangeVariable = "" + currentCharacter.characterLevel}
-                            if (parseInt(characterLevelChangeVariable) < 0){characterLevelChangeVariable = "0";}
-                            if (parseInt(characterLevelChangeVariable) > 20){characterLevelChangeVariable = "20";}
+                            if (isNaN(parseInt(characterLevelChangeVariable)) || (characterLevelChangeVariable == "")){characterLevelChangeVariable = "" + character.characterLevel}
+                            if (parseInt(characterLevelChangeVariable) < 1){characterLevelChangeVariable = "0";}
                             if (fullCasterLevelsChangeVariable == "" || isNaN(parseInt(fullCasterLevelsChangeVariable)))
-                                {fullCasterLevelsChangeVariable = "" + currentCharacter.fullCasterLevel;}
+                                {fullCasterLevelsChangeVariable = "" + character.fullCasterLevel;}
                             if (halfCasterLevelsChangeVariable == "" || isNaN(parseInt(halfCasterLevelsChangeVariable)))
-                                {halfCasterLevelsChangeVariable = "" + currentCharacter.halfCasterLevel;}
+                                {halfCasterLevelsChangeVariable = "" + character.halfCasterLevel;}
                             if (warlockCasterLevelsChangeVariable == "" || isNaN(parseInt(warlockCasterLevelsChangeVariable)))
-                                {warlockCasterLevelsChangeVariable = "" + currentCharacter.warlockCasterLevel;}
-                            currentCharacter.characterLevel = parseInt(characterLevelChangeVariable);
-                            setCurrentCharacterLevel(parseInt(characterLevelChangeVariable));
-                            setCurrentProficiency(updateProficiency(currentCharacter, parseInt(characterLevelChangeVariable)));
-                            setSpellCastingLevel(updateSpellcastingLevel(currentCharacter, parseInt(fullCasterLevelsChangeVariable), parseInt(halfCasterLevelsChangeVariable)));
-                            currentCharacter.warlockCasterLevel = parseInt(warlockCasterLevelsChangeVariable);
-                            setWarlockCastingLevel(parseInt(warlockCasterLevelsChangeVariable));
-                            setFullCasterLevel(parseInt(fullCasterLevelsChangeVariable));
-                            setHalfCasterLevel(parseInt(halfCasterLevelsChangeVariable));
+                                {warlockCasterLevelsChangeVariable = "" + character.warlockCasterLevel;}
+                            characterUpdater({type: "updateCharLevel", value: parseInt(characterLevelChangeVariable)});
+                            characterUpdater({
+                                type: "updateAllSpellcasting",
+                                fullCaster: parseInt(fullCasterLevelsChangeVariable),
+                                halfCaster: parseInt(halfCasterLevelsChangeVariable),
+                                warlock: parseInt(warlockCasterLevelsChangeVariable)
+                            });
                             setAddSpellAndCharaterLevelConfirmationCount(addSpellandCharacterLevelConfirmationCount + 1);
-                            AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter));
                         }}>
                         <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust Character Level: {characterLevelChangeVariable}</Text>
                         <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Spellcasting Level: {getSpellCastingLevelAsString()} </Text>
-                        {(currentCharacter.warlockCasterLevel > 0 || parseInt(warlockCasterLevelsChangeVariable) > 0) && <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Warlock Level: {warlockCasterLevelsChangeVariable}</Text>}
+                        {(character.warlockCasterLevel > 0 || parseInt(warlockCasterLevelsChangeVariable) > 0) && <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Warlock Level: {warlockCasterLevelsChangeVariable}</Text>}
                     </Pressable>}
                 </View>
 
@@ -496,29 +371,23 @@ export default function levelUpTab() {
                             textAlign: "center"
                         }}/>}
                     <View style={{flexDirection: "row", alignSelf: "center"}}>
-                    {addAbilityScoreBoxDisplayStatus && <Pressable
-                        style={styles.coreStatAdjustButton}
-                        onPress={() => {
-                            if (isNaN(parseInt(abilityScoreChangeVariable)) || abilityScoreChangeVariable == ""){
-                                abilityScoreChangeVariable = "" + currentCharacter.STR;
-                            }
-                            currentCharacter.STR = parseInt(abilityScoreChangeVariable);
-                            setCurrentStatSTR(currentCharacter.STR);
-                            AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
-                            setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
-                        }}>
-                        <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  STR: {abilityScoreChangeVariable}</Text>
-                    </Pressable>}
                         {addAbilityScoreBoxDisplayStatus && <Pressable
                             style={styles.coreStatAdjustButton}
                             onPress={() => {
                                 if (isNaN(parseInt(abilityScoreChangeVariable)) || abilityScoreChangeVariable == ""){
-                                    abilityScoreChangeVariable = "" + currentCharacter.DEX;
+                                    abilityScoreChangeVariable = "" + character.STR;
                                 }
-                                currentCharacter.DEX = parseInt(abilityScoreChangeVariable);
-                                setCurrentStatDEX(currentCharacter.DEX);
-                                AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
-                                setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
+                                characterUpdater({type: "updateSTR", value: parseInt(abilityScoreChangeVariable)});
+                            }}>
+                            <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  STR: {abilityScoreChangeVariable}</Text>
+                        </Pressable>}
+                        {addAbilityScoreBoxDisplayStatus && <Pressable
+                            style={styles.coreStatAdjustButton}
+                            onPress={() => {
+                                if (isNaN(parseInt(abilityScoreChangeVariable)) || abilityScoreChangeVariable == ""){
+                                    abilityScoreChangeVariable = "" + character.DEX;
+                                }
+                                characterUpdater({type: "updateDEX", value: parseInt(abilityScoreChangeVariable)});
                             }}>
                             <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  DEX: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
@@ -526,12 +395,9 @@ export default function levelUpTab() {
                             style={styles.coreStatAdjustButton}
                             onPress={() => {
                                 if (isNaN(parseInt(abilityScoreChangeVariable)) || abilityScoreChangeVariable == ""){
-                                    abilityScoreChangeVariable = "" + currentCharacter.CON;
+                                    abilityScoreChangeVariable = "" + character.CON;
                                 }
-                                currentCharacter.CON = parseInt(abilityScoreChangeVariable);
-                                setCurrentStatCON(currentCharacter.CON);
-                                AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
-                                setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
+                                characterUpdater({type: "updateCON", value: parseInt(abilityScoreChangeVariable)});
                             }}>
                             <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  CON: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
@@ -541,12 +407,9 @@ export default function levelUpTab() {
                             style={styles.coreStatAdjustButton}
                             onPress={() => {
                                 if (isNaN(parseInt(abilityScoreChangeVariable)) || abilityScoreChangeVariable == ""){
-                                    abilityScoreChangeVariable = "" + currentCharacter.INT;
+                                    abilityScoreChangeVariable = "" + character.INT;
                                 }
-                                currentCharacter.INT = parseInt(abilityScoreChangeVariable);
-                                setCurrentStatINT(currentCharacter.INT);
-                                AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
-                                setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
+                                characterUpdater({type: "updateINT", value: parseInt(abilityScoreChangeVariable)});
                             }}>
                             <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  INT: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
@@ -554,12 +417,9 @@ export default function levelUpTab() {
                             style={styles.coreStatAdjustButton}
                             onPress={() => {
                                 if (isNaN(parseInt(abilityScoreChangeVariable)) || abilityScoreChangeVariable == ""){
-                                    abilityScoreChangeVariable = "" + currentCharacter.WIS;
+                                    abilityScoreChangeVariable = "" + character.WIS;
                                 }
-                                currentCharacter.WIS = parseInt(abilityScoreChangeVariable);
-                                setCurrentStatWIS(currentCharacter.WIS);
-                                AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
-                                setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
+                                characterUpdater({type: "updateWIS", value: parseInt(abilityScoreChangeVariable)});
                             }}>
                             <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  WIS: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
@@ -567,12 +427,9 @@ export default function levelUpTab() {
                             style={styles.coreStatAdjustButton}
                             onPress={() => {
                                 if (isNaN(parseInt(abilityScoreChangeVariable)) || abilityScoreChangeVariable == ""){
-                                    abilityScoreChangeVariable = "" + currentCharacter.CHA;
+                                    abilityScoreChangeVariable = "" + character.CHA;
                                 }
-                                currentCharacter.CHA = parseInt(abilityScoreChangeVariable);
-                                setCurrentStatCHA(currentCharacter.CHA);
-                                AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
-                                setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1)
+                                characterUpdater({type: "updateCHA", value: parseInt(abilityScoreChangeVariable)});
                             }}>
                             <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  CHA: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
@@ -625,188 +482,188 @@ export default function levelUpTab() {
                             <View style={{flex: 0.3, marginRight: 10}}>
                                 <Text style={styles.skillBannerPlaceHolder}></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setAthletics("X");}}>
-                                    {athletics == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setAthletics", value: "X"});}}>
+                                    {character.athletics == "X" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                setAthletics("P");}}>
-                                {athletics == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setAthletics", value: "P"});}}>
+                                {character.athletics == "P" && <Text style={styles.skillsButtonText}>X</Text>}
                             </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                setAthletics("E");}}>
-                                {athletics == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setAthletics", value: "E"});}}>
+                                {character.athletics == "E" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable></Text>
                                 <Text style={styles.skillBannerPlaceHolder}>not prof---prof----expert</Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
-                                setAcrobatics("X");}}>
-                                {acrobatics == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setAcrobatics", value: "X"});}}>
+                                {character.acrobatics == "X" && <Text style={styles.skillsButtonText}>X</Text>}
                             </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                setAcrobatics("P");}}>
-                                {acrobatics == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setAcrobatics", value: "P"});}}>
+                                {character.acrobatics == "P" && <Text style={styles.skillsButtonText}>X</Text>}
                             </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                setAcrobatics("E");}}>
-                                {acrobatics == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setAcrobatics", value: "E"});}}>
+                                {character.acrobatics == "E" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
-                                        setSleightOfHand("X");}}>
-                                        {sleightOfHand == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setSleightOfHand", value: "X"});}}>
+                                        {character.sleightOfHand == "X" && <Text style={styles.skillsButtonText}>X</Text>}
                                     </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setSleightOfHand("P");}}>
-                                    {sleightOfHand == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setSleightOfHand", value: "P"});}}>
+                                    {character.sleightOfHand == "P" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setSleightOfHand("E");}}>
-                                    {sleightOfHand == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setSleightOfHand", value: "E"});}}>
+                                    {character.sleightOfHand == "E" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
-                                        setStealth("X");}}>
-                                        {stealth == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setStealth", value: "X"});}}>
+                                        {character.stealth == "X" && <Text style={styles.skillsButtonText}>X</Text>}
                                     </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setStealth("P");}}>
-                                    {stealth == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setStealth", value: "P"});}}>
+                                    {character.stealth == "P" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setStealth("E");}}>
-                                    {stealth == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setStealth", value: "E"});}}>
+                                    {character.stealth == "E" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable></Text>
                                 <Text style={styles.skillBannerPlaceHolder}>not prof---prof----expert</Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setArcana("X");}}>
-                                    {arcana == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setArcana", value: "X"});}}>
+                                    {character.arcana == "X" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setArcana("P");}}>
-                                    {arcana == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setArcana", value: "P"});}}>
+                                    {character.arcana == "P" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setArcana("E");}}>
-                                    {arcana == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setArcana", value: "E"});}}>
+                                    {character.arcana == "E" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setHistory("X");}}>
-                                    {history == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setHistory", value: "X"});}}>
+                                    {character.history == "X" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setHistory("P");}}>
-                                    {history == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setHistory", value: "P"});}}>
+                                    {character.history == "P" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setHistory("E");}}>
-                                    {history == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setHistory", value: "E"});}}>
+                                    {character.history == "E" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setInvestigation("X");}}>
-                                    {investigation == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setInvestigation", value: "X"});}}>
+                                    {character.investigation == "X" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setInvestigation("P");}}>
-                                    {investigation == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setInvestigation", value: "P"});}}>
+                                    {character.investigation == "P" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setInvestigation("E");}}>
-                                    {investigation == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setInvestigation", value: "E"});}}>
+                                    {character.investigation == "E" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setNature("X");}}>
-                                    {nature == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setNature", value: "X"});}}>
+                                    {character.nature == "X" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setNature("P");}}>
-                                    {nature == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setNature", value: "P"});}}>
+                                    {character.nature == "P" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setNature("E");}}>
-                                    {nature == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setNature", value: "E"});}}>
+                                    {character.nature == "E" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setReligion("X");}}>
-                                    {religion == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setReligion", value: "X"});}}>
+                                    {character.religion == "X" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setReligion("P");}}>
-                                    {religion == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setReligion", value: "P"});}}>
+                                    {character.religion == "P" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setReligion("E");}}>
-                                    {religion == "E" && <Text style={styles.skillsButtonText}>X</Text>}
-                                </Pressable></Text>
-                                <Text style={styles.skillBannerPlaceHolder}>not prof---prof----expert</Text>
-                                <Text><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setAnimalHandling("X");}}>
-                                    {animalHandling == "X" && <Text style={styles.skillsButtonText}>X</Text>}
-                                </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setAnimalHandling("P");}}>
-                                    {animalHandling == "P" && <Text style={styles.skillsButtonText}>X</Text>}
-                                </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setAnimalHandling("E");}}>
-                                    {animalHandling == "E" && <Text style={styles.skillsButtonText}>X</Text>}
-                                </Pressable></Text>
-                                <Text><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setInsight("X");}}>
-                                    {insight == "X" && <Text style={styles.skillsButtonText}>X</Text>}
-                                </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setInsight("P");}}>
-                                    {insight == "P" && <Text style={styles.skillsButtonText}>X</Text>}
-                                </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setInsight("E");}}>
-                                    {insight == "E" && <Text style={styles.skillsButtonText}>X</Text>}
-                                </Pressable></Text>
-                                <Text><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setMedicine("X");}}>
-                                    {medicine == "X" && <Text style={styles.skillsButtonText}>X</Text>}
-                                </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setMedicine("P");}}>
-                                    {medicine == "P" && <Text style={styles.skillsButtonText}>X</Text>}
-                                </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setMedicine("E");}}>
-                                    {medicine == "E" && <Text style={styles.skillsButtonText}>X</Text>}
-                                </Pressable></Text>
-                                <Text><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setPerception("X");}}>
-                                    {perception == "X" && <Text style={styles.skillsButtonText}>X</Text>}
-                                </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setPerception("P");}}>
-                                    {perception == "P" && <Text style={styles.skillsButtonText}>X</Text>}
-                                </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setPerception("E");}}>
-                                    {perception == "E" && <Text style={styles.skillsButtonText}>X</Text>}
-                                </Pressable></Text>
-                                <Text><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setSurvival("X");}}>
-                                    {survival == "X" && <Text style={styles.skillsButtonText}>X</Text>}
-                                </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setSurvival("P");}}>
-                                    {survival == "P" && <Text style={styles.skillsButtonText}>X</Text>}
-                                </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setSurvival("E");}}>
-                                    {survival == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setReligion", value: "E"});}}>
+                                    {character.religion == "E" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable></Text>
                                 <Text style={styles.skillBannerPlaceHolder}>not prof---prof----expert</Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setDeception("X");}}>
-                                    {deception == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setAnimalHandling", value: "X"});}}>
+                                    {character.animalHandling == "X" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setDeception("P");}}>
-                                    {deception == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setAnimalHandling", value: "P"});}}>
+                                    {character.animalHandling == "P" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setDeception("E");}}>
-                                    {deception == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setAnimalHandling", value: "E"});}}>
+                                    {character.animalHandling == "E" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setIntimidation("X");}}>
-                                    {intimidation == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setInsight", value: "X"});}}>
+                                    {character.insight == "X" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setIntimidation("P");}}>
-                                    {intimidation == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setInsight", value: "P"});}}>
+                                    {character.insight == "P" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setIntimidation("E");}}>
-                                    {intimidation == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setInsight", value: "E"});}}>
+                                    {character.insight == "E" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setPerformance("X");}}>
-                                    {performance == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setMedicine", value: "X"});}}>
+                                    {character.medicine == "X" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setPerformance("P");}}>
-                                    {performance == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setMedicine", value: "P"});}}>
+                                    {character.medicine == "P" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setPerformance("E");}}>
-                                    {performance == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setMedicine", value: "E"});}}>
+                                    {character.medicine == "E" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setPersuasion("X");}}>
-                                    {persuasion == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setPerception", value: "X"});}}>
+                                    {character.perception == "X" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setPersuasion("P");}}>
-                                    {persuasion == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setPerception", value: "P"});}}>
+                                    {character.perception == "P" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
-                                    setPersuasion("E");}}>
-                                    {persuasion == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    characterUpdater({type: "setPerception", value: "E"});}}>
+                                    {character.perception == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                </Pressable></Text>
+                                <Text><Pressable style={styles.skillsButtons} onPress={()=>{
+                                    characterUpdater({type: "setSurvival", value: "X"});}}>
+                                    {character.survival == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
+                                    characterUpdater({type: "setSurvival", value: "P"});}}>
+                                    {character.survival == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
+                                    characterUpdater({type: "setSurvival", value: "E"});}}>
+                                    {character.survival == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                </Pressable></Text>
+                                <Text style={styles.skillBannerPlaceHolder}>not prof---prof----expert</Text>
+                                <Text><Pressable style={styles.skillsButtons} onPress={()=>{
+                                    characterUpdater({type: "setDeception", value: "X"});}}>
+                                    {character.deception == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
+                                    characterUpdater({type: "setDeception", value: "P"});}}>
+                                    {character.deception == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
+                                    characterUpdater({type: "setDeception", value: "E"});}}>
+                                    {character.deception == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                </Pressable></Text>
+                                <Text><Pressable style={styles.skillsButtons} onPress={()=>{
+                                    characterUpdater({type: "setIntimidation", value: "X"});}}>
+                                    {character.intimidation == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
+                                    characterUpdater({type: "setIntimidation", value: "P"});}}>
+                                    {character.intimidation == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
+                                    characterUpdater({type: "setIntimidation", value: "E"});}}>
+                                    {character.intimidation == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                </Pressable></Text>
+                                <Text><Pressable style={styles.skillsButtons} onPress={()=>{
+                                    characterUpdater({type: "setPerformance", value: "X"});}}>
+                                    {character.performance == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
+                                    characterUpdater({type: "setPerformance", value: "P"});}}>
+                                    {character.performance == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
+                                    characterUpdater({type: "setPerformance", value: "E"});}}>
+                                    {character.performance == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                </Pressable></Text>
+                                <Text><Pressable style={styles.skillsButtons} onPress={()=>{
+                                    characterUpdater({type: "setPersuasion", value: "X"});}}>
+                                    {character.persuasion == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
+                                    characterUpdater({type: "setPersuasion", value: "P"});}}>
+                                    {character.persuasion == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
+                                    characterUpdater({type: "setPersuasion", value: "E"});}}>
+                                    {character.persuasion == "E" && <Text style={styles.skillsButtonText}>X</Text>}
                                 </Pressable></Text>
                                 <Text style={styles.skillBannerPlaceHolder}>not prof---prof----expert</Text>
                             </View>
@@ -818,32 +675,6 @@ export default function levelUpTab() {
                             <Text style={styles.confirmationBox}>Confirmed! Skills Updated</Text>
                             <Text style={styles.confirmationBox}>{skillChangeConfirmationCount} time(s)!</Text>
                         </Pressable>}
-                    {addSkillsBoxDisplayStatus && <Pressable
-                        style={styles.toolBoxButton}
-                        onPress={() => {{
-                            currentCharacter.athletics = athletics;
-                            currentCharacter.acrobatics= acrobatics;
-                            currentCharacter.sleightOfHand = sleightOfHand;
-                            currentCharacter.stealth = stealth;
-                            currentCharacter.arcana = arcana;
-                            currentCharacter.history = history;
-                            currentCharacter.investigation= investigation;
-                            currentCharacter.nature = nature;
-                            currentCharacter.religion = religion;
-                            currentCharacter.animalHandling = animalHandling;
-                            currentCharacter.insight = insight;
-                            currentCharacter.medicine = medicine;
-                            currentCharacter.perception = perception;
-                            currentCharacter.survival = survival;
-                            currentCharacter.deception = deception;
-                            currentCharacter.intimidation = intimidation;
-                            currentCharacter.performance = performance;
-                            currentCharacter.persuasion = persuasion;
-                            AsyncStorage.setItem("newCharacter" + currentCharacterName, JSON.stringify(currentCharacter))
-                            setSkillChangeConfirmationCount(skillChangeConfirmationCount + 1)
-                        }}}>
-                        <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Finalize Skills</Text>
-                    </Pressable>}
                 </View>
             </View>
 
@@ -851,7 +682,7 @@ export default function levelUpTab() {
 
 
 
-            <View>{AdjustCoreStatSaves(currentCharacter, detectChange)}</View>
+            <View>{AdjustCoreStatSaves()}</View>
 
 
 
@@ -933,7 +764,7 @@ export default function levelUpTab() {
                     {(addCharacterBoxDisplayStatus && (addCharacterConfirmationCount > 0)) &&
                         <Pressable style={styles.confirmationButton} onPress={() => {setAddCharacterConfirmationCount(0);}}>
                             <Text style={styles.confirmationBox}>Confirmed! New Character</Text>
-                            <Text style={styles.confirmationBox}>"{currentCharacterName}"</Text>
+                            <Text style={styles.confirmationBox}>"{character.charName}"</Text>
                             <Text style={styles.confirmationBox}>Created! {addCharacterConfirmationCount} time(s)!</Text>
                         </Pressable>}
                     {addCharacterBoxDisplayStatus && <Pressable
@@ -943,11 +774,9 @@ export default function levelUpTab() {
                                 {characterLevelChangeVariable = "1";}
                             if (parseInt(characterLevelChangeVariable) > 20) {characterLevelChangeVariable = "20";}
                             if (isNaN(parseInt(HPChangeVariable)) || HPChangeVariable == "" || parseInt(HPChangeVariable) < 1){HPChangeVariable = "10";}
-                            currentCharacter = new Character(nameChangeVariable, parseInt(HPChangeVariable), parseInt(characterLevelChangeVariable));
-                            AsyncStorage.setItem("newCharacter" + nameChangeVariable, JSON.stringify(currentCharacter)).then(()=>{
-                                AsyncStorage.setItem("currentCharacterName", currentCharacter.charName).then(()=>{
-                                    setDetectChange(true);})})
+                            characterUpdater({type: "all", character: new Character(nameChangeVariable, parseInt(HPChangeVariable), parseInt(characterLevelChangeVariable))});
                             setAddCharacterConfirmationCount(addCharacterConfirmationCount + 1);
+                            AsyncStorage.setItem("currentCharacterName", nameChangeVariable);
                             getAllCharacterNames().then(keysString => {
                                 allCharacterNamesInitial = [];
                                 keysString.forEach((key) => {
@@ -983,7 +812,7 @@ export default function levelUpTab() {
                             backgroundColor: "blue",
                             margin: 15,
                             borderRadius: 10
-                        }}>Confirmed! Character {currentCharacterName} Deleted <FontAwesome size={28} name="frown-o" color={"red"} /></Text></Pressable>}
+                        }}>Confirmed! Character {character.charName} Deleted <FontAwesome size={28} name="frown-o" color={"red"} /></Text></Pressable>}
                 <View style={{alignSelf: "center"}}>
                     {allCharacterNames.map((pickedNameDeleteCharacterTool) => {
                         return(
@@ -1013,7 +842,7 @@ export default function levelUpTab() {
                         <Text style={styles.confirmationBox}>\---<FontAwesome size={40} name="smile-o" color={"green"} />---/</Text>
                     </Pressable>}
 
-                {(deleteCharacterBoxDisplayStatus && confirmDelete && (currentCharacterName == deletionName)) && <View>
+                {(deleteCharacterBoxDisplayStatus && confirmDelete && (character.charName == deletionName)) && <View>
                     <Text style={{
                         backgroundColor: "yellow",
                         borderColor: "red",
@@ -1029,13 +858,8 @@ export default function levelUpTab() {
                         setDeleteCharacterConfirmationCount(0);
                         setConfirmDelete(!confirmDelete);
                         AsyncStorage.removeItem("newCharacter" + deletionName);
-                        if (currentCharacterName == deletionName){
-                            currentCharacter = new Character("default", 15, 5);
-                            updateAllStatsToNewCharacter();
-                            AsyncStorage.setItem("newCharacter" + currentCharacter.charName, JSON.stringify(currentCharacter));
-                            AsyncStorage.setItem("currentCharacterName", currentCharacter.charName);
-                            setCurrentCharacterName(currentCharacter.charName);
-                            setDetectChange(true);
+                        if (character.charName == deletionName){
+                            characterUpdater({type: "all", character: new Character("default", 15, 5)});
                         }
                         getAllCharacterNames().then(keysString => {
                             allCharacterNamesInitial = [];
@@ -1054,8 +878,6 @@ export default function levelUpTab() {
 
 
             <View>{AttributionSection()}</View>
-
-            {detectChange && updateAllStatsToNewCharacter()}
         </ParallaxScrollView>
 
 
@@ -1068,13 +890,6 @@ const styles = StyleSheet.create({
     stepContainer: {
         gap: 8,
         marginBottom: 8,
-    },
-    headImage: {
-        height: "100%",
-        width: "100%",
-        bottom: 0,
-        left: 0,
-        position: 'absolute',
     },
     toolBoxStyle: {
         backgroundColor: "teal",
