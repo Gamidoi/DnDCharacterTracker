@@ -68,13 +68,3 @@ export class Character {
                 this.persuasion = "X";
     }
 }
-export function updateProficiency(thisCharacter :Character, characterLevel :number) :number {
-    thisCharacter.proficiency = Math.ceil((4+characterLevel)/4);
-    return  thisCharacter.proficiency;
-}
-export function updateSpellcastingLevel(thisCharacter :Character, fullCasterLevel :number, halfCasterLevel :number) :number {
-    thisCharacter.fullCasterLevel = fullCasterLevel;
-    thisCharacter.halfCasterLevel = halfCasterLevel;
-    thisCharacter.spellcastingLevel = Math.floor(fullCasterLevel + (halfCasterLevel / 2));
-    return  thisCharacter.spellcastingLevel;
-}

@@ -1,54 +1,19 @@
 import {StyleSheet, Text, View, Pressable} from 'react-native';
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState} from "react";
-import {Character} from "@/assets/classes/character";
+import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 
 
-export default function AdjustCoreStatSaves(currentCharacter :Character, detectChange :boolean) {
+export default function AdjustCoreStatSaves() {
+    const character = useCharacter();
+    const characterUpdater = useCharacterUpdater();
+
     let [adjustCoreStatSavesToolDisplay, setAdjustCoreStatSavesToolDisplay] = useState(false);
-    let [STRSaveProf, setSTRSaveProf] = useState(currentCharacter.STRSaveProf);
-    let [DEXSaveProf, setDEXSaveProf] = useState(currentCharacter.DEXSaveProf);
-    let [CONSaveProf, setCONSaveProf] = useState(currentCharacter.CONSaveProf);
-    let [INTSaveProf, setINTSaveProf] = useState(currentCharacter.INTSaveProf);
-    let [WISSaveProf, setWISSaveProf] = useState(currentCharacter.WISSaveProf);
-    let [CHASaveProf, setCHASaveProf] = useState(currentCharacter.CHASaveProf);
-
-    let [detectChangeToSaves, setDetectChangeToSaves] = useState(false);
-
-    function saveSaveProficiencies(){
-        currentCharacter.STRSaveProf = STRSaveProf;
-        currentCharacter.DEXSaveProf = DEXSaveProf;
-        currentCharacter.CONSaveProf = CONSaveProf;
-        currentCharacter.INTSaveProf = INTSaveProf;
-        currentCharacter.WISSaveProf = WISSaveProf;
-        currentCharacter.CHASaveProf = CHASaveProf;
-        AsyncStorage.setItem("newCharacter" + currentCharacter.charName, JSON.stringify(currentCharacter));
-        setDetectChangeToSaves(false);
-        return <View></View>;
-    }
-
-    function updateCharacterSaveProficiency() {
-        setSTRSaveProf(currentCharacter.STRSaveProf);
-        setDEXSaveProf(currentCharacter.DEXSaveProf);
-        setCONSaveProf(currentCharacter.CONSaveProf);
-        setINTSaveProf(currentCharacter.INTSaveProf);
-        setWISSaveProf(currentCharacter.WISSaveProf);
-        setCHASaveProf(currentCharacter.CHASaveProf);
-    }
-
-    if (detectChange){
-        updateCharacterSaveProficiency();
-    }
-
-
 
 
     return(
         <View style={styles.toolBoxStyle}>
             <Pressable onPress={() => {
                 setAdjustCoreStatSavesToolDisplay(!adjustCoreStatSavesToolDisplay);
-                updateCharacterSaveProficiency();
             }}>
                 {!adjustCoreStatSavesToolDisplay && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open Saving Throw Proficiency Tool</Text>}
                 {adjustCoreStatSavesToolDisplay && <Text style={{color: "white", textAlign: "center", marginBottom: 20}}>Close Saving Throw Proficiency Tool</Text>}
@@ -56,42 +21,39 @@ export default function AdjustCoreStatSaves(currentCharacter :Character, detectC
             {adjustCoreStatSavesToolDisplay && <View style={{flexDirection: "row", alignSelf: "center"}}>
                 <Pressable
                     onPress={() => {
-                        setSTRSaveProf(!STRSaveProf);
-                        setDetectChangeToSaves(true);
+                        characterUpdater({type: "updateSTRSaveProf", value: !character.STRSaveProf});
                     }}>
-                    {!STRSaveProf && <View style={styles.coreStatAdjustButton}>
+                    {!character.STRSaveProf && <View style={styles.coreStatAdjustButton}>
                         <Text style={[styles.standard]}>STR Save</Text>
                         <Text style={[styles.standard]}>not Prof</Text>
                     </View>}
-                    {STRSaveProf && <View style={[styles.coreStatAdjustButton, {backgroundColor: "green"}]}>
+                    {character.STRSaveProf && <View style={[styles.coreStatAdjustButton, {backgroundColor: "green"}]}>
                         <Text style={[styles.standard]}>STR Save</Text>
                         <Text style={[styles.standard]}>Proficient</Text>
                     </View>}
                 </Pressable>
                 <Pressable
                     onPress={() => {
-                        setDEXSaveProf(!DEXSaveProf);
-                        setDetectChangeToSaves(true);
+                        characterUpdater({type: "updateDEXSaveProf", value: !character.DEXSaveProf});
                     }}>
-                    {!DEXSaveProf && <View style={styles.coreStatAdjustButton}>
+                    {!character.DEXSaveProf && <View style={styles.coreStatAdjustButton}>
                         <Text style={[styles.standard]}>DEX Save</Text>
                         <Text style={[styles.standard]}>not Prof</Text>
                     </View>}
-                    {DEXSaveProf && <View style={[styles.coreStatAdjustButton, {backgroundColor: "green"}]}>
+                    {character.DEXSaveProf && <View style={[styles.coreStatAdjustButton, {backgroundColor: "green"}]}>
                         <Text style={[styles.standard]}>DEX Save</Text>
                         <Text style={[styles.standard]}>Proficient</Text>
                     </View>}
                 </Pressable>
                 <Pressable
                 onPress={() => {
-                    setCONSaveProf(!CONSaveProf);
-                    setDetectChangeToSaves(true);
+                    characterUpdater({type: "updateCONSaveProf", value: !character.CONSaveProf});
                 }}>
-                {!CONSaveProf && <View style={styles.coreStatAdjustButton}>
+                {!character.CONSaveProf && <View style={styles.coreStatAdjustButton}>
                     <Text style={[styles.standard]}>CON Save</Text>
                     <Text style={[styles.standard]}>not Prof</Text>
                 </View>}
-                {CONSaveProf && <View style={[styles.coreStatAdjustButton, {backgroundColor: "green"}]}>
+                {character.CONSaveProf && <View style={[styles.coreStatAdjustButton, {backgroundColor: "green"}]}>
                     <Text style={[styles.standard]}>CON Save</Text>
                     <Text style={[styles.standard]}>Proficient</Text>
                 </View>}
@@ -100,48 +62,44 @@ export default function AdjustCoreStatSaves(currentCharacter :Character, detectC
             {adjustCoreStatSavesToolDisplay && <View style={{flexDirection: "row", alignSelf: "center"}}>
                 <Pressable
                     onPress={() => {
-                        setINTSaveProf(!INTSaveProf);
-                        setDetectChangeToSaves(true);
+                        characterUpdater({type: "updateINTSaveProf", value: !character.INTSaveProf});
                     }}>
-                    {!INTSaveProf && <View style={styles.coreStatAdjustButton}>
+                    {!character.INTSaveProf && <View style={styles.coreStatAdjustButton}>
                         <Text style={[styles.standard]}>INT Save</Text>
                         <Text style={[styles.standard]}>not Prof</Text>
                     </View>}
-                    {INTSaveProf && <View style={[styles.coreStatAdjustButton, {backgroundColor: "green"}]}>
+                    {character.INTSaveProf && <View style={[styles.coreStatAdjustButton, {backgroundColor: "green"}]}>
                         <Text style={[styles.standard]}>INT Save</Text>
                         <Text style={[styles.standard]}>Proficient</Text>
                     </View>}
                 </Pressable>
                 <Pressable
                     onPress={() => {
-                        setWISSaveProf(!WISSaveProf);
-                        setDetectChangeToSaves(true);
+                        characterUpdater({type: "updateWISSaveProf", value: !character.WISSaveProf});
                     }}>
-                    {!WISSaveProf && <View style={styles.coreStatAdjustButton}>
+                    {!character.WISSaveProf && <View style={styles.coreStatAdjustButton}>
                         <Text style={[styles.standard]}>WIS Save</Text>
                         <Text style={[styles.standard]}>not Prof</Text>
                     </View>}
-                    {WISSaveProf && <View style={[styles.coreStatAdjustButton, {backgroundColor: "green"}]}>
+                    {character.WISSaveProf && <View style={[styles.coreStatAdjustButton, {backgroundColor: "green"}]}>
                         <Text style={[styles.standard]}>WIS Save</Text>
                         <Text style={[styles.standard]}>Proficient</Text>
                     </View>}
                 </Pressable>
                 <Pressable
                     onPress={() => {
-                        setCHASaveProf(!CHASaveProf);
-                        setDetectChangeToSaves(true);
+                        characterUpdater({type: "updateCHASaveProf", value: !character.CHASaveProf});
                     }}>
-                    {!CHASaveProf && <View style={styles.coreStatAdjustButton}>
+                    {!character.CHASaveProf && <View style={styles.coreStatAdjustButton}>
                         <Text style={[styles.standard]}>CHA Save</Text>
                         <Text style={[styles.standard]}>not Prof</Text>
                     </View>}
-                    {CHASaveProf && <View style={[styles.coreStatAdjustButton, {backgroundColor: "green"}]}>
+                    {character.CHASaveProf && <View style={[styles.coreStatAdjustButton, {backgroundColor: "green"}]}>
                         <Text style={[styles.standard]}>CHA Save</Text>
                         <Text style={[styles.standard]}>Proficient</Text>
                     </View>}
                 </Pressable>
             </View>}
-            {detectChangeToSaves && saveSaveProficiencies()}
         </View>
     )
 }

@@ -1,21 +1,16 @@
-import {StyleSheet, Image, Text, View, Pressable} from 'react-native';
-import React, {useEffect, useState} from "react";
+import {StyleSheet, Text, View, Pressable} from 'react-native';
+import React, {useState} from "react";
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
+import headerRandomizer from "@/components/headerRandomizer";
 
 
-
-
-
-
+let headerImage :React.JSX.Element = headerRandomizer();
 export default function TabSkillsSavesRolls() {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 
     let [currentRollName, setCurrentRollName] = useState("");
-
-
-
     let [currentRollDie1, setCurrentRollDie1] = useState(20);
     let [currentRollDie2, setCurrentRollDie2] = useState(NaN);
     let [currentRollMod, setCurrentRollMod] = useState(0);
@@ -27,32 +22,12 @@ export default function TabSkillsSavesRolls() {
         return Math.floor((coreStat - 10)/2);
     }
 
-    function headerRandomizer(){
-        let randomNumber = Math.random() * 4;
-        if (randomNumber < 1) {return (
-            <Image
-                source={require("@/assets/images/glowingWomanOutlineInForest.jpg")}
-                style={styles.headImage}/>)}
-        if (randomNumber < 2) {return (
-            <Image
-                source={require("@/assets/images/hatchingTechnoEggInGreenForest.jpg")}
-                style={styles.headImage}/>)}
-        if (randomNumber < 3) {return (
-            <Image
-                source={require("@/assets/images/manStaringDownRiotInChasm.jpg")}
-                style={styles.headImage}/>)}
-        return (
-            <Image
-                source={require("@/assets/images/spectralDragonAttackingVillage.jpg")}
-                style={styles.headImage}/>)}
-
-
 
     return (
         <ParallaxScrollView
             headerBackgroundColor={{ light: '#60D0D0', dark: '#353636' }}
             headerImage={
-                headerRandomizer()
+                headerImage
             }>
             <View style={{backgroundColor: 'black'}}>
                     <Text style={{color: "white", fontSize: 50, backgroundColor: "tan", textAlign: "center"}}>{character.charName}
@@ -272,16 +247,16 @@ export default function TabSkillsSavesRolls() {
                     {!character.WISSaveProf && <Text style={{fontSize: 7}}> </Text>}
                 </Pressable>
                 <Pressable style={[styles.coreSkillBoxes, {backgroundColor: "red"}]} onPress={()=> {
-                    setCurrentRollMod(findStatModifier(character.WIS));
-                    if (character.CHASaveProf) {setCurrentRollMod(findStatModifier(character.WIS) + character.proficiency);}
+                    setCurrentRollMod(findStatModifier(character.CHA));
+                    if (character.CHASaveProf) {setCurrentRollMod(findStatModifier(character.CHA) + character.proficiency);}
                     setCurrentRollDie1(rollD20());
                     setCurrentRollName("CHA Save");
                     if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
                 }}>
                     {!character.CHASaveProf && <Text style={{fontSize: 7}}> </Text>}
                     <Text style={styles.coreStatText}>Save</Text>
-                    {!character.CHASaveProf && <Text style={styles.coreStatText}>{findStatModifier(character.WIS) > 0 && "+"}{findStatModifier(character.WIS)}</Text>}
-                    {character.CHASaveProf && <Text style={styles.coreStatText}>{findStatModifier(character.WIS) + character.proficiency > 0 && "+"}{findStatModifier(character.WIS) + character.proficiency}</Text>}
+                    {!character.CHASaveProf && <Text style={styles.coreStatText}>{findStatModifier(character.CHA) > 0 && "+"}{findStatModifier(character.CHA)}</Text>}
+                    {character.CHASaveProf && <Text style={styles.coreStatText}>{findStatModifier(character.CHA) + character.proficiency > 0 && "+"}{findStatModifier(character.CHA) + character.proficiency}</Text>}
                     {character.CHASaveProf && <Text style={styles.coreStatText}>Prof</Text>}
                     {!character.CHASaveProf && <Text style={{fontSize: 7}}> </Text>}
                 </Pressable>

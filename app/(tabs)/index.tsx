@@ -1,12 +1,13 @@
-import { Image, StyleSheet, TextInput, View, Text, Pressable} from 'react-native';
+import { StyleSheet, TextInput, View, Text, Pressable} from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import React, {useState} from "react";
 import {spellSlotsByLevel} from '@/assets/classes/spellSlotsByLevel';
-import {CharacterInfoProvider, useCharacter, useCharacterUpdater} from '@/components/characterUpdater';
+import {useCharacter, useCharacterUpdater} from '@/components/characterUpdater';
+import headerRandomizer from "@/components/headerRandomizer";
 
 
 
-
+let headerImage :React.JSX.Element = headerRandomizer();
 export default function MainCharacterSyndrome() {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
@@ -24,33 +25,12 @@ export default function MainCharacterSyndrome() {
 
 
 
-    function headerRandomizer(){
-        let randomNumber = Math.random() * 4;
-        if (randomNumber < 1) {return (
-            <Image
-                source={require("@/assets/images/glowingWomanOutlineInForest.jpg")}
-                style={styles.headImage}/>)}
-        if (randomNumber < 2) {return (
-            <Image
-                source={require("@/assets/images/hatchingTechnoEggInGreenForest.jpg")}
-                style={styles.headImage}/>)}
-        if (randomNumber < 3) {return (
-            <Image
-                source={require("@/assets/images/manStaringDownRiotInChasm.jpg")}
-                style={styles.headImage}/>)}
-        return (
-            <Image
-                source={require("@/assets/images/spectralDragonAttackingVillage.jpg")}
-                style={styles.headImage}/>)}
-
-
-
 
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#1D3D47', dark: '#1D3D47' }}
       headerImage={
-          headerRandomizer()
+          headerImage
       }>
 
         <View style={{marginBottom: 20, backgroundColor: 'black'}}>
@@ -66,14 +46,14 @@ export default function MainCharacterSyndrome() {
                     width: 122,
                     height: 42}}
                 onPress={() => {
-                    if (isNaN(character.currentHP)){characterUpdater({type: "updateCurrentHP", value: character.maxHP})}
+                    if (typeof(character.currentHP) != "number"){characterUpdater({type: "updateCurrentHP", value: character.maxHP})}
                     if (!isNaN(parseInt(incrementHP))){
                         if (parseInt(incrementHP) < 0){incrementHP = "" +  Math.abs(parseInt(incrementHP))}
                         if (character.currentHP - parseInt(incrementHP) < 0) {
                             characterUpdater({type: "updateCurrentHP", value: 0})
-                        } else {
+                    } else {
                             characterUpdater({type: "updateCurrentHP", value: (character.currentHP - parseInt(incrementHP))})
-                        }
+                    }
                 }
                 }}>
                 <Text style={{color: "white", fontSize: 12}}>take {incrementHP} damage</Text>
@@ -87,11 +67,11 @@ export default function MainCharacterSyndrome() {
                     width: 93,
                     height: 42}}
                 onPress={() => {
-                if (!isNaN(parseInt(incrementHP))){
-                    if (isNaN(character.currentHP)){characterUpdater({type: "updateCurrentHP", value: character.maxHP})}
-                    if (parseInt(incrementHP) < 0){incrementHP = "" +  Math.abs(parseInt(incrementHP))}
-                    if (character.currentHP + parseInt(incrementHP) > character.maxHP) {
-                        characterUpdater({type: "updateCurrentHP", value: character.maxHP})
+                    if (typeof(character.currentHP) != "number"){characterUpdater({type: "updateCurrentHP", value: character.maxHP})}
+                    if (!isNaN(parseInt(incrementHP))){
+                        if (parseInt(incrementHP) < 0){incrementHP = "" +  Math.abs(parseInt(incrementHP))}
+                        if (character.currentHP + parseInt(incrementHP) > character.maxHP) {
+                            characterUpdater({type: "updateCurrentHP", value: character.maxHP})
                     } else {
                         characterUpdater({type: "updateCurrentHP", value: (character.currentHP + parseInt(incrementHP))})
                     }

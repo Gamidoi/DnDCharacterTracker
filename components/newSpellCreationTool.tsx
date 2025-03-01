@@ -500,7 +500,7 @@ export default function newSpellCreationTool() {
                 {deleteSpellToolDisplay && <Text style={{color: "white", textAlign: "center", marginBottom: 20}}>Choose Spell Below</Text>}
             </Pressable>
             <View style={{alignSelf: "center"}}>
-            {character.spells.map((pickedSpellForDeletion :Spell) => {
+            {character.spells?.map((pickedSpellForDeletion :Spell) => {
                 return(
                     deleteSpellToolDisplay && <View><Pressable onPress={() => {
                         setSpellConfirmDelete(!spellConfirmDelete);

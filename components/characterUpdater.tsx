@@ -8,7 +8,16 @@ interface UpdateAll {
     type: "all";
     character: Character;
 }
-
+interface updateCharLevel {
+    type: "updateCharLevel";
+    value: number;
+}
+interface updateAllSpellcasting {
+    type: "updateAllSpellcasting";
+    fullCaster: number;
+    halfCaster: number;
+    warlock: number;
+}
 interface UpdateMaxHpEvent {
     type: "updateMaxHP";
     value: number;
@@ -17,12 +26,10 @@ interface UpdateCurrentHP {
     type: "updateCurrentHP";
     value: number;
 }
-
 interface UpdateSpellSlots {
     type: "updateSpellSlots";
     spellSlot: number;
 }
-
 interface UpdateWarlockSpellSlots {
     type: "updateWarlockSpellSlots";
     spellSlot: number;
@@ -83,6 +90,78 @@ interface updateKnownSpells{
     type: "updateKnownSpells";
     knownSpells: Spell[];
 }
+interface setAthletics {
+    type: "setAthletics";
+    value: string;
+}
+interface setAcrobatics {
+    type: "setAcrobatics";
+    value: string;
+}
+interface setSleightOfHand {
+    type: "setSleightOfHand";
+    value: string;
+}
+interface setStealth {
+    type: "setStealth";
+    value: string;
+}
+interface setArcana {
+    type: "setArcana";
+    value: string;
+}
+interface setHistory {
+    type: "setHistory";
+    value: string;
+}
+interface setInvestigation {
+    type: "setInvestigation";
+    value: string;
+}
+interface setNature {
+    type: "setNature";
+    value: string;
+}
+interface setReligion {
+    type: "setReligion";
+    value: string;
+}
+interface setAnimalHandling {
+    type: "setAnimalHandling";
+    value: string;
+}
+interface setInsight {
+    type: "setInsight";
+    value: string;
+}
+interface setMedicine {
+    type: "setMedicine";
+    value: string;
+}
+interface setPerception {
+    type: "setPerception";
+    value: string;
+}
+interface setSurvival {
+    type: "setSurvival";
+    value: string;
+}
+interface setDeception {
+    type: "setDeception";
+    value: string;
+}
+interface setIntimidation {
+    type: "setIntimidation";
+    value: string;
+}
+interface setPerformance {
+    type: "setPerformance";
+    value: string;
+}
+interface setPersuasion {
+    type: "setPersuasion";
+    value: string;
+}
 
 type CharacterEvent =
     UpdateMaxHpEvent
@@ -104,6 +183,26 @@ type CharacterEvent =
     | updateCHASaveProf
     | updateProficiency
     | updateKnownSpells
+    | updateCharLevel
+    | updateAllSpellcasting
+    | setAthletics
+    | setAcrobatics
+    | setSleightOfHand
+    | setStealth
+    | setArcana
+    | setHistory
+    | setInvestigation
+    | setNature
+    | setReligion
+    | setAnimalHandling
+    | setInsight
+    | setMedicine
+    | setPerception
+    | setSurvival
+    | setDeception
+    | setIntimidation
+    | setPerformance
+    | setPersuasion
 
 
 const characterDispatch: (current: Character, event: CharacterEvent) => Character = (currentCharacter, event) => {
@@ -159,21 +258,220 @@ const characterDispatch: (current: Character, event: CharacterEvent) => Characte
             spells: event.knownSpells
         }
     }
+    if (event.type === "updateSTR"){
+        return{
+            ...currentCharacter,
+            STR: event.value
+        }
+    }
+    if (event.type === "updateDEX"){
+        return{
+            ...currentCharacter,
+            DEX: event.value
+        }
+    }
+    if (event.type === "updateCON"){
+        return{
+            ...currentCharacter,
+            CON: event.value
+        }
+    }
+    if (event.type === "updateINT"){
+        return{
+            ...currentCharacter,
+            INT: event.value
+        }
+    }
+    if (event.type === "updateWIS"){
+        return{
+            ...currentCharacter,
+            WIS: event.value
+        }
+    }
+    if (event.type === "updateCHA"){
+        return{
+            ...currentCharacter,
+            CHA: event.value
+        }
+    }
+    if (event.type === "updateCharLevel"){
+        let proficiency = Math.ceil((4+event.value)/4);
+        return{
+            ...currentCharacter,
+            characterLevel: event.value,
+            proficiency: proficiency
+        }
+    }
+    if (event.type === "updateAllSpellcasting"){
+        let totalSpellCastingLevel = event.fullCaster + (event.halfCaster / 2);
+        return {
+            ...currentCharacter,
+            fullCasterLevel: event.fullCaster,
+            halfCasterLevel: event.halfCaster,
+            spellcastingLevel: totalSpellCastingLevel,
+            warlockCasterLevel: event.warlock
+        }
+    }
+    if (event.type === "setAthletics") {
+        return{
+            ...currentCharacter,
+            athletics: event.value
+        }
+    }
+    if (event.type === "setAcrobatics") {
+        return{
+            ...currentCharacter,
+            acrobatics: event.value
+        }
+    }
+    if (event.type === "setSleightOfHand") {
+        return{
+            ...currentCharacter,
+            sleightOfHand: event.value
+        }
+    }
+    if (event.type === "setStealth") {
+        return{
+            ...currentCharacter,
+            stealth: event.value
+        }
+    }
+    if (event.type === "setArcana") {
+        return{
+            ...currentCharacter,
+            arcana: event.value
+        }
+    }
+    if (event.type === "setHistory") {
+        return{
+            ...currentCharacter,
+            history: event.value
+        }
+    }
+    if (event.type === "setInvestigation") {
+        return{
+            ...currentCharacter,
+            investigation: event.value
+        }
+    }
+    if (event.type === "setNature") {
+        return{
+            ...currentCharacter,
+            nature: event.value
+        }
+    }
+    if (event.type === "setReligion") {
+        return{
+            ...currentCharacter,
+            religion: event.value
+        }
+    }
+    if (event.type === "setAnimalHandling") {
+        return{
+            ...currentCharacter,
+            animalHandling: event.value
+        }
+    }
+    if (event.type === "setInsight") {
+        return{
+            ...currentCharacter,
+            insight: event.value
+        }
+    }
+    if (event.type === "setMedicine") {
+        return{
+            ...currentCharacter,
+            medicine: event.value
+        }
+    }
+    if (event.type === "setPerception") {
+        return{
+            ...currentCharacter,
+            perception: event.value
+        }
+    }
+    if (event.type === "setSurvival") {
+        return{
+            ...currentCharacter,
+            survival: event.value
+        }
+    }
+    if (event.type === "setDeception") {
+        return{
+            ...currentCharacter,
+            deception: event.value
+        }
+    }
+    if (event.type === "setIntimidation") {
+        return{
+            ...currentCharacter,
+            intimidation: event.value
+        }
+    }
+    if (event.type === "setPerformance") {
+        return{
+            ...currentCharacter,
+            performance: event.value
+        }
+    }
+    if (event.type === "setPersuasion") {
+        return{
+            ...currentCharacter,
+            persuasion: event.value
+        }
+    }
+    if (event.type === "updateSTRSaveProf") {
+        return{
+            ...currentCharacter,
+            STRSaveProf: event.value
+        }
+    }
+    if (event.type === "updateDEXSaveProf") {
+        return{
+            ...currentCharacter,
+            DEXSaveProf: event.value
+        }
+    }
+    if (event.type === "updateCONSaveProf") {
+        return{
+            ...currentCharacter,
+            CONSaveProf: event.value
+        }
+    }
+    if (event.type === "updateINTSaveProf") {
+        return{
+            ...currentCharacter,
+            INTSaveProf: event.value
+        }
+    }
+    if (event.type === "updateWISSaveProf") {
+        return{
+            ...currentCharacter,
+            WISSaveProf: event.value
+        }
+    }
+    if (event.type === "updateCHASaveProf") {
+        return{
+            ...currentCharacter,
+            CHASaveProf: event.value
+        }
+    }
 
 
     return currentCharacter;
 }
 
-let CharacterContext = createContext<Character>(new Character('default loc characterUpdater', 10, 1));
+let CharacterContext = createContext<Character>(new Character('defaultA', 10, 1));
 const CharacterUpdaterContext = createContext<Dispatch<CharacterEvent>>(() => ({} as Character));
 
 export const CharacterInfoProvider = ({children}: PropsWithChildren) => {
-    const [character, updateCharacter] = useReducer(characterDispatch, {} as Character);
+    const [character, updateCharacter] = useReducer(characterDispatch, new Character('defaultBbB', 10, 1));
 
     useEffect(() => {
         AsyncStorage.getItem("currentCharacterName").then((characterName) => {
             AsyncStorage.getItem("newCharacter" + characterName).then((characterObjectString) => {
                 updateCharacter({type: 'all', character: JSON.parse("" + characterObjectString)})
+                AsyncStorage.removeItem("newCharacterdefaultBbB");
             })
         });
     }, []);

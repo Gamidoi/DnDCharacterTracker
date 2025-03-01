@@ -1,17 +1,14 @@
-import {StyleSheet, Image, Text, View, Pressable} from 'react-native';
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {StyleSheet, Text, View, Pressable} from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import React, {useEffect, useState} from "react";
-import {Character} from "@/assets/classes/character";
-import {useNavigation} from "@react-navigation/native";
+import React, { useState} from "react";
 import DisplaySpellBox from "@/components/displaySpellBox";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
+import headerRandomizer from "@/components/headerRandomizer";
 
 
 
 
-
+let headerImage :React.JSX.Element = headerRandomizer();
 export default function SpellsAbilitiesScreen() {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
@@ -72,32 +69,11 @@ export default function SpellsAbilitiesScreen() {
         setHaveQuantity8thSpells(spells8);
         setHaveQuantity9thSpells(spells9);
     }
-
-    function headerRandomizer(){
-        let randomNumber = Math.random() * 4;
-        if (randomNumber < 1) {return (
-            <Image
-                source={require("@/assets/images/glowingWomanOutlineInForest.jpg")}
-                style={styles.headImage}/>)}
-        if (randomNumber < 2) {return (
-            <Image
-                source={require("@/assets/images/hatchingTechnoEggInGreenForest.jpg")}
-                style={styles.headImage}/>)}
-        if (randomNumber < 3) {return (
-            <Image
-                source={require("@/assets/images/manStaringDownRiotInChasm.jpg")}
-                style={styles.headImage}/>)}
-        return (
-            <Image
-                source={require("@/assets/images/spectralDragonAttackingVillage.jpg")}
-                style={styles.headImage}/>)}
-
-
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#60D0D0', dark: '#353636' }}
       headerImage={
-          headerRandomizer()
+          headerImage
       }>
 
 
@@ -107,6 +83,16 @@ export default function SpellsAbilitiesScreen() {
         </View>
         <Pressable onPress={()=> {
             setDisplayAllSpells(!displayAllSpells);
+            setDisplay0thSpells(false);
+            setDisplay1stSpells(false);
+            setDisplay2ndSpells(false);
+            setDisplay3rdSpells(false);
+            setDisplay4thSpells(false);
+            setDisplay5thSpells(false);
+            setDisplay6thSpells(false);
+            setDisplay7thSpells(false);
+            setDisplay8thSpells(false);
+            setDisplay9thSpells(false);
             updateQuantityOfSpellsByLevel();
         }}>
             {!displayAllSpells && <Text style={styles.displayAllSpells}>Open All Spells</Text>}
