@@ -29,10 +29,6 @@ export default function TabSkillsSavesRolls() {
             headerImage={
                 headerImage
             }>
-            <View style={{backgroundColor: 'black'}}>
-                    <Text style={{color: "white", fontSize: 50, backgroundColor: "tan", textAlign: "center"}}>{character.charName}
-                    </Text>
-            </View>
 
             <Text style={{
                 color: "white",
@@ -580,9 +576,6 @@ export default function TabSkillsSavesRolls() {
                     </Pressable>
                 </View>
             </View>
-
-
-
 
 
 

@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View, Pressable, TextInput} from 'react-native';
-
+import DropDownPicker from 'react-native-dropdown-picker';
 import React, {useState} from "react";
 import {Spell} from "@/assets/classes/spell";
 import {FontAwesome, MaterialCommunityIcons} from "@expo/vector-icons";
@@ -11,6 +11,108 @@ export default function newSpellCreationTool() {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 
+
+    let [spellLevelDropDownOpen, setSpellLevelDropDownOpen] = useState(false);
+    let [spellLevelVariable, setSpellLevelVariable] = useState("0");
+    let [spellLevelDropDownOptions, setSpellLevelDropDownOptions] = useState([
+        {label: "Cantrip", value: "0"},
+        {label: "1st Level", value: "1"},
+        {label: "2nd Level", value: "2"},
+        {label: "3rd Level", value: "3"},
+        {label: "4th Level", value: "4"},
+        {label: "5th Level", value: "5"},
+        {label: "6th Level", value: "6"},
+        {label: "7th Level", value: "7"},
+        {label: "8th Level", value: "8"},
+        {label: "9th Level", value: "9"}
+    ]);
+
+    let [spellTimeDropDownOpen, setSpellTimeDropDownOpen] = useState(false);
+    let [spellTimeVariable, setSpellTimeVariable] = useState("Action");
+    let [spellTimeDropDownOptions, setSpellTimeDropDownOptions] = useState([
+        {label: "Action", value: "Action"},
+        {label: "Bonus Action", value: "Bonus Action"},
+        {label: "Reaction", value: "Reaction"},
+        {label: "1 Minute", value: "1 Minute"},
+        {label: "10 Minutes", value: "10 Minutes"},
+        {label: "1 Hour", value: "1 Hour"},
+        {label: "8 Hours", value: "8 Hours"},
+    ]);
+
+    let [spellDurationDropDownOpen, setSpellDurationDropDownOpen] = useState(false);
+    let [spellDurationVariable, setSpellDurationVariable] = useState("Instantaneous");
+    let [spellDurationDropDownOptions, setSpellDurationDropDownOptions] = useState([
+        {label: "Instantaneous", value: "Instantaneous"},
+        {label: "1 Round", value: "1 Round"},
+        {label: "1 Minute", value: "1 Minute"},
+        {label: "10 Minutes", value: "10 Minutes"},
+        {label: "1 Hour", value: "1 Hour"},
+        {label: "8 Hours", value: "8 Hours"},
+        {label: "24 Hours", value: "24 Hours"},
+        {label: "10 Days", value: "10 Days"},
+        {label: "30 Days", value: "30 Days"},
+        {label: "Until Dispelled", value: "Until Dispelled"},
+        {label: "Special", value: "Special"},
+    ]);
+
+    let [spellRangeDropDownOpen, setSpellRangeDropDownOpen] = useState(false);
+    let [spellRangeVariable, setSpellRangeVariable] = useState("Touch");
+    let [spellRangeDropDownOptions, setSpellRangeDropDownOptions] = useState([
+        {label: "Self", value: "Self"},
+        {label: "Touch", value: "Touch"},
+        {label: "5 Foot", value: "5 Foot"},
+        {label: "10 Foot", value: "10 Foot"},
+        {label: "30 Foot", value: "30 Foot"},
+        {label: "60 Foot", value: "60 Foot"},
+        {label: "90 Foot", value: "90 Foot"},
+        {label: "120 Foot", value: "120 Foot"},
+        {label: "500 Foot", value: "500 Foot"},
+        {label: "Sight", value: "Sight"},
+        {label: "1 Mile", value: "1 Mile"},
+        {label: "10 Miles", value: "10 Miles"},
+        {label: "Same Plane of Existence", value: "Same Plane of Existence"},
+        {label: "Any", value: "Any"},
+    ]);
+
+    let [spellTargetDropDownOpen, setSpellTargetDropDownOpen] = useState(false);
+    let [spellTargetVariable, setSpellTargetVariable] = useState("Self");
+    let [spellTargetDropDownOptions, setSpellTargetDropDownOptions] = useState([
+        {label: "Self", value: "Self"},
+        {label: "Creature", value: "Creature"},
+        {label: "Humanoid", value: "Humanoid", parent: "Creature"},
+        {label: "Medium Creature", value: "Medium Creature", parent: "Creature"},
+        {label: "Large Creature", value: "Large Creature", parent: "Creature"},
+        {label: "Object", value: "Object"},
+        {label: "Sphere", value: "Sphere"},
+        {label: "5 foot Radius Sphere", value: "5 foot Radius Sphere", parent: "Sphere"},
+        {label: "10 foot Radius Sphere", value: "10 foot Radius Sphere", parent: "Sphere"},
+        {label: "15 foot Radius Sphere", value: "15 foot Radius Sphere", parent: "Sphere"},
+        {label: "20 foot Radius Sphere", value: "20 foot Radius Sphere", parent: "Sphere"},
+        {label: "30 foot Radius Sphere", value: "30 foot Radius Sphere", parent: "Sphere"},
+        {label: "40 foot Radius Sphere", value: "40 foot Radius Sphere", parent: "Sphere"},
+        {label: "60 foot Radius Sphere", value: "60 foot Radius Sphere", parent: "Sphere"},
+        {label: "Cube", value: "Cube"},
+        {label: "10 foot Cube", value: "10 foot Cube", parent: "Cube"},
+        {label: "15 foot Cube", value: "15 foot Cube", parent: "Cube"},
+        {label: "20 foot Cube", value: "20 foot Cube", parent: "Cube"},
+        {label: "30 foot Cube", value: "30 foot Cube", parent: "Cube"},
+        {label: "40 foot Cube", value: "40 foot Cube", parent: "Cube"},
+        {label: "90 foot Cube", value: "90 foot Cube", parent: "Cube"},
+        {label: "100 foot Cube", value: "100 foot Cube", parent: "Cube"},
+        {label: "150 foot Cube", value: "150 foot Cube", parent: "Cube"},
+        {label: "Cone", value: "Cone"},
+        {label: "15 foot Cone", value: "15 foot Cone", parent: "Cone"},
+        {label: "30 foot Cone", value: "30 foot Cone", parent: "Cone"},
+        {label: "60 foot Cone", value: "60 foot Cone", parent: "Cone"},
+        {label: "120 foot Cone", value: "120 foot Cone", parent: "Cone"},
+        {label: "Line", value: "Line"},
+        {label: "15 foot Line", value: "15 foot Line", parent: "Line"},
+        {label: "30 foot Line", value: "30 foot Line", parent: "Line"},
+        {label: "60 foot Line", value: "60 foot Line", parent: "Line"},
+        {label: "100 foot Line", value: "100 foot Line", parent: "Line"},
+    ]);
+
+
     let [newSpellCreationToolDisplay, setNewSpellCreationToolDisplay] = useState(false);
     let [newSpellConfirmationCount, setNewSpellConfirmationCount] = useState(0);
     let [deleteSpellToolDisplay, setDeleteSpellToolDisplay] = useState(false);
@@ -18,17 +120,12 @@ export default function newSpellCreationTool() {
     let [spellConfirmDelete, setSpellConfirmDelete] = useState(false);
 
     let [spellNameVariable, setSpellNameVariable] = useState("");
-    let [spellLevelVariable, setSpellLevelVariable] = useState("0");
     let [spellVerbalVariable, setSpellVerbalVariable] = useState(false);
     let [spellSomaticVariable, setSpellSomaticVariable] = useState(false);
     let [spellMaterialBooleanVariable, setSpellMaterialBooleanVariable] = useState(false,);
     let [spellMaterialDescriptionVariable, setSpellMaterialDescriptionVariable] = useState("");
     let [spellConcentrationVariable, setSpellConcentrationVariable] = useState(false);
     let [spellRitualVariable, setSpellRitualVariable] = useState(false);
-    let [spellTimeVariable, setSpellTimeVariable] = useState("action");
-    let [spellDurationVariable, setSpellDurationVariable] = useState("instant");
-    let [spellRangeVariable, setSpellRangeVariable] = useState("touch");
-    let [spellTargetVariable, setSpellTargetVariable] = useState("self");
     let isAttack :[boolean, string] = [false, "INT"];
     let [spellIsAttack, setSpellIsAttack] = useState(isAttack);
     let [spellIsSaveDC, setSpellIsSaveDC] = useState(isAttack);
@@ -52,7 +149,7 @@ export default function newSpellCreationTool() {
             </Pressable>
             {newSpellCreationToolDisplay && <View>
                 <View style={{flexDirection: "row", alignSelf: "center", marginBottom: 10}}>
-                    <View style={{flex: 0.7}}>
+                    <View style={{flex: 0.7, marginVertical: 10}}>
                         <Text style={styles.lables}>Spell Name</Text>
                         <TextInput
                             onChangeText={setSpellNameVariable}
@@ -67,29 +164,27 @@ export default function newSpellCreationTool() {
                                 alignSelf: "center",
                                 color: "white",
                                 textAlign: "center",
-                                padding: 0,
+                                padding: 5,
                             }}/>
                     </View>
-                    <View style={{flex: 0.3, alignSelf: "center"}}>
+                    <View style={{flex: 0.35, alignSelf: "center"}}>
                         <Text style={styles.lables}>Spell Level</Text>
-                        <TextInput
-                            onChangeText={setSpellLevelVariable}
-                            placeholder={"0"}
-                            keyboardType={"numeric"}
-                            maxLength={1}
-                            placeholderTextColor={"grey"}
-                            style={{
-                                fontSize: 22,
-                                borderStyle: "solid",
-                                borderWidth: 3,
-                                borderColor: "white",
-                                width: 100,
-                                padding: 0,
-                                alignSelf: "center",
-                                color: "white",
-                                textAlign: "center",
-                                marginLeft: 10
-                            }}/>
+                        <DropDownPicker
+                            open={spellLevelDropDownOpen}
+                            value={spellLevelVariable}
+                            items={spellLevelDropDownOptions}
+                            setOpen={setSpellLevelDropDownOpen}
+                            setValue={setSpellLevelVariable}
+                            setItems={setSpellLevelDropDownOptions}
+                            autoScroll={true}
+                            zIndex={1000}
+                            flatListProps={{nestedScrollEnabled:true}}
+                            style={styles.dropDownPicker}
+                            dropDownContainerStyle={styles.dropDownContainer}
+                            textStyle={{color: "white", fontSize: 14}}
+                        />
+
+
                     </View>
                 </View>
                 <View style={{flexDirection: "row", alignSelf: "center", marginBottom: 5}}>
@@ -153,77 +248,73 @@ export default function newSpellCreationTool() {
                 <View style={{flexDirection: "row", alignSelf: "center", marginBottom: 5}}>
                     <View style={{flex: 0.5}}>
                         <Text style={styles.lables}>Casting Time</Text>
-                        <TextInput
-                            onChangeText={setSpellTimeVariable}
-                            placeholder={"action"}
-                            placeholderTextColor={"grey"}
-                            style={{
-                                fontSize: 22,
-                                borderStyle: "solid",
-                                borderWidth: 3,
-                                borderColor: "white",
-                                width: 180,
-                                padding: 0,
-                                alignSelf: "center",
-                                color: "white",
-                                textAlign: "center"
-                            }}/>
+                        <DropDownPicker
+                            open={spellTimeDropDownOpen}
+                            value={spellTimeVariable}
+                            items={spellTimeDropDownOptions}
+                            setOpen={setSpellTimeDropDownOpen}
+                            setValue={setSpellTimeVariable}
+                            setItems={setSpellTimeDropDownOptions}
+                            autoScroll={true}
+                            zIndex={991}
+                            flatListProps={{nestedScrollEnabled:true}}
+                            style={styles.dropDownPicker}
+                            dropDownContainerStyle={styles.dropDownContainer}
+                            textStyle={{color: "white", fontSize: 14}}
+                        />
                     </View>
                     <View style={{flex: 0.5}}>
                         <Text style={styles.lables}>Spell Duration</Text>
-                        <TextInput
-                        onChangeText={setSpellDurationVariable}
-                        placeholder={"instant"}
-                        placeholderTextColor={"grey"}
-                        style={{
-                            fontSize: 22,
-                            borderStyle: "solid",
-                            borderWidth: 3,
-                            borderColor: "white",
-                            width: 180,
-                            padding: 0,
-                            alignSelf: "center",
-                            color: "white",
-                            textAlign: "center"
-                        }}/>
+                        <DropDownPicker
+                            open={spellDurationDropDownOpen}
+                            value={spellDurationVariable}
+                            items={spellDurationDropDownOptions}
+                            setOpen={setSpellDurationDropDownOpen}
+                            setValue={setSpellDurationVariable}
+                            setItems={setSpellDurationDropDownOptions}
+                            autoScroll={true}
+                            zIndex={990}
+                            flatListProps={{nestedScrollEnabled:true}}
+                            style={styles.dropDownPicker}
+                            dropDownContainerStyle={styles.dropDownContainer}
+                            textStyle={{color: "white", fontSize: 14}}
+                        />
                     </View>
                 </View>
                 <View style={{flexDirection: "row", alignSelf: "center", marginBottom: 10}}>
                     <View style={{flex: 0.5}}>
                         <Text style={styles.lables}>Spell Range</Text>
-                        <TextInput
-                            onChangeText={setSpellRangeVariable}
-                            placeholder={"5 Ft"}
-                            placeholderTextColor={"grey"}
-                            style={{
-                                fontSize: 22,
-                                borderStyle: "solid",
-                                borderWidth: 3,
-                                borderColor: "white",
-                                width: 180,
-                                padding: 0,
-                                alignSelf: "center",
-                                color: "white",
-                                textAlign: "center"
-                            }}/>
+                        <DropDownPicker
+                            open={spellRangeDropDownOpen}
+                            value={spellRangeVariable}
+                            items={spellRangeDropDownOptions}
+                            setOpen={setSpellRangeDropDownOpen}
+                            setValue={setSpellRangeVariable}
+                            setItems={setSpellRangeDropDownOptions}
+                            autoScroll={true}
+                            zIndex={981}
+                            flatListProps={{nestedScrollEnabled:true}}
+                            style={styles.dropDownPicker}
+                            dropDownContainerStyle={styles.dropDownContainer}
+                            textStyle={{color: "white", fontSize: 14}}
+                        />
                     </View>
                     <View style={{flex: 0.5}}>
                         <Text style={styles.lables}>Spell Target</Text>
-                        <TextInput
-                            onChangeText={setSpellTargetVariable}
-                            placeholder={"creature"}
-                            placeholderTextColor={"grey"}
-                            style={{
-                                fontSize: 22,
-                                borderStyle: "solid",
-                                borderWidth: 3,
-                                borderColor: "white",
-                                width: 180,
-                                padding: 0,
-                                alignSelf: "center",
-                                color: "white",
-                                textAlign: "center"
-                            }}/>
+                        <DropDownPicker
+                            open={spellTargetDropDownOpen}
+                            value={spellTargetVariable}
+                            items={spellTargetDropDownOptions}
+                            setOpen={setSpellTargetDropDownOpen}
+                            setValue={setSpellTargetVariable}
+                            setItems={setSpellTargetDropDownOptions}
+                            autoScroll={true}
+                            zIndex={981}
+                            flatListProps={{nestedScrollEnabled:true}}
+                            style={styles.dropDownPicker}
+                            dropDownContainerStyle={styles.dropDownContainer}
+                            textStyle={{color: "white", fontSize: 14}}
+                        />
                     </View>
                 </View>
                 <Text style={styles.lables}>What Type of Roll?</Text>
@@ -664,5 +755,16 @@ const styles = StyleSheet.create({
         margin: 15,
         backgroundColor: "blue",
         borderRadius: 10,
+    },
+    dropDownPicker: {
+        backgroundColor: "teal",
+        borderColor: "white",
+        borderWidth: 3,
+        padding: 0,
+    },
+    dropDownContainer: {
+        backgroundColor: "teal",
+        borderColor: "white",
+        borderWidth: 2,
     },
 })

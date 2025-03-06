@@ -75,12 +75,6 @@ export default function SpellsAbilitiesScreen() {
       headerImage={
           headerImage
       }>
-
-
-        <View style={{marginBottom: 20, backgroundColor: 'black'}}>
-                <Text style={{color: "white", fontSize: 50, backgroundColor: "tan", textAlign: "center"}}>{character.charName}
-                </Text>
-        </View>
         <Pressable onPress={()=> {
             setDisplayAllSpells(!displayAllSpells);
             setDisplay0thSpells(false);

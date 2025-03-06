@@ -1,5 +1,5 @@
 import type { PropsWithChildren, ReactElement } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View} from 'react-native';
 import Animated, {
   interpolate,
   useAnimatedRef,
@@ -7,9 +7,9 @@ import Animated, {
   useScrollViewOffset,
 } from 'react-native-reanimated';
 
-import { ThemedView } from '@/components/ThemedView';
 import { useBottomTabOverflow } from '@/components/ui/TabBarBackground';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import CharacterNameHeader from "@/components/characterNameHeader";
 
 const HEADER_HEIGHT = 250;
 
@@ -48,6 +48,7 @@ export default function ParallaxScrollView({
     <View style={styles.container}>
       <Animated.ScrollView
         ref={scrollRef}
+        stickyHeaderIndices={[1]}
         scrollEventThrottle={16}
         scrollIndicatorInsets={{ bottom }}
         contentContainerStyle={{ paddingBottom: bottom }}>
@@ -59,6 +60,7 @@ export default function ParallaxScrollView({
           ]}>
           {headerImage}
         </Animated.View>
+        {CharacterNameHeader()}
         <View style={styles.content}>{children}</View>
       </Animated.ScrollView>
     </View>

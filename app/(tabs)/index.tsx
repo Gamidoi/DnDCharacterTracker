@@ -34,62 +34,60 @@ export default function MainCharacterSyndrome() {
       }>
 
         <View style={{marginBottom: 20, backgroundColor: 'black'}}>
-                <Text style={{color: "white", fontSize: 50, backgroundColor: "tan", textAlign: "center"}}>{character.charName}
-                </Text>
-        <Text style={{color: "white", fontSize: 28}}>current HP is {character.currentHP} / {character.maxHP}</Text>
-        <Text>
-            <Pressable
-                style={{
-                    backgroundColor: "maroon",
-                    padding: 13,
-                    borderRadius: 12,
-                    width: 122,
-                    height: 42}}
-                onPress={() => {
-                    if (typeof(character.currentHP) != "number"){characterUpdater({type: "updateCurrentHP", value: character.maxHP})}
-                    if (!isNaN(parseInt(incrementHP))){
-                        if (parseInt(incrementHP) < 0){incrementHP = "" +  Math.abs(parseInt(incrementHP))}
-                        if (character.currentHP - parseInt(incrementHP) < 0) {
-                            characterUpdater({type: "updateCurrentHP", value: 0})
-                    } else {
-                            characterUpdater({type: "updateCurrentHP", value: (character.currentHP - parseInt(incrementHP))})
+            <Text style={{color: "white", fontSize: 28}}>current HP is {character.currentHP} / {character.maxHP}</Text>
+            <Text>
+                <Pressable
+                    style={{
+                        backgroundColor: "maroon",
+                        padding: 13,
+                        borderRadius: 12,
+                        width: 122,
+                        height: 42}}
+                    onPress={() => {
+                        if (typeof(character.currentHP) != "number"){characterUpdater({type: "updateCurrentHP", value: character.maxHP})}
+                        if (!isNaN(parseInt(incrementHP))){
+                            if (parseInt(incrementHP) < 0){incrementHP = "" +  Math.abs(parseInt(incrementHP))}
+                            if (character.currentHP - parseInt(incrementHP) < 0) {
+                                characterUpdater({type: "updateCurrentHP", value: 0})
+                        } else {
+                                characterUpdater({type: "updateCurrentHP", value: (character.currentHP - parseInt(incrementHP))})
+                        }
                     }
-                }
                 }}>
-                <Text style={{color: "white", fontSize: 12}}>take {incrementHP} damage</Text>
-            </Pressable>
+                    <Text style={{color: "white", fontSize: 12}}>take {incrementHP} damage</Text>
+                </Pressable>
 
-            <Pressable
-                style={{
-                    backgroundColor: "green",
-                    padding: 13,
-                    borderRadius: 12,
-                    width: 93,
-                    height: 42}}
-                onPress={() => {
-                    if (typeof(character.currentHP) != "number"){characterUpdater({type: "updateCurrentHP", value: character.maxHP})}
-                    if (!isNaN(parseInt(incrementHP))){
-                        if (parseInt(incrementHP) < 0){incrementHP = "" +  Math.abs(parseInt(incrementHP))}
-                        if (character.currentHP + parseInt(incrementHP) > character.maxHP) {
-                            characterUpdater({type: "updateCurrentHP", value: character.maxHP})
-                    } else {
-                        characterUpdater({type: "updateCurrentHP", value: (character.currentHP + parseInt(incrementHP))})
-                    }
+                <Pressable
+                    style={{
+                        backgroundColor: "green",
+                        padding: 13,
+                        borderRadius: 12,
+                        width: 93,
+                        height: 42}}
+                    onPress={() => {
+                        if (typeof(character.currentHP) != "number"){characterUpdater({type: "updateCurrentHP", value: character.maxHP})}
+                        if (!isNaN(parseInt(incrementHP))){
+                            if (parseInt(incrementHP) < 0){incrementHP = "" +  Math.abs(parseInt(incrementHP))}
+                            if (character.currentHP + parseInt(incrementHP) > character.maxHP) {
+                                characterUpdater({type: "updateCurrentHP", value: character.maxHP})
+                        } else {
+                            characterUpdater({type: "updateCurrentHP", value: (character.currentHP + parseInt(incrementHP))})
+                        }
                 }}}>
                     <Text style={{color: "white", fontSize: 12}}>Heal {incrementHP} HP</Text>
                 </Pressable>
-            <TextInput
-                keyboardType='numeric'
-                onChangeText={setIncrementHP}
-                maxLength={3}
-                style={{
-                    borderStyle: "solid",
-                    borderWidth: 3,
-                    borderColor: "white",
-                    width: 80,
-                    color: "grey",
-                }}
-            />
+                <TextInput
+                    keyboardType='numeric'
+                    onChangeText={setIncrementHP}
+                    maxLength={3}
+                    style={{
+                        borderStyle: "solid",
+                        borderWidth: 3,
+                        borderColor: "white",
+                        width: 80,
+                        color: "grey",
+                    }}
+                />
             </Text>
         </View>
 
