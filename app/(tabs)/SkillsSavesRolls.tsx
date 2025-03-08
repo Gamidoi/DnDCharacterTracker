@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Pressable} from 'react-native';
+import {StyleSheet, Text, View, Pressable, TextInput} from 'react-native';
 import React, {useState} from "react";
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
@@ -14,6 +14,9 @@ export default function TabSkillsSavesRolls() {
     let [currentRollDie1, setCurrentRollDie1] = useState(20);
     let [currentRollDie2, setCurrentRollDie2] = useState(NaN);
     let [currentRollMod, setCurrentRollMod] = useState(0);
+    let [customProficiency, setCustomProficiency] = useState("X");
+    let [customModifier, setCustomModifier] = useState("");
+    let [customModifierPosNeg, setCustomModifierPosNeg] = useState("+");
 
     let [toggleAdvantage, setToggleAdvantage] = useState(false);
     let [toggleDisadvantage, setToggleDisadvantage] = useState(false);
@@ -21,59 +24,56 @@ export default function TabSkillsSavesRolls() {
     function findStatModifier(coreStat: number){
         return Math.floor((coreStat - 10)/2);
     }
-
-
-    return (
-        <ParallaxScrollView
-            headerBackgroundColor={{ light: '#60D0D0', dark: '#353636' }}
-            headerImage={
-                headerImage
-            }>
-
-            <Text style={{
-                color: "white",
-                backgroundColor: "black",
-                fontSize: 26,
-                textAlign: "center"
-            }}>Current Roll: {currentRollName}</Text>
-            <View style={{backgroundColor: 'black', flexDirection: "row", alignSelf: "center", marginLeft: 20}}>
-                {currentRollDie1 === 1 && <Text style={styles.dice20Unnatural}>{currentRollDie1}</Text>}
-                {(currentRollDie1 < 6 && currentRollDie1 > 1) && <Text style={styles.dice20bad}>{currentRollDie1}</Text>}
-                {(currentRollDie1 < 11 && currentRollDie1 > 5) && <Text style={styles.dice20poor}>{currentRollDie1}</Text>}
-                {(currentRollDie1 < 16 && currentRollDie1 > 10) && <Text style={styles.dice20ok}>{currentRollDie1}</Text>}
-                {(currentRollDie1 < 20 && currentRollDie1 > 15) && <Text style={styles.dice20great}>{currentRollDie1}</Text>}
-                {currentRollDie1 === 20 && <Text style={styles.dice20Natural}>{currentRollDie1}</Text>}
-
-                {currentRollDie2 === 1 && <Text style={styles.dice20Unnatural}>{currentRollDie2}</Text>}
-                {(currentRollDie2 < 6 && currentRollDie2 > 1) && <Text style={styles.dice20bad}>{currentRollDie2}</Text>}
-                {(currentRollDie2 < 11 && currentRollDie2 > 5) && <Text style={styles.dice20poor}>{currentRollDie2}</Text>}
-                {(currentRollDie2 < 16 && currentRollDie2 > 10) && <Text style={styles.dice20ok}>{currentRollDie2}</Text>}
-                {(currentRollDie2 < 20 && currentRollDie2 > 15) && <Text style={styles.dice20great}>{currentRollDie2}</Text>}
-                {currentRollDie2 === 20 && <Text style={styles.dice20Natural}>{currentRollDie2}</Text>}
-
-                <View style={{flex: 0.4}}>
-                    <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Mod for</Text>
-                    <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>current Roll</Text>
-                    <Text style={{color: "white", fontSize: 30, textAlign: "center"}}>{currentRollMod > 0 && "+"}{currentRollMod}</Text>
-                </View>
-                <Text style={{fontSize: 50, color: "white", marginTop: 16, flex: 0.2}}>=</Text>
+    function rollDisplay() {
+        return(
+            <View>
                 <Text style={{
-                    fontSize: 25,
                     color: "white",
-                    marginTop: 14,
-                    flex: 0.40,
-                    width: 40,
-                    borderColor: "orange",
-                    borderWidth: 3,
-                    borderRadius: 15,
-                    textAlign: "center",
-                    textAlignVertical: "center",
-                }}>
-                    {currentRollResult(currentRollMod, currentRollDie1, currentRollDie2, toggleAdvantage)}
-                </Text>
+                    backgroundColor: "black",
+                    fontSize: 26,
+                    textAlign: "center"
+                }}>Current Roll: {currentRollName}</Text>
+                <View style={{backgroundColor: 'black', flexDirection: "row", alignSelf: "center", marginLeft: 20}}>
+                    {currentRollDie1 === 1 && <Text style={styles.dice20Unnatural}>{currentRollDie1}</Text>}
+                    {(currentRollDie1 < 6 && currentRollDie1 > 1) && <Text style={styles.dice20bad}>{currentRollDie1}</Text>}
+                    {(currentRollDie1 < 11 && currentRollDie1 > 5) && <Text style={styles.dice20poor}>{currentRollDie1}</Text>}
+                    {(currentRollDie1 < 16 && currentRollDie1 > 10) && <Text style={styles.dice20ok}>{currentRollDie1}</Text>}
+                    {(currentRollDie1 < 20 && currentRollDie1 > 15) && <Text style={styles.dice20great}>{currentRollDie1}</Text>}
+                    {currentRollDie1 === 20 && <Text style={styles.dice20Natural}>{currentRollDie1}</Text>}
+
+                    {currentRollDie2 === 1 && <Text style={styles.dice20Unnatural}>{currentRollDie2}</Text>}
+                    {(currentRollDie2 < 6 && currentRollDie2 > 1) && <Text style={styles.dice20bad}>{currentRollDie2}</Text>}
+                    {(currentRollDie2 < 11 && currentRollDie2 > 5) && <Text style={styles.dice20poor}>{currentRollDie2}</Text>}
+                    {(currentRollDie2 < 16 && currentRollDie2 > 10) && <Text style={styles.dice20ok}>{currentRollDie2}</Text>}
+                    {(currentRollDie2 < 20 && currentRollDie2 > 15) && <Text style={styles.dice20great}>{currentRollDie2}</Text>}
+                    {currentRollDie2 === 20 && <Text style={styles.dice20Natural}>{currentRollDie2}</Text>}
+
+                    <View style={{flex: 0.4}}>
+                        <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Mod for</Text>
+                        <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>current Roll</Text>
+                        <Text style={{color: "white", fontSize: 30, textAlign: "center"}}>{currentRollMod > 0 && "+"}{currentRollMod}</Text>
+                    </View>
+                    <Text style={{fontSize: 50, color: "white", marginTop: 16, flex: 0.2}}>=</Text>
+                    <Text style={{
+                        fontSize: 25,
+                        color: "white",
+                        marginTop: 14,
+                        flex: 0.40,
+                        width: 40,
+                        borderColor: "orange",
+                        borderWidth: 3,
+                        borderRadius: 15,
+                        textAlign: "center",
+                        textAlignVertical: "center",
+                    }}>
+                        {currentRollResult(currentRollMod, currentRollDie1, currentRollDie2, toggleAdvantage)}
+                    </Text>
+                </View>
             </View>
+    )}
 
-
+    function toggleAdvantagebutttons() {
+        return(
             <View style={{
                 marginTop: 10,
                 backgroundColor: 'blue',
@@ -81,7 +81,8 @@ export default function TabSkillsSavesRolls() {
                 paddingTop: 5,
                 paddingBottom: 5,
                 borderRadius: 16,
-            }}><Pressable  style={styles.toggleAdv} onPress={()=> {
+            }}>
+                <Pressable  style={styles.toggleAdv} onPress={()=> {
                     setToggleAdvantage(!toggleAdvantage);
                     setToggleDisadvantage(false);
                     if (!toggleAdvantage) {
@@ -104,6 +105,18 @@ export default function TabSkillsSavesRolls() {
                 }}> <Text style={{color: "white", fontSize: 17, textAlign: "center"}}>Toggle Disadvantage: {toggleDisadvantage && "On"}{!toggleDisadvantage && "Off"}</Text>
                 </Pressable>
             </View>
+        )}
+
+    return (
+        <ParallaxScrollView
+            headerBackgroundColor={{ light: '#60D0D0', dark: '#353636' }}
+            headerImage={
+                headerImage
+            }>
+
+            {rollDisplay()}
+
+            {toggleAdvantagebutttons()}
 
 
 
@@ -258,10 +271,9 @@ export default function TabSkillsSavesRolls() {
                 </Pressable>
             </View>
 
+            {rollDisplay()}
 
-
-
-            <Text style={{color: "white", textAlign: "center", fontSize: 25}}>Proficiency {character.proficiency}</Text>
+            <Text style={styles.subHeaderLabel}>Proficiency {character.proficiency}</Text>
             <View style={{flexDirection: "row"}}>
                 <View style={styles.skillRollColumn}>
                     <Pressable style={[styles.skillBoxes, {backgroundColor: "green"}]} onPress={()=> {
@@ -577,6 +589,74 @@ export default function TabSkillsSavesRolls() {
                 </View>
             </View>
 
+            {toggleAdvantagebutttons()}
+
+            {rollDisplay()}
+
+            <Text style={styles.subHeaderLabel}>Custom Roll</Text>
+            <View style={{flexDirection: "row", alignSelf: "center"}}>
+                <Text style={[styles.subHeaderLabel, {textAlignVertical: "center"}]}>d20 +  </Text>
+                <Pressable onPress={() => {
+                    if (customProficiency == "X"){setCustomProficiency("P")}
+                    else if (customProficiency == "P"){setCustomProficiency("E")}
+                    else {setCustomProficiency("X")}
+                }}>
+                    {customProficiency == "P" && <Text style={[styles.customToggleProfOn, {paddingTop: 5, borderTopLeftRadius: 8, borderTopRightRadius: 8}]}>Proficient</Text>}
+                    {customProficiency != "P" && <Text style={[styles.customToggleProfOff, {paddingTop: 5, borderTopLeftRadius: 8, borderTopRightRadius: 8}]}>Proficient</Text>}
+                    {customProficiency == "E" && <Text style={[styles.customToggleProfOn, {paddingBottom: 5, borderBottomLeftRadius: 8, borderBottomRightRadius: 8}]}>Expert</Text>}
+                    {customProficiency != "E" && <Text style={[styles.customToggleProfOff, {paddingBottom: 5, borderBottomLeftRadius: 8, borderBottomRightRadius: 8}]}>Expert</Text>}
+                </Pressable>
+                <Pressable  style={{marginHorizontal: 15}} onPress={() => {
+                    if (customModifierPosNeg == "+"){setCustomModifierPosNeg("-")}
+                    else {setCustomModifierPosNeg("+")}
+                }}>
+                    {customModifierPosNeg == "+" && <Text style={[styles.customToggleProfOn, {paddingTop: 5, borderTopLeftRadius: 8, borderTopRightRadius: 8}]}> + </Text>}
+                    {customModifierPosNeg != "+" && <Text style={[styles.customToggleProfOff, {paddingTop: 5, borderTopLeftRadius: 8, borderTopRightRadius: 8}]}> + </Text>}
+                    {customModifierPosNeg == "-" && <Text style={[styles.customToggleProfOn, {paddingBottom: 5, borderBottomLeftRadius: 8, borderBottomRightRadius: 8}]}> - </Text>}
+                    {customModifierPosNeg != "-" && <Text style={[styles.customToggleProfOff, {paddingBottom: 5, borderBottomLeftRadius: 8, borderBottomRightRadius: 8}]}> - </Text>}
+                </Pressable>
+                <TextInput
+                    onChangeText={setCustomModifier}
+                    placeholder={"0"}
+                    keyboardType={"numeric"}
+                    maxLength={2}
+                    placeholderTextColor={"grey"}
+                    style={{
+                        fontSize: 22,
+                        borderStyle: "solid",
+                        borderWidth: 3,
+                        borderColor: "white",
+                        width: 80,
+                        padding: 0,
+                        margin: 1,
+                        alignSelf: "center",
+                        color: "white",
+                        textAlign: "center"}}
+                />
+            </View>
+            <Pressable style={{
+                backgroundColor: "maroon",
+                borderColor: "orange",
+                borderWidth: 4,
+                borderRadius: 20,
+                width: 300,
+                alignSelf: "center",
+                }}
+                onPress={() => {
+                    let proficiencyBonus = 0;
+                    if (customProficiency == "P") {proficiencyBonus = character.proficiency;}
+                    if (customProficiency == "E") {proficiencyBonus = (2 * character.proficiency);}
+                    if (isNaN(parseInt(customModifier))) {customModifier = "0";}
+                    let posOrNeg = 1;
+                    if (customModifierPosNeg == "-") {posOrNeg = -1;}
+                    setCurrentRollMod((parseInt(customModifier) * posOrNeg) + proficiencyBonus);
+                    setCurrentRollDie1(rollD20());
+                    setCurrentRollName("Custom Roll");
+                    if (toggleAdvantage || toggleDisadvantage) {setCurrentRollDie2(rollD20())}
+                }}>
+                <Text style={styles.subHeaderLabel}>Roll Custom</Text>
+            </Pressable>
+
 
 
 
@@ -687,7 +767,29 @@ const styles = StyleSheet.create({
         flex: 0.3333,
         alignSelf: "center",
         backgroundColor: "orange",
-    }
+    },
+    subHeaderLabel: {
+        color: "white",
+        textAlign: "center",
+        fontSize: 25
+    },
+    customToggleProfOn: {
+        color: "white",
+        textAlign: "center",
+        backgroundColor: "green",
+        paddingHorizontal: 5,
+        borderWidth: 2,
+        borderColor: "grey",
+    },
+    customToggleProfOff: {
+        color: "white",
+        textAlign: "center",
+        backgroundColor: "#333333",
+        paddingHorizontal: 5,
+        borderWidth: 2,
+        borderColor: "grey",
+
+    },
 });
 
 function rollD20() {

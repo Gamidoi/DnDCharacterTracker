@@ -140,10 +140,19 @@ export default function newSpellCreationTool() {
     let [spellDescription, setSpellDescription] = useState("");
 
 
+    function closeAll(type: string = ""){
+        if (type != "Level") {setSpellLevelDropDownOpen(false);}
+        if (type != "Time") {setSpellTimeDropDownOpen(false);}
+        if (type != "Range") {setSpellRangeDropDownOpen(false);}
+        if (type != "Duration") {setSpellDurationDropDownOpen(false);}
+        if (type != "Target") {setSpellTargetDropDownOpen(false);}
+    }
 
     return(<View>
-        <View style={styles.toolBoxStyle}>
-            <Pressable onPress={() => {setNewSpellCreationToolDisplay(!newSpellCreationToolDisplay)}}>
+        <Pressable onPress={() => closeAll()} style={styles.toolBoxStyle}>
+            <Pressable onPress={() => {
+                setNewSpellCreationToolDisplay(!newSpellCreationToolDisplay);
+                closeAll()}}>
             {!newSpellCreationToolDisplay && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open New Spell Tool</Text>}
             {newSpellCreationToolDisplay && <Text style={{color: "white", textAlign: "center", marginBottom: 20}}>Close New Spell Tool</Text>}
             </Pressable>
@@ -153,6 +162,7 @@ export default function newSpellCreationTool() {
                         <Text style={styles.lables}>Spell Name</Text>
                         <TextInput
                             onChangeText={setSpellNameVariable}
+                            onFocus={() => {closeAll()}}
                             placeholder={"Spellname"}
                             placeholderTextColor={"grey"}
                             style={{
@@ -176,6 +186,7 @@ export default function newSpellCreationTool() {
                             setOpen={setSpellLevelDropDownOpen}
                             setValue={setSpellLevelVariable}
                             setItems={setSpellLevelDropDownOptions}
+                            onOpen={() => {closeAll("Level")}}
                             autoScroll={true}
                             zIndex={1000}
                             flatListProps={{nestedScrollEnabled:true}}
@@ -192,7 +203,9 @@ export default function newSpellCreationTool() {
                         <Text style={styles.lables}>Verbal</Text>
                         <Pressable
                             style={styles.newSpellToolToggleButtons}
-                            onPress={() => {setSpellVerbalVariable(!spellVerbalVariable)}}>
+                            onPress={() => {
+                                setSpellVerbalVariable(!spellVerbalVariable);
+                                closeAll()}}>
                             <Text style={styles.toggleButtonLables}>{spellVerbalVariable ? "Yes" : "No"}</Text>
                         </Pressable>
                     </View>
@@ -200,7 +213,9 @@ export default function newSpellCreationTool() {
                         <Text style={styles.lables}>Somatic</Text>
                         <Pressable
                             style={styles.newSpellToolToggleButtons}
-                            onPress={() => {setSpellSomaticVariable(!spellSomaticVariable)}}>
+                            onPress={() => {
+                                setSpellSomaticVariable(!spellSomaticVariable);
+                            closeAll()}}>
                             <Text style={styles.toggleButtonLables}>{spellSomaticVariable ? "Yes" : "No"}</Text>
                         </Pressable>
                     </View>
@@ -208,7 +223,9 @@ export default function newSpellCreationTool() {
                         <Text style={styles.lables}>Material</Text>
                         <Pressable
                             style={styles.newSpellToolToggleButtons}
-                            onPress={() => {setSpellMaterialBooleanVariable(!spellMaterialBooleanVariable)}}>
+                            onPress={() => {
+                                setSpellMaterialBooleanVariable(!spellMaterialBooleanVariable);
+                            closeAll()}}>
                             <Text style={styles.toggleButtonLables}>{spellMaterialBooleanVariable ? "Yes" : "No"}</Text>
                         </Pressable>
                     </View>
@@ -216,20 +233,25 @@ export default function newSpellCreationTool() {
                         <Text style={styles.lables}>Concentrate</Text>
                         <Pressable
                             style={styles.newSpellToolToggleButtons}
-                            onPress={() => {setSpellConcentrationVariable(!spellConcentrationVariable)}}>
+                            onPress={() => {
+                                setSpellConcentrationVariable(!spellConcentrationVariable);
+                            closeAll()}}>
                             <Text style={styles.toggleButtonLables}>{spellConcentrationVariable ? "Yes" : "No"}</Text>
                         </Pressable></View>
                     <View style={{flex: 0.2}}>
                         <Text style={styles.lables}>Ritual</Text>
                         <Pressable
                             style={styles.newSpellToolToggleButtons}
-                            onPress={() => {setSpellRitualVariable(!spellRitualVariable)}}>
+                            onPress={() => {
+                                setSpellRitualVariable(!spellRitualVariable);
+                                closeAll()}}>
                             <Text style={styles.toggleButtonLables}>{spellRitualVariable ? "Yes" : "No"}</Text>
                         </Pressable></View>
                 </View>
                 {spellMaterialBooleanVariable && <Text style={styles.lables}>If specified, what are the Material Components?</Text>}
                 {spellMaterialBooleanVariable && <TextInput
                     onChangeText={setSpellMaterialDescriptionVariable}
+                    onFocus={() => closeAll()}
                     placeholder={"Bat Guano worth 25gp"}
                     placeholderTextColor={"grey"}
                     multiline={true}
@@ -255,6 +277,7 @@ export default function newSpellCreationTool() {
                             setOpen={setSpellTimeDropDownOpen}
                             setValue={setSpellTimeVariable}
                             setItems={setSpellTimeDropDownOptions}
+                            onOpen={() => {closeAll("Time")}}
                             autoScroll={true}
                             zIndex={991}
                             flatListProps={{nestedScrollEnabled:true}}
@@ -272,6 +295,7 @@ export default function newSpellCreationTool() {
                             setOpen={setSpellDurationDropDownOpen}
                             setValue={setSpellDurationVariable}
                             setItems={setSpellDurationDropDownOptions}
+                            onOpen={() => {closeAll("Duration")}}
                             autoScroll={true}
                             zIndex={990}
                             flatListProps={{nestedScrollEnabled:true}}
@@ -291,6 +315,7 @@ export default function newSpellCreationTool() {
                             setOpen={setSpellRangeDropDownOpen}
                             setValue={setSpellRangeVariable}
                             setItems={setSpellRangeDropDownOptions}
+                            onOpen={() => {closeAll("Range")}}
                             autoScroll={true}
                             zIndex={981}
                             flatListProps={{nestedScrollEnabled:true}}
@@ -308,6 +333,7 @@ export default function newSpellCreationTool() {
                             setOpen={setSpellTargetDropDownOpen}
                             setValue={setSpellTargetVariable}
                             setItems={setSpellTargetDropDownOptions}
+                            onOpen={() => {closeAll("Target")}}
                             autoScroll={true}
                             zIndex={981}
                             flatListProps={{nestedScrollEnabled:true}}
@@ -322,12 +348,14 @@ export default function newSpellCreationTool() {
                     {!spellIsAttack[0] && <Pressable style={[styles.attackSaveNeitherButtonsOff, {borderBottomStartRadius: 10, borderTopStartRadius: 10}]} onPress={() => {
                         setSpellIsAttack([true, spellIsAttack[1]]);
                         setSpellIsSaveDC([false, spellIsSaveDC[1]]);
+                        closeAll();
                     }}>
                         <Text style={styles.toggleButtonLables}>Spell Attack</Text>
                     </Pressable>}
                     {spellIsAttack[0] && <Pressable style={[styles.attackSaveNeitherButtonsOn, {borderBottomStartRadius: 10, borderTopStartRadius: 10}]} onPress={() => {
-                    setSpellIsAttack([false, spellIsAttack[1]]);
-                    setSpellIsSaveDC([false, spellIsSaveDC[1]]);
+                        setSpellIsAttack([false, spellIsAttack[1]]);
+                        setSpellIsSaveDC([false, spellIsSaveDC[1]]);
+                        closeAll();
                     }}>
                         <Text style={styles.toggleButtonLables}>Spell Attack</Text>
                     </Pressable>}
@@ -335,12 +363,14 @@ export default function newSpellCreationTool() {
                     {(!spellIsSaveDC[0] && !spellIsAttack[0]) && <Pressable style={styles.attackSaveNeitherButtonsOn} onPress={() => {
                         setSpellIsAttack([false, spellIsAttack[1]]);
                         setSpellIsSaveDC([false, spellIsSaveDC[1]]);
+                        closeAll();
                     }}>
                         <Text style={[styles.toggleButtonLables, {marginTop: 10}]}>Neither</Text>
                     </Pressable>}
                     {(spellIsSaveDC[0] || spellIsAttack[0]) && <Pressable style={styles.attackSaveNeitherButtonsOff} onPress={() => {
                         setSpellIsAttack([false, spellIsAttack[1]]);
                         setSpellIsSaveDC([false, spellIsSaveDC[1]]);
+                        closeAll();
                     }}>
                         <Text style={[styles.toggleButtonLables, {marginTop: 10}]}>Neither</Text>
                     </Pressable>}
@@ -348,12 +378,14 @@ export default function newSpellCreationTool() {
                     {!spellIsSaveDC[0] && <Pressable style={[styles.attackSaveNeitherButtonsOff, {borderBottomEndRadius: 10, borderTopEndRadius: 10}]} onPress={() => {
                         setSpellIsAttack([false, spellIsAttack[1]]);
                         setSpellIsSaveDC([true, spellIsSaveDC[1]]);
+                        closeAll();
                     }}>
                         <Text style={styles.toggleButtonLables}>Saving Throw</Text>
                     </Pressable>}
                     {spellIsSaveDC[0] && <Pressable style={[styles.attackSaveNeitherButtonsOn, {borderBottomEndRadius: 10, borderTopEndRadius: 10}]} onPress={() => {
                         setSpellIsAttack([false, spellIsAttack[1]]);
                         setSpellIsSaveDC([false, spellIsSaveDC[1]]);
+                        closeAll();
                     }}>
                         <Text style={styles.toggleButtonLables}>Saving Throw</Text>
                     </Pressable>}
@@ -362,29 +394,29 @@ export default function newSpellCreationTool() {
                 {spellIsSaveDC[0] && <Text style={styles.lables}>What is the Saving Throw?</Text>}
                 {spellIsSaveDC[0] && <View style={{flexDirection: "row", alignSelf: "center"}}>
                     {spellSaveType == "STR" && <Pressable style={[styles.saveTypeToggleON, {borderBottomStartRadius: 10, borderTopStartRadius: 10}]} onPress={() =>
-                    {setSpellSaveType("STR")}}><Text style={styles.saveStatLable}>STR</Text></Pressable>}
+                        {setSpellSaveType("STR"); closeAll()}}><Text style={styles.saveStatLable}>STR</Text></Pressable>}
                     {spellSaveType != "STR" && <Pressable style={[styles.saveTypeToggleOff, {borderBottomStartRadius: 10, borderTopStartRadius: 10}]} onPress={() =>
-                    {setSpellSaveType("STR")}}><Text style={styles.saveStatLable}>STR</Text></Pressable>}
+                        {setSpellSaveType("STR"); closeAll()}}><Text style={styles.saveStatLable}>STR</Text></Pressable>}
                     {spellSaveType == "DEX" && <Pressable style={styles.saveTypeToggleON} onPress={() =>
-                    {setSpellSaveType("DEX")}}><Text style={styles.saveStatLable}>DEX</Text></Pressable>}
+                        {setSpellSaveType("DEX"); closeAll()}}><Text style={styles.saveStatLable}>DEX</Text></Pressable>}
                     {spellSaveType != "DEX" && <Pressable style={styles.saveTypeToggleOff} onPress={() =>
-                    {setSpellSaveType("DEX")}}><Text style={styles.saveStatLable}>DEX</Text></Pressable>}
+                        {setSpellSaveType("DEX"); closeAll()}}><Text style={styles.saveStatLable}>DEX</Text></Pressable>}
                     {spellSaveType == "CON" && <Pressable style={styles.saveTypeToggleON} onPress={() =>
-                    {setSpellSaveType("CON")}}><Text style={styles.saveStatLable}>CON</Text></Pressable>}
+                        {setSpellSaveType("CON"); closeAll()}}><Text style={styles.saveStatLable}>CON</Text></Pressable>}
                     {spellSaveType != "CON" && <Pressable style={styles.saveTypeToggleOff} onPress={() =>
-                    {setSpellSaveType("CON")}}><Text style={styles.saveStatLable}>CON</Text></Pressable>}
+                        {setSpellSaveType("CON"); closeAll()}}><Text style={styles.saveStatLable}>CON</Text></Pressable>}
                     {spellSaveType == "INT" && <Pressable style={styles.saveTypeToggleON} onPress={() =>
-                    {setSpellSaveType("INT")}}><Text style={styles.saveStatLable}>INT</Text></Pressable>}
+                        {setSpellSaveType("INT"); closeAll()}}><Text style={styles.saveStatLable}>INT</Text></Pressable>}
                     {spellSaveType != "INT" && <Pressable style={styles.saveTypeToggleOff} onPress={() =>
-                    {setSpellSaveType("INT")}}><Text style={styles.saveStatLable}>INT</Text></Pressable>}
+                        {setSpellSaveType("INT"); closeAll()}}><Text style={styles.saveStatLable}>INT</Text></Pressable>}
                     {spellSaveType == "WIS" && <Pressable style={styles.saveTypeToggleON} onPress={() =>
-                    {setSpellSaveType("WIS")}}><Text style={styles.saveStatLable}>WIS</Text></Pressable>}
+                        {setSpellSaveType("WIS"); closeAll()}}><Text style={styles.saveStatLable}>WIS</Text></Pressable>}
                     {spellSaveType != "WIS" && <Pressable style={styles.saveTypeToggleOff} onPress={() =>
-                    {setSpellSaveType("WIS")}}><Text style={styles.saveStatLable}>WIS</Text></Pressable>}
+                        {setSpellSaveType("WIS"); closeAll()}}><Text style={styles.saveStatLable}>WIS</Text></Pressable>}
                     {spellSaveType == "CHA" && <Pressable style={[styles.saveTypeToggleON, {borderBottomEndRadius: 10, borderTopEndRadius: 10}]} onPress={() =>
-                    {setSpellSaveType("CHA")}}><Text style={styles.saveStatLable}>CHA</Text></Pressable>}
+                        {setSpellSaveType("CHA"); closeAll()}}><Text style={styles.saveStatLable}>CHA</Text></Pressable>}
                     {spellSaveType != "CHA" && <Pressable style={[styles.saveTypeToggleOff, {borderBottomEndRadius: 10, borderTopEndRadius: 10}]} onPress={() =>
-                    {setSpellSaveType("CHA")}}><Text style={styles.saveStatLable}>CHA</Text></Pressable>}
+                        {setSpellSaveType("CHA"); closeAll()}}><Text style={styles.saveStatLable}>CHA</Text></Pressable>}
                 </View>}
 
 
@@ -393,36 +425,42 @@ export default function newSpellCreationTool() {
                     {spellIsSaveDC[1] == "INT" && <Pressable style={[styles.spellCastingStatButtonsOn, {borderStartStartRadius: 10}]} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "INT"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "INT"]);
+                        closeAll();
                     }}>
                         <Text style={[styles.toggleButtonLables]}>INT</Text>
                     </Pressable>}
                     {spellIsSaveDC[1] != "INT" && <Pressable style={[styles.spellCastingStatButtonsOff, {borderStartStartRadius: 10}]} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "INT"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "INT"]);
+                        closeAll();
                     }}>
                         <Text style={[styles.toggleButtonLables]}>INT</Text>
                     </Pressable>}
                     {spellIsSaveDC[1] == "WIS" && <Pressable style={styles.spellCastingStatButtonsOn} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "WIS"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "WIS"]);
+                        closeAll();
                     }}>
                         <Text style={[styles.toggleButtonLables]}>WIS</Text>
                     </Pressable>}
                     {spellIsSaveDC[1] != "WIS" && <Pressable style={styles.spellCastingStatButtonsOff} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "WIS"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "WIS"]);
+                        closeAll();
                     }}>
                         <Text style={[styles.toggleButtonLables]}>WIS</Text>
                     </Pressable>}
                     {spellIsSaveDC[1] == "CHA" && <Pressable style={[styles.spellCastingStatButtonsOn, {borderTopEndRadius: 10}]} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "CHA"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "CHA"]);
+                        closeAll();
                     }}>
                         <Text style={[styles.toggleButtonLables]}>CHA</Text>
                     </Pressable>}
                     {spellIsSaveDC[1] != "CHA" && <Pressable style={[styles.spellCastingStatButtonsOff, {borderTopEndRadius: 10}]} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "CHA"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "CHA"]);
+                        closeAll();
                     }}>
                         <Text style={[styles.toggleButtonLables]}>CHA</Text>
                     </Pressable>}
@@ -440,36 +478,42 @@ export default function newSpellCreationTool() {
                     {spellIsSaveDC[1] == "STR" && <Pressable style={[styles.spellCastingStatButtonsOn, {borderBottomStartRadius: 10}]} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "STR"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "STR"]);
+                        closeAll();
                     }}>
                         <Text style={[styles.toggleButtonLables]}>STR</Text>
                     </Pressable>}
                     {spellIsSaveDC[1] != "STR" && <Pressable style={[styles.spellCastingStatButtonsOff, {borderBottomStartRadius: 10}]} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "STR"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "STR"]);
+                        closeAll();
                     }}>
                         <Text style={[styles.toggleButtonLables]}>STR</Text>
                     </Pressable>}
                     {spellIsSaveDC[1] == "DEX" && <Pressable style={styles.spellCastingStatButtonsOn} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "DEX"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "DEX"]);
+                        closeAll();
                     }}>
                         <Text style={[styles.toggleButtonLables]}>DEX</Text>
                     </Pressable>}
                     {spellIsSaveDC[1] != "DEX" && <Pressable style={styles.spellCastingStatButtonsOff} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "DEX"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "DEX"]);
+                        closeAll();
                     }}>
                         <Text style={[styles.toggleButtonLables]}>DEX</Text>
                     </Pressable>}
                     {spellIsSaveDC[1] == "CON" && <Pressable style={[styles.spellCastingStatButtonsOn, {borderBottomEndRadius: 10}]} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "CON"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "CON"]);
+                        closeAll();
                     }}>
                         <Text style={[styles.toggleButtonLables]}>CON</Text>
                     </Pressable>}
                     {spellIsSaveDC[1] != "CON" && <Pressable style={[styles.spellCastingStatButtonsOff, {borderBottomEndRadius: 10}]} onPress={() => {
                         setSpellIsAttack([spellIsAttack[0], "CON"]);
                         setSpellIsSaveDC([spellIsSaveDC[0], "CON"]);
+                        closeAll();
                     }}>
                         <Text style={[styles.toggleButtonLables]}>CON</Text>
                     </Pressable>}
@@ -478,7 +522,8 @@ export default function newSpellCreationTool() {
 
                 <View><Text style={styles.lables}>Does the Spell Roll for Damage/Healing/Other?</Text>
                     <Pressable style={[styles.newSpellToolToggleButtons, {width: 150, height: 40}]} onPress={() => {
-                        setSpellDamageVariable(!spellDamageVariable)
+                        setSpellDamageVariable(!spellDamageVariable);
+                        closeAll();
                     }}>
                         {spellDamageVariable && <Text style={styles.toggleButtonLables}>Yes</Text>}
                         {!spellDamageVariable && <Text style={styles.toggleButtonLables}>No</Text>}
@@ -487,6 +532,7 @@ export default function newSpellCreationTool() {
                         <View style={{flex: 0.1666}}><Text style={styles.lables}>D4s</Text>
                             <TextInput
                                 onChangeText={setDamageD4}
+                                onFocus={() => closeAll()}
                                 placeholder={"0"}
                                 keyboardType={"numeric"}
                                 maxLength={2}
@@ -495,6 +541,7 @@ export default function newSpellCreationTool() {
                         <View style={{flex: 0.1666}}><Text style={styles.lables}>D6s</Text>
                             <TextInput
                                 onChangeText={setDamageD6}
+                                onFocus={() => closeAll()}
                                 placeholder={"0"}
                                 keyboardType={"numeric"}
                                 maxLength={2}
@@ -503,6 +550,7 @@ export default function newSpellCreationTool() {
                         <View style={{flex: 0.1666}}><Text style={styles.lables}>D8s</Text>
                             <TextInput
                                 onChangeText={setDamageD8}
+                                onFocus={() => closeAll()}
                                 placeholder={"0"}
                                 keyboardType={"numeric"}
                                 maxLength={2}
@@ -511,6 +559,7 @@ export default function newSpellCreationTool() {
                         <View style={{flex: 0.1666}}><Text style={styles.lables}>D10s</Text>
                             <TextInput
                                 onChangeText={setDamageD10}
+                                onFocus={() => closeAll()}
                                 placeholder={"0"}
                                 keyboardType={"numeric"}
                                 maxLength={2}
@@ -519,6 +568,7 @@ export default function newSpellCreationTool() {
                         <View style={{flex: 0.1666}}><Text style={styles.lables}>D12s</Text>
                             <TextInput
                                 onChangeText={setDamageD12}
+                                onFocus={() => closeAll()}
                                 placeholder={"0"}
                                 keyboardType={"numeric"}
                                 maxLength={2}
@@ -527,6 +577,7 @@ export default function newSpellCreationTool() {
                         <View style={{flex: 0.1666}}><Text style={styles.lables}>bonus</Text>
                             <TextInput
                                 onChangeText={setDamageBonus}
+                                onFocus={() => closeAll()}
                                 placeholder={"0"}
                                 keyboardType={"numeric"}
                                 maxLength={2}
@@ -539,6 +590,7 @@ export default function newSpellCreationTool() {
                 <Text style={styles.lables}>Verbose Description</Text>
                 <TextInput
                     onChangeText={setSpellDescription}
+                    onFocus={() => closeAll()}
                     placeholder={"throw a flaming ball of bat guano at your enemies, it is highly effective at hurting them 8d8 fire damage"}
                     placeholderTextColor={"grey"}
                     textAlignVertical={"top"}
@@ -556,7 +608,9 @@ export default function newSpellCreationTool() {
                     }}/>
 
                 {(newSpellConfirmationCount > 0) &&
-                    <Pressable  style={styles.confirmationButton} onPress={() => {setNewSpellConfirmationCount(0);}}>
+                    <Pressable  style={styles.confirmationButton} onPress={() => {
+                        setNewSpellConfirmationCount(0);
+                        closeAll();}}>
                         <Text style={styles.confirmationBox}>Confirmed! New Spell</Text>
                         <Text style={styles.confirmationBox}>"{spellNameVariable}"</Text>
                         <Text style={styles.confirmationBox}>Created! {newSpellConfirmationCount} time(s)!</Text>
@@ -566,6 +620,7 @@ export default function newSpellCreationTool() {
                 <Pressable
                     style={styles.toolBoxButton}
                     onPress={() => {
+                        closeAll();
                         if (spellNameVariable != ""){
 
                             let newSpell = new Spell(spellNameVariable, parseInt(spellLevelVariable), spellVerbalVariable, spellSomaticVariable,
@@ -581,7 +636,7 @@ export default function newSpellCreationTool() {
                     <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>For {character.charName}</Text>
                 </Pressable>
             </View>}
-        </View>
+        </Pressable>
 
 
         <View style={[styles.toolBoxStyle, {marginTop: 17}]}>
