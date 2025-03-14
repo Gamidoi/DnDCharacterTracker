@@ -97,35 +97,53 @@ export default function MainCharacterSyndrome() {
         {<View style={styles.spellSlotButtonRow}> {(currentSpells[1] === "2") && (<Text>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 0})
-                }}>{character.currentUsedSpells[0] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[0] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 1})
-                }}>{character.currentUsedSpells[1] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[1] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
             </Text>)}
             {(currentSpells[1] === "3") && (<Text>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 0})
-                }}>{character.currentUsedSpells[0] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[0] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 1})
-                }}>{character.currentUsedSpells[1] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[1] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 2})
-                }}>{character.currentUsedSpells[2] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[2] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
             </Text>)}
             {(currentSpells[1] === "4") && (<Text>
                 <Pressable style={styles.SpellSlotButton4} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 0})
-                }}>{character.currentUsedSpells[0] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[0] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
                 <Pressable style={styles.SpellSlotButton4} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 1})
-                }}>{character.currentUsedSpells[1] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[1] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
                 <Pressable style={styles.SpellSlotButton4} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 2})
-                }}>{character.currentUsedSpells[2] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[2] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
                 <Pressable style={styles.SpellSlotButton4} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 3})
-                }}>{character.currentUsedSpells[3] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[3] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
             </Text>)}
         </View>}
         </View>
@@ -136,21 +154,31 @@ export default function MainCharacterSyndrome() {
         {<View style={styles.spellSlotButtonRow}> {(currentSpells[2] === "2") && (<Text>
             <Pressable style={styles.SpellSlotButton2} onPress={()=>{
                 characterUpdater({type: "updateSpellSlots", spellSlot: 4})
-            }}>{character.currentUsedSpells[4] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+            }}>{character.currentUsedSpells[4] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                <Text style={styles.spellSlotButtonX}> </Text>
+            </Pressable>
             <Pressable style={styles.SpellSlotButton2} onPress={()=>{
                 characterUpdater({type: "updateSpellSlots", spellSlot: 5})
-            }}>{character.currentUsedSpells[5] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+            }}>{character.currentUsedSpells[5] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                <Text style={styles.spellSlotButtonX}> </Text>
+            </Pressable>
         </Text>)}
         {(currentSpells[2] === "3") && (<Text>
             <Pressable style={styles.SpellSlotButton3} onPress={()=>{
                 characterUpdater({type: "updateSpellSlots", spellSlot: 4})
-            }}>{character.currentUsedSpells[4] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+            }}>{character.currentUsedSpells[4] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                <Text style={styles.spellSlotButtonX}> </Text>
+            </Pressable>
             <Pressable style={styles.SpellSlotButton3} onPress={()=>{
                 characterUpdater({type: "updateSpellSlots", spellSlot: 5})
-            }}>{character.currentUsedSpells[5] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+            }}>{character.currentUsedSpells[5] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                <Text style={styles.spellSlotButtonX}> </Text>
+            </Pressable>
             <Pressable style={styles.SpellSlotButton3} onPress={()=>{
                 characterUpdater({type: "updateSpellSlots", spellSlot: 6})
-            }}>{character.currentUsedSpells[6] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+            }}>{character.currentUsedSpells[6] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                <Text style={styles.spellSlotButtonX}> </Text>
+            </Pressable>
         </Text>)}
         </View>}
         </View>
@@ -161,21 +189,31 @@ export default function MainCharacterSyndrome() {
         {<View style={styles.spellSlotButtonRow}> {(currentSpells[3] === "2") && (<Text>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 7})
-                }}>{character.currentUsedSpells[7] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[7] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 8})
-                }}>{character.currentUsedSpells[8] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[8] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
             </Text>)}
             {(currentSpells[3] === "3") && (<Text>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 7})
-                }}>{character.currentUsedSpells[7] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[7] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 8})
-                }}>{character.currentUsedSpells[8] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[8] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 9})
-                }}>{character.currentUsedSpells[9] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[9] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
             </Text>)}
             </View>}
         </View>
@@ -186,26 +224,38 @@ export default function MainCharacterSyndrome() {
         {<View style={styles.spellSlotButtonRow}> {(currentSpells[4] === "1") && (<Text>
                 <Pressable style={styles.SpellSlotButton1} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 10})
-                }}>{character.currentUsedSpells[10] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[10] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
             </Text>)}
             {(currentSpells[4] === "2") && (<Text>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 10})
-                }}>{character.currentUsedSpells[10] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[10] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 11})
-                }}>{character.currentUsedSpells[11] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[11] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
             </Text>)}
             {(currentSpells[4] === "3") && <Text>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 10})
-                }}>{character.currentUsedSpells[10] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[10] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 11})
-                }}>{character.currentUsedSpells[11] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[11] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 12})
-                }}>{character.currentUsedSpells[12] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[12] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
             </Text>}
             </View>}
         </View>
@@ -216,26 +266,38 @@ export default function MainCharacterSyndrome() {
         {<View style={styles.spellSlotButtonRow}> {(currentSpells[5] === "1") && <Text>
                 <Pressable style={styles.SpellSlotButton1} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 13})
-                }}>{character.currentUsedSpells[13] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[13] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
             </Text>}
             {(currentSpells[5] === "2") && <Text>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 13})
-                }}>{character.currentUsedSpells[13] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[13] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 14})
-                }}>{character.currentUsedSpells[14] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[14] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
             </Text>}
             {(currentSpells[5] === "3") && <Text>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 13})
-                }}>{character.currentUsedSpells[13] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[13] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 14})
-                }}>{character.currentUsedSpells[14] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[14] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 15})
-                }}>{character.currentUsedSpells[15] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[15] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
             </Text>}
             </View>}
         </View>
@@ -246,15 +308,21 @@ export default function MainCharacterSyndrome() {
         {<View style={styles.spellSlotButtonRow}> {(currentSpells[6] === "1") && <Text>
                 <Pressable style={styles.SpellSlotButton1} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 16})
-                }}>{character.currentUsedSpells[16] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[16] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
             </Text>}
             {(currentSpells[6] === "2") && <Text>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 16})
-                }}>{character.currentUsedSpells[16] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[16] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 17})
-                }}>{character.currentUsedSpells[17] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[17] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
             </Text>}
             </View>}
         </View>
@@ -265,15 +333,21 @@ export default function MainCharacterSyndrome() {
         {<View style={styles.spellSlotButtonRow}> {(currentSpells[7] === "1") && <Text>
             <Pressable style={styles.SpellSlotButton1} onPress={()=>{
                 characterUpdater({type: "updateSpellSlots", spellSlot: 18})
-            }}>{character.currentUsedSpells[18] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+            }}>{character.currentUsedSpells[18] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                <Text style={styles.spellSlotButtonX}> </Text>
+            </Pressable>
         </Text>}
             {(currentSpells[7] === "2") && <Text>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 18})
-                }}>{character.currentUsedSpells[18] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[18] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 19})
-                }}>{character.currentUsedSpells[19] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                }}>{character.currentUsedSpells[19] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                    <Text style={styles.spellSlotButtonX}> </Text>
+                </Pressable>
             </Text>}
             </View>}
         </View>
@@ -284,7 +358,9 @@ export default function MainCharacterSyndrome() {
         {<View style={styles.spellSlotButtonRow}> {(currentSpells[8] === "1") && <Text>
             <Pressable style={styles.SpellSlotButton1} onPress={()=>{
                 characterUpdater({type: "updateSpellSlots", spellSlot: 20})
-            }}>{character.currentUsedSpells[20] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+            }}>{character.currentUsedSpells[20] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                <Text style={styles.spellSlotButtonX}> </Text>
+            </Pressable>
         </Text>}
             </View>}
         </View>
@@ -295,7 +371,9 @@ export default function MainCharacterSyndrome() {
         {<View style={styles.spellSlotButtonRow}> {(currentSpells[9] === "1") && (<Text>
             <Pressable style={styles.SpellSlotButton1} onPress={()=>{
                 characterUpdater({type: "updateSpellSlots", spellSlot: 21})
-            }}>{character.currentUsedSpells[21] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+            }}>{character.currentUsedSpells[21] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                <Text style={styles.spellSlotButtonX}> </Text>
+            </Pressable>
         </Text>)}
             </View>}
         </View>
@@ -311,40 +389,60 @@ export default function MainCharacterSyndrome() {
                     {character.warlockCasterLevel == 1 && (<Text>
                         <Pressable style={[styles.SpellSlotButton1, {backgroundColor: "purple"}]} onPress={()=>{
                             characterUpdater({type: "updateWarlockSpellSlots", spellSlot: 0})
-                        }}>{character.warlockCurrentUsedSpells[0] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
-                    </Text>)})
+                        }}>{character.warlockCurrentUsedSpells[0] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                            <Text style={styles.spellSlotButtonX}> </Text>
+                        </Pressable>
+                    </Text>)}
                     {(character.warlockCasterLevel > 1 && character.warlockCasterLevel < 12) && (<Text>
                         <Pressable style={[styles.SpellSlotButton2, {backgroundColor: "purple"}]} onPress={()=>{
                             characterUpdater({type: "updateWarlockSpellSlots", spellSlot: 0})
-                        }}>{character.warlockCurrentUsedSpells[0] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                        }}>{character.warlockCurrentUsedSpells[0] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                            <Text style={styles.spellSlotButtonX}> </Text>
+                        </Pressable>
                         <Pressable style={[styles.SpellSlotButton2, {backgroundColor: "purple"}]} onPress={()=>{
                             characterUpdater({type: "updateWarlockSpellSlots", spellSlot: 1})
-                        }}>{character.warlockCurrentUsedSpells[1] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                        }}>{character.warlockCurrentUsedSpells[1] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                            <Text style={styles.spellSlotButtonX}> </Text>
+                        </Pressable>
                     </Text>)}
                     {(character.warlockCasterLevel > 11 && character.warlockCasterLevel < 17) && (<Text>
                         <Pressable style={[styles.SpellSlotButton3, {backgroundColor: "purple"}]} onPress={()=>{
                             characterUpdater({type: "updateWarlockSpellSlots", spellSlot: 0})
-                        }}>{character.warlockCurrentUsedSpells[0] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                        }}>{character.warlockCurrentUsedSpells[0] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                            <Text style={styles.spellSlotButtonX}> </Text>
+                        </Pressable>
                         <Pressable style={[styles.SpellSlotButton3, {backgroundColor: "purple"}]} onPress={()=>{
                             characterUpdater({type: "updateWarlockSpellSlots", spellSlot: 1})
-                        }}>{character.warlockCurrentUsedSpells[1] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                        }}>{character.warlockCurrentUsedSpells[1] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                            <Text style={styles.spellSlotButtonX}> </Text>
+                        </Pressable>
                         <Pressable style={[styles.SpellSlotButton3, {backgroundColor: "purple"}]} onPress={()=>{
                             characterUpdater({type: "updateWarlockSpellSlots", spellSlot: 2})
-                        }}>{character.warlockCurrentUsedSpells[2] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                        }}>{character.warlockCurrentUsedSpells[2] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                            <Text style={styles.spellSlotButtonX}> </Text>
+                        </Pressable>
                     </Text>)}
                     {character.warlockCasterLevel > 16 && (<Text>
                         <Pressable style={[styles.SpellSlotButton4, {backgroundColor: "purple"}]} onPress={()=>{
                             characterUpdater({type: "updateWarlockSpellSlots", spellSlot: 0})
-                        }}>{character.warlockCurrentUsedSpells[0] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                        }}>{character.warlockCurrentUsedSpells[0] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                            <Text style={styles.spellSlotButtonX}> </Text>
+                        </Pressable>
                         <Pressable style={[styles.SpellSlotButton4, {backgroundColor: "purple"}]} onPress={()=>{
                             characterUpdater({type: "updateWarlockSpellSlots", spellSlot: 1})
-                        }}>{character.warlockCurrentUsedSpells[1] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                        }}>{character.warlockCurrentUsedSpells[1] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                            <Text style={styles.spellSlotButtonX}> </Text>
+                        </Pressable>
                         <Pressable style={[styles.SpellSlotButton4, {backgroundColor: "purple"}]} onPress={()=>{
                             characterUpdater({type: "updateWarlockSpellSlots", spellSlot: 2})
-                        }}>{character.warlockCurrentUsedSpells[2] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                        }}>{character.warlockCurrentUsedSpells[2] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                            <Text style={styles.spellSlotButtonX}> </Text>
+                        </Pressable>
                         <Pressable style={[styles.SpellSlotButton4, {backgroundColor: "purple"}]} onPress={()=>{
                             characterUpdater({type: "updateWarlockSpellSlots", spellSlot: 3})
-                        }}>{character.warlockCurrentUsedSpells[3] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}</Pressable>
+                        }}>{character.warlockCurrentUsedSpells[3] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
+                            <Text style={styles.spellSlotButtonX}> </Text>
+                        </Pressable>
                     </Text>)}
                 </View>
             </View>
@@ -419,9 +517,10 @@ const styles = StyleSheet.create({
         borderRadius: 5,
     },
     spellSlotButtonX: {
-      padding: 0,
+        padding: 0,
         color: 'black',
-        marginTop: -13,
+        fontWeight: 'bold',
+        margin: -13,
         fontSize: 40,
         textAlign: 'center',
     }

@@ -461,7 +461,7 @@ const characterDispatch: (current: Character, event: CharacterEvent) => Characte
     return currentCharacter;
 }
 
-let CharacterContext = createContext<Character>(new Character('defaultA', 10, 1));
+let CharacterContext = createContext<Character>(new Character('defaultAaA', 10, 1));
 const CharacterUpdaterContext = createContext<Dispatch<CharacterEvent>>(() => ({} as Character));
 
 export const CharacterInfoProvider = ({children}: PropsWithChildren) => {
@@ -472,7 +472,11 @@ export const CharacterInfoProvider = ({children}: PropsWithChildren) => {
             AsyncStorage.getItem("newCharacter" + characterName).then((characterObjectString) => {
                 updateCharacter({type: 'all', character: JSON.parse("" + characterObjectString)})
                 AsyncStorage.removeItem("newCharacterdefaultBbB");
-            })
+                if (characterName == "" || characterName == undefined) {
+                    updateCharacter({type: "all", character: new Character("defaultCcC")});
+                    updateCharacter({type: "updateAllSpellcasting", fullCaster: 3, halfCaster: 2, warlock: 2});
+                }
+            });
         });
     }, []);
 
