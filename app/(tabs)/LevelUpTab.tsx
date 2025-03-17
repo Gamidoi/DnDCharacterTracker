@@ -53,7 +53,6 @@ export default function levelUpTab() {
     let [loadCharacterBoxDisplayStatus, setLoadCharacterBoxDisplayStatus] = useState(false);
     let [deleteCharacterBoxDisplayStatus, setDeleteCharacterBoxDisplayStatus] = useState(false);
 
-    let [skillChangeConfirmationCount, setSkillChangeConfirmationCount] = useState(0);
     let [addCharacterConfirmationCount, setAddCharacterConfirmationCount] = useState(0);
     let [addHPAdjustConfirmationCount, setAddHPAdjustConfirmationCount] = useState(0);
     let [addSpellandCharacterLevelConfirmationCount, setAddSpellAndCharaterLevelConfirmationCount] = useState(0);

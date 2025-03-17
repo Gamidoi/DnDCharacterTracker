@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Pressable, TextInput} from 'react-native';
+import {StyleSheet, Text, View, Pressable, TextInput, Platform} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import React, {useState} from "react";
 import {Spell} from "@/assets/classes/spell";
@@ -188,9 +188,15 @@ export default function newSpellCreationTool() {
                             setItems={setSpellLevelDropDownOptions}
                             onOpen={() => {closeAll("Level")}}
                             autoScroll={true}
+                            dropDownDirection={"BOTTOM"}
                             zIndex={100000}
                             flatListProps={{nestedScrollEnabled:true}}
-                            style={styles.dropDownPicker}
+                            style={[
+                                styles.dropDownPicker,
+                                {
+                                    width: 125,
+                                    marginBottom: Platform.OS === "web" ? (spellLevelDropDownOpen ? 190 : 0) : 0
+                            }]}
                             dropDownContainerStyle={styles.dropDownContainer}
                             textStyle={{color: "white", fontSize: 14}}
                         />
@@ -279,9 +285,11 @@ export default function newSpellCreationTool() {
                             setItems={setSpellTimeDropDownOptions}
                             onOpen={() => {closeAll("Time")}}
                             autoScroll={true}
+                            dropDownDirection={"BOTTOM"}
                             zIndex={90091}
                             flatListProps={{nestedScrollEnabled:true}}
-                            style={styles.dropDownPicker}
+                            style={[styles.dropDownPicker,
+                                {marginBottom: Platform.OS === "web" ? (spellTimeDropDownOpen ? 200 : 0) : 0}]}
                             dropDownContainerStyle={styles.dropDownContainer}
                             textStyle={{color: "white", fontSize: 14}}
                         />
@@ -297,9 +305,11 @@ export default function newSpellCreationTool() {
                             setItems={setSpellDurationDropDownOptions}
                             onOpen={() => {closeAll("Duration")}}
                             autoScroll={true}
+                            dropDownDirection={"BOTTOM"}
                             zIndex={90090}
                             flatListProps={{nestedScrollEnabled:true}}
-                            style={styles.dropDownPicker}
+                            style={[styles.dropDownPicker,
+                                {marginBottom: Platform.OS === "web" ? (spellDurationDropDownOpen ? 200 : 0) : 0}]}
                             dropDownContainerStyle={styles.dropDownContainer}
                             textStyle={{color: "white", fontSize: 14}}
                         />
@@ -317,9 +327,11 @@ export default function newSpellCreationTool() {
                             setItems={setSpellRangeDropDownOptions}
                             onOpen={() => {closeAll("Range")}}
                             autoScroll={true}
+                            dropDownDirection={"BOTTOM"}
                             zIndex={90081}
                             flatListProps={{nestedScrollEnabled:true}}
-                            style={styles.dropDownPicker}
+                            style={[styles.dropDownPicker,
+                                {marginBottom: Platform.OS === "web" ? (spellRangeDropDownOpen ? 200 : 0) : 0}]}
                             dropDownContainerStyle={styles.dropDownContainer}
                             textStyle={{color: "white", fontSize: 14}}
                         />
@@ -335,9 +347,11 @@ export default function newSpellCreationTool() {
                             setItems={setSpellTargetDropDownOptions}
                             onOpen={() => {closeAll("Target")}}
                             autoScroll={true}
-                            zIndex={90081}
+                            dropDownDirection={"BOTTOM"}
+                            zIndex={90080}
                             flatListProps={{nestedScrollEnabled:true}}
-                            style={styles.dropDownPicker}
+                            style={[styles.dropDownPicker,
+                                {marginBottom: Platform.OS === "web" ? (spellTargetDropDownOpen ? 200 : 0) : 0}]}
                             dropDownContainerStyle={styles.dropDownContainer}
                             textStyle={{color: "white", fontSize: 14}}
                         />
@@ -802,9 +816,9 @@ const styles = StyleSheet.create({
         textAlign: "center"
     },
     confirmationBox: {
-    textAlign: "center",
-    color: "white",
-    fontSize: 18,
+        textAlign: "center",
+        color: "white",
+        fontSize: 18,
     },
     confirmationButton: {
         margin: 15,
@@ -816,6 +830,7 @@ const styles = StyleSheet.create({
         borderColor: "white",
         borderWidth: 3,
         padding: 0,
+        width: 190,
     },
     dropDownContainer: {
         backgroundColor: "teal",
