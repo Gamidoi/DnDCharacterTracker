@@ -188,7 +188,7 @@ export default function newSpellCreationTool() {
                             setItems={setSpellLevelDropDownOptions}
                             onOpen={() => {closeAll("Level")}}
                             autoScroll={true}
-                            zIndex={1000}
+                            zIndex={100000}
                             flatListProps={{nestedScrollEnabled:true}}
                             style={styles.dropDownPicker}
                             dropDownContainerStyle={styles.dropDownContainer}
@@ -279,7 +279,7 @@ export default function newSpellCreationTool() {
                             setItems={setSpellTimeDropDownOptions}
                             onOpen={() => {closeAll("Time")}}
                             autoScroll={true}
-                            zIndex={991}
+                            zIndex={90091}
                             flatListProps={{nestedScrollEnabled:true}}
                             style={styles.dropDownPicker}
                             dropDownContainerStyle={styles.dropDownContainer}
@@ -297,7 +297,7 @@ export default function newSpellCreationTool() {
                             setItems={setSpellDurationDropDownOptions}
                             onOpen={() => {closeAll("Duration")}}
                             autoScroll={true}
-                            zIndex={990}
+                            zIndex={90090}
                             flatListProps={{nestedScrollEnabled:true}}
                             style={styles.dropDownPicker}
                             dropDownContainerStyle={styles.dropDownContainer}
@@ -317,7 +317,7 @@ export default function newSpellCreationTool() {
                             setItems={setSpellRangeDropDownOptions}
                             onOpen={() => {closeAll("Range")}}
                             autoScroll={true}
-                            zIndex={981}
+                            zIndex={90081}
                             flatListProps={{nestedScrollEnabled:true}}
                             style={styles.dropDownPicker}
                             dropDownContainerStyle={styles.dropDownContainer}
@@ -335,7 +335,7 @@ export default function newSpellCreationTool() {
                             setItems={setSpellTargetDropDownOptions}
                             onOpen={() => {closeAll("Target")}}
                             autoScroll={true}
-                            zIndex={981}
+                            zIndex={90081}
                             flatListProps={{nestedScrollEnabled:true}}
                             style={styles.dropDownPicker}
                             dropDownContainerStyle={styles.dropDownContainer}

@@ -211,6 +211,7 @@ export default function levelUpTab() {
                         onPress={() => {{
                             if (HPChangeVariable == "" || isNaN(parseInt(HPChangeVariable))){HPChangeVariable = "10";}
                             characterUpdater({type: "updateMaxHP", value: parseInt(HPChangeVariable)});
+                            setAddHPAdjustConfirmationCount(addHPAdjustConfirmationCount + 1);
                         }}}>
                         <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust Max HP: {HPChangeVariable}</Text>
                     </Pressable>}
@@ -377,6 +378,7 @@ export default function levelUpTab() {
                                     abilityScoreChangeVariable = "" + character.STR;
                                 }
                                 characterUpdater({type: "updateSTR", value: parseInt(abilityScoreChangeVariable)});
+                                setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1);
                             }}>
                             <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  STR: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
@@ -387,6 +389,7 @@ export default function levelUpTab() {
                                     abilityScoreChangeVariable = "" + character.DEX;
                                 }
                                 characterUpdater({type: "updateDEX", value: parseInt(abilityScoreChangeVariable)});
+                                setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1);
                             }}>
                             <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  DEX: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
@@ -397,6 +400,7 @@ export default function levelUpTab() {
                                     abilityScoreChangeVariable = "" + character.CON;
                                 }
                                 characterUpdater({type: "updateCON", value: parseInt(abilityScoreChangeVariable)});
+                                setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1);
                             }}>
                             <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  CON: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
@@ -409,6 +413,7 @@ export default function levelUpTab() {
                                     abilityScoreChangeVariable = "" + character.INT;
                                 }
                                 characterUpdater({type: "updateINT", value: parseInt(abilityScoreChangeVariable)});
+                                setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1);
                             }}>
                             <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  INT: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
@@ -419,6 +424,7 @@ export default function levelUpTab() {
                                     abilityScoreChangeVariable = "" + character.WIS;
                                 }
                                 characterUpdater({type: "updateWIS", value: parseInt(abilityScoreChangeVariable)});
+                                setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1);
                             }}>
                             <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  WIS: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
@@ -429,6 +435,7 @@ export default function levelUpTab() {
                                     abilityScoreChangeVariable = "" + character.CHA;
                                 }
                                 characterUpdater({type: "updateCHA", value: parseInt(abilityScoreChangeVariable)});
+                                setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1);
                             }}>
                             <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  CHA: {abilityScoreChangeVariable}</Text>
                         </Pressable>}
@@ -483,197 +490,246 @@ export default function levelUpTab() {
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setAthletics", value: "X"});}}>
                                     {character.athletics == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setAthletics", value: "P"});}}>
                                 {character.athletics == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                             </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setAthletics", value: "E"});}}>
                                 {character.athletics == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable></Text>
                                 <Text style={styles.skillBannerPlaceHolder}>not prof---prof----expert</Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setAcrobatics", value: "X"});}}>
                                 {character.acrobatics == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                             </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setAcrobatics", value: "P"});}}>
                                 {character.acrobatics == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                             </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setAcrobatics", value: "E"});}}>
                                 {character.acrobatics == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setSleightOfHand", value: "X"});}}>
                                         {character.sleightOfHand == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                     </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setSleightOfHand", value: "P"});}}>
                                     {character.sleightOfHand == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setSleightOfHand", value: "E"});}}>
                                     {character.sleightOfHand == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setStealth", value: "X"});}}>
                                         {character.stealth == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                     </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setStealth", value: "P"});}}>
                                     {character.stealth == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setStealth", value: "E"});}}>
                                     {character.stealth == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable></Text>
                                 <Text style={styles.skillBannerPlaceHolder}>not prof---prof----expert</Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setArcana", value: "X"});}}>
                                     {character.arcana == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setArcana", value: "P"});}}>
                                     {character.arcana == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setArcana", value: "E"});}}>
                                     {character.arcana == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setHistory", value: "X"});}}>
                                     {character.history == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setHistory", value: "P"});}}>
                                     {character.history == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setHistory", value: "E"});}}>
                                     {character.history == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setInvestigation", value: "X"});}}>
                                     {character.investigation == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setInvestigation", value: "P"});}}>
                                     {character.investigation == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setInvestigation", value: "E"});}}>
                                     {character.investigation == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setNature", value: "X"});}}>
                                     {character.nature == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setNature", value: "P"});}}>
                                     {character.nature == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setNature", value: "E"});}}>
                                     {character.nature == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setReligion", value: "X"});}}>
                                     {character.religion == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setReligion", value: "P"});}}>
                                     {character.religion == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setReligion", value: "E"});}}>
                                     {character.religion == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable></Text>
                                 <Text style={styles.skillBannerPlaceHolder}>not prof---prof----expert</Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setAnimalHandling", value: "X"});}}>
                                     {character.animalHandling == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setAnimalHandling", value: "P"});}}>
                                     {character.animalHandling == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setAnimalHandling", value: "E"});}}>
                                     {character.animalHandling == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setInsight", value: "X"});}}>
                                     {character.insight == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setInsight", value: "P"});}}>
                                     {character.insight == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setInsight", value: "E"});}}>
                                     {character.insight == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setMedicine", value: "X"});}}>
                                     {character.medicine == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setMedicine", value: "P"});}}>
                                     {character.medicine == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setMedicine", value: "E"});}}>
                                     {character.medicine == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setPerception", value: "X"});}}>
                                     {character.perception == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setPerception", value: "P"});}}>
                                     {character.perception == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setPerception", value: "E"});}}>
                                     {character.perception == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setSurvival", value: "X"});}}>
                                     {character.survival == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setSurvival", value: "P"});}}>
                                     {character.survival == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setSurvival", value: "E"});}}>
                                     {character.survival == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable></Text>
                                 <Text style={styles.skillBannerPlaceHolder}>not prof---prof----expert</Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setDeception", value: "X"});}}>
                                     {character.deception == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setDeception", value: "P"});}}>
                                     {character.deception == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setDeception", value: "E"});}}>
                                     {character.deception == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setIntimidation", value: "X"});}}>
                                     {character.intimidation == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setIntimidation", value: "P"});}}>
                                     {character.intimidation == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setIntimidation", value: "E"});}}>
                                     {character.intimidation == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setPerformance", value: "X"});}}>
                                     {character.performance == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setPerformance", value: "P"});}}>
                                     {character.performance == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setPerformance", value: "E"});}}>
                                     {character.performance == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable></Text>
                                 <Text><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setPersuasion", value: "X"});}}>
                                     {character.persuasion == "X" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setPersuasion", value: "P"});}}>
                                     {character.persuasion == "P" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable><Pressable style={styles.skillsButtons} onPress={()=>{
                                     characterUpdater({type: "setPersuasion", value: "E"});}}>
                                     {character.persuasion == "E" && <Text style={styles.skillsButtonText}>X</Text>}
+                                    <Text style={styles.skillsButtonText}> </Text>
                                 </Pressable></Text>
                                 <Text style={styles.skillBannerPlaceHolder}>not prof---prof----expert</Text>
                             </View>
 
                         </View>
                     </View>}
-                    {(addSkillsBoxDisplayStatus && (skillChangeConfirmationCount > 0)) &&
-                        <Pressable style={styles.confirmationButton} onPress={() => {setSkillChangeConfirmationCount(0);}}>
-                            <Text style={styles.confirmationBox}>Confirmed! Skills Updated</Text>
-                            <Text style={styles.confirmationBox}>{skillChangeConfirmationCount} time(s)!</Text>
-                        </Pressable>}
                 </View>
             </View>
 
@@ -935,6 +991,7 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         borderColor: "black",
         borderWidth: 5,
+        marginVertical: -2
     },
     skillsButtonText: {
         color: "Black",

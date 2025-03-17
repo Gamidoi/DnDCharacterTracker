@@ -94,7 +94,7 @@ export default function MainCharacterSyndrome() {
         {character.spellcastingLevel > 0 && <View style={{backgroundColor: 'black'}}>
             <View style={styles.spellRow}>
         {character.spellcastingLevel > 0 && <Text style={styles.spellText}> 1st Level Spells ({currentSpells[1]})</Text>}
-        {<View style={styles.spellSlotButtonRow}> {(currentSpells[1] === "2") && (<Text>
+        {<View style={styles.spellSlotButtonRow}> {(currentSpells[1] === "2") && <Text>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 0})
                 }}>{character.currentUsedSpells[0] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
@@ -105,8 +105,8 @@ export default function MainCharacterSyndrome() {
                 }}>{character.currentUsedSpells[1] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
                     <Text style={styles.spellSlotButtonX}> </Text>
                 </Pressable>
-            </Text>)}
-            {(currentSpells[1] === "3") && (<Text>
+            </Text>}
+            {(currentSpells[1] === "3") && <Text>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 0})
                 }}>{character.currentUsedSpells[0] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
@@ -122,8 +122,8 @@ export default function MainCharacterSyndrome() {
                 }}>{character.currentUsedSpells[2] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
                     <Text style={styles.spellSlotButtonX}> </Text>
                 </Pressable>
-            </Text>)}
-            {(currentSpells[1] === "4") && (<Text>
+            </Text>}
+            {(currentSpells[1] === "4") && <Text>
                 <Pressable style={styles.SpellSlotButton4} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 0})
                 }}>{character.currentUsedSpells[0] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
@@ -144,14 +144,14 @@ export default function MainCharacterSyndrome() {
                 }}>{character.currentUsedSpells[3] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
                     <Text style={styles.spellSlotButtonX}> </Text>
                 </Pressable>
-            </Text>)}
+            </Text>}
         </View>}
         </View>
 
 
         <View style={styles.spellRow}>
             {character.spellcastingLevel > 2 && <Text style={styles.spellText}> 2nd Level Spells ({currentSpells[2]})</Text>}
-        {<View style={styles.spellSlotButtonRow}> {(currentSpells[2] === "2") && (<Text>
+        {<View style={styles.spellSlotButtonRow}> {(currentSpells[2] === "2") && <Text>
             <Pressable style={styles.SpellSlotButton2} onPress={()=>{
                 characterUpdater({type: "updateSpellSlots", spellSlot: 4})
             }}>{character.currentUsedSpells[4] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
@@ -162,8 +162,8 @@ export default function MainCharacterSyndrome() {
             }}>{character.currentUsedSpells[5] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
                 <Text style={styles.spellSlotButtonX}> </Text>
             </Pressable>
-        </Text>)}
-        {(currentSpells[2] === "3") && (<Text>
+        </Text>}
+        {(currentSpells[2] === "3") && <Text>
             <Pressable style={styles.SpellSlotButton3} onPress={()=>{
                 characterUpdater({type: "updateSpellSlots", spellSlot: 4})
             }}>{character.currentUsedSpells[4] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
@@ -179,14 +179,14 @@ export default function MainCharacterSyndrome() {
             }}>{character.currentUsedSpells[6] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
                 <Text style={styles.spellSlotButtonX}> </Text>
             </Pressable>
-        </Text>)}
+        </Text>}
         </View>}
         </View>
 
 
         <View style={styles.spellRow}>
             {character.spellcastingLevel > 4 && <Text style={styles.spellText}> 3rd Level Spells ({currentSpells[3]})</Text>}
-        {<View style={styles.spellSlotButtonRow}> {(currentSpells[3] === "2") && (<Text>
+        {<View style={styles.spellSlotButtonRow}> {(currentSpells[3] === "2") && <Text>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 7})
                 }}>{character.currentUsedSpells[7] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
@@ -197,8 +197,8 @@ export default function MainCharacterSyndrome() {
                 }}>{character.currentUsedSpells[8] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
                     <Text style={styles.spellSlotButtonX}> </Text>
                 </Pressable>
-            </Text>)}
-            {(currentSpells[3] === "3") && (<Text>
+            </Text>}
+            {(currentSpells[3] === "3") && <Text>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 7})
                 }}>{character.currentUsedSpells[7] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
@@ -214,21 +214,21 @@ export default function MainCharacterSyndrome() {
                 }}>{character.currentUsedSpells[9] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
                     <Text style={styles.spellSlotButtonX}> </Text>
                 </Pressable>
-            </Text>)}
+            </Text>}
             </View>}
         </View>
 
 
         <View style={styles.spellRow}>
             {character.spellcastingLevel > 6 && <Text style={styles.spellText}> 4th Level Spells ({currentSpells[4]})</Text>}
-        {<View style={styles.spellSlotButtonRow}> {(currentSpells[4] === "1") && (<Text>
+        {<View style={styles.spellSlotButtonRow}> {(currentSpells[4] === "1") && <Text>
                 <Pressable style={styles.SpellSlotButton1} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 10})
                 }}>{character.currentUsedSpells[10] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
                     <Text style={styles.spellSlotButtonX}> </Text>
                 </Pressable>
-            </Text>)}
-            {(currentSpells[4] === "2") && (<Text>
+            </Text>}
+            {(currentSpells[4] === "2") && <Text>
                 <Pressable style={styles.SpellSlotButton2} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 10})
                 }}>{character.currentUsedSpells[10] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
@@ -239,7 +239,7 @@ export default function MainCharacterSyndrome() {
                 }}>{character.currentUsedSpells[11] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
                     <Text style={styles.spellSlotButtonX}> </Text>
                 </Pressable>
-            </Text>)}
+            </Text>}
             {(currentSpells[4] === "3") && <Text>
                 <Pressable style={styles.SpellSlotButton3} onPress={()=>{
                     characterUpdater({type: "updateSpellSlots", spellSlot: 10})
