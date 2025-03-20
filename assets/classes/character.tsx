@@ -1,9 +1,11 @@
 import {Spell} from "@/assets/classes/spell";
+import {Ability} from "@/assets/classes/ability";
 
 export class Character {
     charName: string;
     maxHP: number;
     currentHP: number;
+    armorClass: number;
     spellcastingLevel: number;
     characterLevel: number;
     fullCasterLevel: number;
@@ -11,8 +13,11 @@ export class Character {
     warlockCasterLevel: number;
     currentUsedSpells: string;
     warlockCurrentUsedSpells: string;
-    abilities: [];
+    abilities: Ability[];
     spells: Spell[];
+    languages: string[];
+    resistances: string[];
+    items: [];
 
     STR: number;
     DEX: number;
@@ -52,6 +57,7 @@ export class Character {
         this.charName = character;
         this.maxHP = HPMax;
         this.currentHP = HPMax;
+        this.armorClass = 10;
         this.spellcastingLevel = 0;
         this.characterLevel = characterLevel;
         this.fullCasterLevel = this.warlockCasterLevel = this.halfCasterLevel = 0;
@@ -59,6 +65,9 @@ export class Character {
         this.warlockCurrentUsedSpells = "0000"
         this.abilities = [];
         this.spells = [];
+        this.languages = ["common"];
+        this.items = [];
+        this.resistances = [];
         this.STR = this.DEX = this.CON = this.INT = this.WIS = this.CHA = 10;
         this.STRSaveProf = this.DEXSaveProf = this.CONSaveProf = this.INTSaveProf = this.WISSaveProf = this.CHASaveProf= false;
         this.proficiency = Math.ceil((4+characterLevel)/4);

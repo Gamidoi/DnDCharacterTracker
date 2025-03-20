@@ -2,6 +2,7 @@ import {createContext, Dispatch, PropsWithChildren, useContext, useEffect, useRe
 import {Character} from "@/assets/classes/character";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {Spell} from "@/assets/classes/spell";
+import {Ability} from "@/assets/classes/ability";
 
 
 interface UpdateAll {
@@ -162,6 +163,14 @@ interface setPersuasion {
     type: "setPersuasion";
     value: string;
 }
+interface updateArmorClass {
+    type: "updateArmorClass";
+    value: number;
+}
+interface updateAbilities{
+    type: "updateAbilities",
+    knownAbilities: Ability[]
+}
 
 type CharacterEvent =
     UpdateMaxHpEvent
@@ -203,11 +212,22 @@ type CharacterEvent =
     | setIntimidation
     | setPerformance
     | setPersuasion
+    | updateArmorClass
+    | updateAbilities
 
 
 const characterDispatch: (current: Character, event: CharacterEvent) => Character = (currentCharacter, event) => {
 
     if (event.type === "all"){
+        if (event.character.armorClass == undefined) {
+            //this if should be deleted in time. after all legacy Character objects have been updated to include armorClass. there are several locations for this, meaning it will be a long process.
+            return {...event.character,
+                armorClass: 10,
+                languages: ["common"],
+                resistances: [],
+                items: []
+            }
+        }
         return {...event.character}
     }
     if (event.type === "updateMaxHP") {
@@ -258,37 +278,79 @@ const characterDispatch: (current: Character, event: CharacterEvent) => Characte
             spells: event.knownSpells
         }
     }
+    if (event.type === "updateAbilities"){
+        return{
+            ...currentCharacter,
+            abilities: event.knownAbilities
+        }
+    }
     if (event.type === "updateSTR"){
+        currentCharacter.abilities.forEach((ability) => {
+            if (ability.usesQuantityStat === "STR") {
+                ability.uses = (Math.floor((event.value - 10) / 2));
+                if (ability.uses < 1){ability.uses = 1}
+            }
+        })
         return{
             ...currentCharacter,
             STR: event.value
         }
     }
     if (event.type === "updateDEX"){
+        currentCharacter.abilities.forEach((ability) => {
+            if (ability.usesQuantityStat === "DEX") {
+                ability.uses = (Math.floor((event.value - 10) / 2));
+                if (ability.uses < 1){ability.uses = 1}
+            }
+        })
         return{
             ...currentCharacter,
             DEX: event.value
         }
     }
     if (event.type === "updateCON"){
+        currentCharacter.abilities.forEach((ability) => {
+            if (ability.usesQuantityStat === "CON") {
+                ability.uses = (Math.floor((event.value - 10) / 2));
+                if (ability.uses < 1){ability.uses = 1}
+            }
+        })
         return{
             ...currentCharacter,
             CON: event.value
         }
     }
     if (event.type === "updateINT"){
+        currentCharacter.abilities.forEach((ability) => {
+            if (ability.usesQuantityStat === "INT") {
+                ability.uses = (Math.floor((event.value - 10) / 2));
+                if (ability.uses < 1){ability.uses = 1}
+            }
+        })
         return{
             ...currentCharacter,
             INT: event.value
         }
     }
     if (event.type === "updateWIS"){
+        currentCharacter.abilities.forEach((ability) => {
+            if (ability.usesQuantityStat === "WIS") {
+                ability.uses = (Math.floor((event.value - 10) / 2));
+                if (ability.uses < 1){ability.uses = 1}
+            }
+        })
         return{
             ...currentCharacter,
             WIS: event.value
         }
     }
     if (event.type === "updateCHA"){
+        currentCharacter.abilities.forEach((ability) => {
+            if (ability.usesQuantityStat === "CHA") {
+                ability.uses = (Math.floor((event.value - 10) / 2));
+                if (ability.uses < 1){ability.uses = 1}
+            }
+        })
         return{
             ...currentCharacter,
             CHA: event.value
@@ -296,6 +358,14 @@ const characterDispatch: (current: Character, event: CharacterEvent) => Characte
     }
     if (event.type === "updateCharLevel"){
         let proficiency = Math.ceil((4+event.value)/4);
+        currentCharacter.abilities.forEach((ability) => {
+            if (ability.usesQuantityStat === "Proficiency") {
+                ability.uses = proficiency;
+            }
+            if (ability.usesQuantityStat === "Level") {
+                ability.uses = event.value;
+            }
+        })
         return{
             ...currentCharacter,
             characterLevel: event.value,
@@ -454,6 +524,12 @@ const characterDispatch: (current: Character, event: CharacterEvent) => Characte
         return{
             ...currentCharacter,
             CHASaveProf: event.value
+        }
+    }
+    if (event.type === "updateArmorClass") {
+        return{
+            ...currentCharacter,
+            armorClass: event.value
         }
     }
 
