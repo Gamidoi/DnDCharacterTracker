@@ -74,72 +74,76 @@ export default function DisplaySpellBox(spellLevel :number){
         {character.spells.map((spell :Spell) => {
             if (spell.spellLevel == spellLevel){
 
-            return (
-        <View style={{
-            backgroundColor: "teal",
-            borderRadius: 10,
-            borderWidth: 4,
-            borderColor: "orange",
-            marginBottom: 10,
-        }}>
-            <Text style={{color: "white", fontSize: 30, textAlign: "center"}}>{spell.name}   {spellLevelToString(spell.spellLevel)}</Text>
-            <View style={{flexDirection: "row", alignSelf: "center"}}>
-                {(spell.verbal || spell.somatic || spell.material[0]) && <View style={{ alignSelf: "center", flex: 0.35}}>
-                    <View style={{flexDirection: "row", alignSelf: "center"}}>
-                        {spell.verbal && <Text style={styles.vsmStyle}>V</Text>}
-                        {spell.somatic && <Text style={styles.vsmStyle}>S</Text>}
-                        {spell.material[0] && <Text style={[styles.vsmStyle, {backgroundColor: "maroon"}]}>M</Text>}
+                return (
+                    <View style={{
+                        backgroundColor: "teal",
+                        borderRadius: 10,
+                        borderWidth: 4,
+                        borderColor: "orange",
+                        marginBottom: 10,
+                    }}>
+                        <Text style={{color: "white", fontSize: 30, textAlign: "center"}}>{spell.name}</Text>
+                        <Text style={{color: "white", fontSize: 10, textAlign: "center"}}>{spellLevelToString(spell.spellLevel)}</Text>
+                        <View style={{flexDirection: "row", alignSelf: "center"}}>
+                            {(spell.verbal || spell.somatic || spell.material[0]) && <View style={{ alignSelf: "center", flex: 0.35}}>
+                                <View style={{flexDirection: "row", alignSelf: "center"}}>
+                                    {spell.verbal && <Text style={styles.vsmStyle}>V</Text>}
+                                    {spell.somatic && <Text style={styles.vsmStyle}>S</Text>}
+                                    {spell.material[0] && <Text style={[styles.vsmStyle, {backgroundColor: "maroon"}]}>M</Text>}
+                                </View>
+                                {spell.material[0] && <Text style={styles.materialComponentsText}>{spell.material[1]}</Text>}
+                            </View>}
+                            {(spell.concentration || spell.ritual) && <View style={{flexDirection: "row", alignSelf: "center", flex: 0.65}}>
+                                {spell.concentration && <Text style={[styles.concentrateRitualStyle, {width: 150}]}>Concentration</Text>}
+                                {spell.ritual && <Text style={[styles.concentrateRitualStyle, {width: 90}]}>Ritual</Text>}
+                            </View>}
+                        </View>
+                        <View style={{flexDirection: "row", alignSelf: "center"}}>
+                            <Text style={styles.timeDurationRangeTargetText}>Casting Time: {spell.time}</Text>
+                            <Text style={styles.timeDurationRangeTargetText}>Spell Duration: {spell.duration}</Text>
+                        </View>
+                        <View style={{flexDirection: "row", alignSelf: "center", maxWidth: 400}}>
+                            <Text style={styles.timeDurationRangeTargetText}>Range: {spell.spellRange}</Text>
+                            <Text style={styles.timeDurationRangeTargetText}>Target: {spell.spellTarget}</Text>
+                        </View>
+
+                        {spell.isAttack[0] &&
+                            <View style={{
+                                backgroundColor: "red",
+                                borderRadius: 10,
+                                borderWidth: 4,
+                                borderColor: "orange",
+                                width: 250,
+                                alignSelf: "center",
+                            }}>
+                                <Text style={{color: "white", textAlign: "center"}}>Spell Attack: Casting Ability {spell.isAttack[1]}</Text>
+                                <Text style={{color: "white", textAlign: "center", fontSize: 20}}>{spellAttackModifierToString(spell.isAttack[1], character)}</Text>
+                            </View>}
+                        {spell.isSaveDC[0] &&
+                            <View style={{
+                                backgroundColor: "blue",
+                                borderRadius: 10,
+                                borderWidth: 4,
+                                borderColor: "orange",
+                                width: 270,
+                                alignSelf: "center",
+                            }}>
+                                <Text style={{color: "white", textAlign: "center"}}>Saving Throw: Casting Ability {spell.isSaveDC[1]}</Text>
+                                <Text style={{color: "white", textAlign: "center", fontSize: 20}}>
+                                    DC {spellSaveDCToString(spell.isSaveDC[1], character)} {spell.isSaveDC[2]} Saving Throw</Text>
+                            </View>}
+
+                        <View style={{flexDirection: "row", alignSelf: "center"}}>
+                            {spell.damage[0] && <Text style={styles.diceDisplay}>{getDamageDiceAsString(spell.damage)}</Text>}
+                        </View>
+
+                        <Text style={styles.descriptionText}>{spell.description}</Text>
                     </View>
-                    {spell.material[0] && <Text style={styles.materialComponentsText}>{spell.material[1]}</Text>}
-                </View>}
-                {(spell.concentration || spell.ritual) && <View style={{flexDirection: "row", alignSelf: "center", flex: 0.65}}>
-                    {spell.concentration && <Text style={[styles.concentrateRitualStyle, {width: 150}]}>Concentration</Text>}
-                    {spell.ritual && <Text style={[styles.concentrateRitualStyle, {width: 90}]}>Ritual</Text>}
-                </View>}
-            </View>
-            <View style={{flexDirection: "row", alignSelf: "center"}}>
-                <Text style={styles.timeDurationRangeTargetText}>Casting Time: {spell.time}</Text>
-                <Text style={styles.timeDurationRangeTargetText}>Spell Duration: {spell.duration}</Text>
-            </View>
-            <View style={{flexDirection: "row", alignSelf: "center", maxWidth: 400}}>
-                <Text style={styles.timeDurationRangeTargetText}>Range: {spell.spellRange}</Text>
-                <Text style={styles.timeDurationRangeTargetText}>Target: {spell.spellTarget}</Text>
-            </View>
-
-            {spell.isAttack[0] &&
-                <View style={{
-                    backgroundColor: "red",
-                    borderRadius: 10,
-                    borderWidth: 4,
-                    borderColor: "orange",
-                    width: 250,
-                    alignSelf: "center",
-                }}>
-                    <Text style={{color: "white", textAlign: "center"}}>Spell Attack: Casting Ability {spell.isAttack[1]}</Text>
-                    <Text style={{color: "white", textAlign: "center", fontSize: 20}}>{spellAttackModifierToString(spell.isAttack[1], character)}</Text>
-                </View>}
-            {spell.isSaveDC[0] &&
-                <View style={{
-                    backgroundColor: "blue",
-                    borderRadius: 10,
-                    borderWidth: 4,
-                    borderColor: "orange",
-                    width: 270,
-                    alignSelf: "center",
-                }}>
-                    <Text style={{color: "white", textAlign: "center"}}>Saving Throw: Casting Ability {spell.isSaveDC[1]}</Text>
-                    <Text style={{color: "white", textAlign: "center", fontSize: 20}}>
-                        DC {spellSaveDCToString(spell.isSaveDC[1], character)} {spell.isSaveDC[2]} Saving Throw</Text>
-                </View>}
-
-            <View style={{flexDirection: "row", alignSelf: "center"}}>
-                {spell.damage[0] && <Text style={styles.diceDisplay}>{getDamageDiceAsString(spell.damage)}</Text>}
-            </View>
-
-            <Text style={styles.descriptionText}>{spell.description}</Text>
-        </View>
-    )
-}})}</View>)}
+                )
+            }
+        })}
+    </View>)
+}
 
 const styles = StyleSheet.create({
     vsmStyle: {

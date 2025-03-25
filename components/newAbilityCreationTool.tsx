@@ -3,6 +3,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import React, {useState} from "react";
 import {Ability} from "@/assets/classes/ability";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
+import {FontAwesome, MaterialCommunityIcons} from "@expo/vector-icons";
 
 
 export default function newAbilityCreationTool() {
@@ -60,7 +61,7 @@ export default function newAbilityCreationTool() {
         {label: "Set Number", value: "Set Number"},
     ]);
 
-    let [refreshOn, setRefreshOn] = useState("");
+    let [refreshOn, setRefreshOn] = useState("Long Rest");
     let [refreshOnDropDownOpen, setRefreshOnDropDownOpen] = useState(false);
     let [refreshOnDropDownOptions, setRefreshOnDropDownOptions] = useState([
         {label: "Long Rest", value: "Long Rest"},
@@ -126,9 +127,10 @@ export default function newAbilityCreationTool() {
     ]);
 
     let [newAbilityConfirmationCount, setNewAbilityConfirmationCount] = useState(0);
-
     let [newAbilityCreationToolDisplay, setNewAbilityCreationToolDisplay] = useState(false);
     let [abilityDeleteToolDisplay, setAbilityDeleteToolDisplay] = useState(false);
+    let [deleteAbilityName, setDeleteAbilityName] = useState("");
+    let [abilityConfirmDelete, setAbilityConfirmDelete] = useState(false);
 
 
     function closeAllDropDowns(type: string = "") {
@@ -140,16 +142,41 @@ export default function newAbilityCreationTool() {
     }
 
     function determineUseQuantity(usesQuantityStat: string): number {
-        if (usesQuantityStat === "STR"){return Math.floor((character.STR - 10)/2);}
-        if (usesQuantityStat === "DEX"){return Math.floor((character.DEX - 10)/2);}
-        if (usesQuantityStat === "CON"){return Math.floor((character.CON - 10)/2);}
-        if (usesQuantityStat === "INT"){return Math.floor((character.INT - 10)/2);}
-        if (usesQuantityStat === "WIS"){return Math.floor((character.WIS - 10)/2);}
-        if (usesQuantityStat === "CHA"){return Math.floor((character.CHA - 10)/2);}
-        if (usesQuantityStat === "Level"){return character.characterLevel;}
+        let uses = 1;
+        if (usesQuantityStat === "STR"){uses = Math.floor((character.STR - 10)/2);}
+        if (usesQuantityStat === "DEX"){uses = Math.floor((character.DEX - 10)/2);}
+        if (usesQuantityStat === "CON"){uses = Math.floor((character.CON - 10)/2);}
+        if (usesQuantityStat === "INT"){uses = Math.floor((character.INT - 10)/2);}
+        if (usesQuantityStat === "WIS"){uses = Math.floor((character.WIS - 10)/2);}
+        if (usesQuantityStat === "CHA"){uses = Math.floor((character.CHA - 10)/2);}
+        if (usesQuantityStat === "Level"){uses = character.characterLevel;}
         if (usesQuantityStat === "Proficiency"){return character.proficiency;}
-        if (usesQuantityStat === "Two") {return 2}
-        return 1;
+        if (usesQuantityStat === "Two") {return 2;}
+        if (uses < 1){uses = 1;}
+        return uses;
+    }
+
+    function resetVariablesOnTabClose(){
+        setAbilityName("");
+        setUsesQuantity("");
+        setAbilityDescription("");
+        setPersistence([false, false]);
+        setAbilityRollVariable(false);
+        setAbilityRollD4("0");
+        setAbilityRollD6("0");
+        setAbilityRollD8("0");
+        setAbilityRollD10("0");
+        setAbilityRollD12("0");
+        setAbilityRollD20("0");
+        setAbilityRollD100("0");
+        setAbilityRollBonus("0");
+        setUsesType("as Action");
+        setUsesQuantityStat("Proficiency");
+        setRefreshOn("Long Rest");
+        setGrantsResistance(false);
+        setResistance([]);
+        setGrantsImmunity(false);
+        setImmunity([]);
     }
 
     return(
@@ -157,8 +184,10 @@ export default function newAbilityCreationTool() {
             <View style={styles.toolBoxStyle}>
                 <Pressable onPress={() => closeAllDropDowns()} style={styles.toolBoxStyle}>
                     <Pressable onPress={() => {
-                            setNewAbilityCreationToolDisplay(!newAbilityCreationToolDisplay);
-                            closeAllDropDowns()}}>
+                        setNewAbilityCreationToolDisplay(!newAbilityCreationToolDisplay);
+                        closeAllDropDowns();
+                        resetVariablesOnTabClose()
+                    }}>
                         {!newAbilityCreationToolDisplay && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open New Ability Tool</Text>}
                         {newAbilityCreationToolDisplay && <Text style={{color: "white", textAlign: "center", marginBottom: 20}}>Close New Ability Tool</Text>}
                     </Pressable>
@@ -199,9 +228,14 @@ export default function newAbilityCreationTool() {
                                 dropDownDirection={"BOTTOM"}
                                 zIndex={100000}
                                 flatListProps={{nestedScrollEnabled:true}}
-                                style={[styles.dropDownPicker,
-                                    {marginBottom: Platform.OS === "web" ? (abilityUsesTypeDropDownOpen ? 200 : 0) : 0,
-                                }]}
+                                style={
+                                    [styles.dropDownPicker,
+                                        {
+                                            width: 350,
+                                            alignSelf: "center",
+                                            marginBottom: Platform.OS === "web" ? (abilityUsesTypeDropDownOpen ? 200 : 0) : 0,
+                                        }
+                                    ]}
                                 dropDownContainerStyle={styles.dropDownContainer}
                                 textStyle={{color: "white", fontSize: 14}}
                             />
@@ -275,7 +309,7 @@ export default function newAbilityCreationTool() {
                             flatListProps={{nestedScrollEnabled: true}}
                             style={[styles.dropDownPicker,
                                 {
-                                    marginBottom: Platform.OS === "web" ? (usesQuantityStatDropDownOpen ? 200 : 0) : 0,
+                                    marginBottom: Platform.OS === "web" ? (refreshOnDropDownOpen ? 200 : 0) : 0,
                                     width: 250
                                 }]}
                             dropDownContainerStyle={[styles.dropDownContainer, {width: 250}]}
@@ -336,7 +370,7 @@ export default function newAbilityCreationTool() {
                                 flatListProps={{nestedScrollEnabled: true}}
                                 style={[styles.dropDownPicker,
                                     {
-                                        marginBottom: Platform.OS === "web" ? (usesQuantityStatDropDownOpen ? 200 : 0) : 0,
+                                        marginBottom: Platform.OS === "web" ? (resistanceDropDownOpen ? 200 : 0) : 0,
                                         width: 180
                                     }]}
                                 dropDownContainerStyle={[styles.dropDownContainer, {width: 180}]}
@@ -363,7 +397,7 @@ export default function newAbilityCreationTool() {
                                 flatListProps={{nestedScrollEnabled: true}}
                                 style={[styles.dropDownPicker,
                                     {
-                                        marginBottom: Platform.OS === "web" ? (usesQuantityStatDropDownOpen ? 200 : 0) : 0,
+                                        marginBottom: Platform.OS === "web" ? (immunityDropDownOpen ? 200 : 0) : 0,
                                         width: 180
                                     }]}
                                 dropDownContainerStyle={[styles.dropDownContainer, {width: 180}]}
@@ -479,8 +513,6 @@ export default function newAbilityCreationTool() {
                         }}/>
 
 
-
-
                     {(newAbilityConfirmationCount > 0) &&
                         <Pressable  style={styles.confirmationButton} onPress={() => {
                             setNewAbilityConfirmationCount(0);
@@ -517,7 +549,59 @@ export default function newAbilityCreationTool() {
                         closeAllDropDowns()}}>
                         {!abilityDeleteToolDisplay && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open Delete Ability Tool</Text>}
                         {abilityDeleteToolDisplay && <Text style={{color: "white", textAlign: "center", marginBottom: 20}}>Close Delete Ability Tool</Text>}
+                        {abilityDeleteToolDisplay && <Text style={{color: "white", textAlign: "center", marginBottom: 20}}>Choose Ability Below</Text>}
                     </Pressable>
+                    <View style={{alignSelf: "center"}}>
+                        {character.abilities?.map((pickedAbilityForDeletion :Ability) => {
+                            return(
+                                abilityDeleteToolDisplay && <View><Pressable onPress={() => {
+                                    setAbilityConfirmDelete(!abilityConfirmDelete);
+                                    setDeleteAbilityName(pickedAbilityForDeletion.name);
+                                }}><Text style={{
+                                    fontSize: 20,
+                                    backgroundColor: "maroon",
+                                    textAlign: "center",
+                                    margin: 10,
+                                    height: 50,
+                                    borderRadius: 30,
+                                    width: 260,
+                                    color: "white",
+                                    paddingTop: 10,
+                                    borderColor: "orange",
+                                    borderWidth: 3,
+                                }}>{pickedAbilityForDeletion.name}</Text></Pressable></View>
+                            )})}</View>
+                    {(abilityDeleteToolDisplay && abilityConfirmDelete) &&
+                        <Pressable onPress={() => {
+                            setAbilityConfirmDelete(false);}}>
+                            <Text style={{
+                                textAlign: "center",
+                                color: "white",
+                                fontSize: 25,
+                                backgroundColor: "blue",
+                                margin: 15,
+                                borderRadius: 10
+                            }}>Cancel Ability {deleteAbilityName} Deletion?<FontAwesome size={28} name="smile-o" color={"green"} /></Text></Pressable>}
+                    {(abilityDeleteToolDisplay && abilityConfirmDelete) &&
+                        <Pressable onPress={() => {
+                            setAbilityConfirmDelete(false);
+                            let knownAbilities :Ability[] = [];
+                            character.abilities.forEach((ability) => {
+                                if (ability.name != deleteAbilityName) {
+                                    knownAbilities.push(ability);
+                                }
+                            });
+                            characterUpdater({type: "updateAbilities", knownAbilities: knownAbilities})
+                        }}>
+                            <Text style={{
+                                textAlign: "center",
+                                color: "white",
+                                fontSize: 25,
+                                backgroundColor: "blue",
+                                margin: 15,
+                                borderRadius: 10
+                            }}>Confirm Ability {deleteAbilityName} Deletion?<MaterialCommunityIcons size={28} name="skull-crossbones-outline" color={"red"} /></Text></Pressable>}
+
                 </Pressable>
             </View>
 

@@ -3,6 +3,8 @@ export class Ability {
     usesType: string;
     usesQuantityStat: string;
     uses: number;
+    usedInstances: string;
+    unusedQuantity: number;
     description: string;
     refreshOn: string;
     persistence: [boolean, boolean];
@@ -16,6 +18,11 @@ export class Ability {
         this.usesType = usesType;
         this.usesQuantityStat = usesQuantityStat;
         this.uses = uses;
+        this.usedInstances = "";
+        while (this.usedInstances.length < uses){
+            this.usedInstances += "0"
+        }
+        this.unusedQuantity = uses;
         this.description = description;
         this.refreshOn = refreshOn;
         this.persistence = persistence;

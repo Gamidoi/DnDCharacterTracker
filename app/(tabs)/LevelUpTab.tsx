@@ -9,7 +9,7 @@ import AdjustCoreStatSaves from "@/components/adjustCoreStatSaves";
 import AttributionSection from "@/components/attributionSection";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 import headerRandomizer from "@/components/headerRandomizer";
-import newAbilityCreationTool from "@/components/ui/newAbilityCreationTool";
+import newAbilityCreationTool from "@/components/newAbilityCreationTool";
 
 
 

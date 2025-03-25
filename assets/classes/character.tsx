@@ -13,10 +13,12 @@ export class Character {
     warlockCasterLevel: number;
     currentUsedSpells: string;
     warlockCurrentUsedSpells: string;
+    concentration: string;
     abilities: Ability[];
     spells: Spell[];
     languages: string[];
     resistances: string[];
+    immunities: string[];
     items: [];
 
     STR: number;
@@ -61,13 +63,15 @@ export class Character {
         this.spellcastingLevel = 0;
         this.characterLevel = characterLevel;
         this.fullCasterLevel = this.warlockCasterLevel = this.halfCasterLevel = 0;
-        this.currentUsedSpells = "0000000000000000000000"
-        this.warlockCurrentUsedSpells = "0000"
+        this.currentUsedSpells = "0000000000000000000000";
+        this.warlockCurrentUsedSpells = "0000";
+        this.concentration = "";
         this.abilities = [];
         this.spells = [];
         this.languages = ["common"];
         this.items = [];
         this.resistances = [];
+        this.immunities = [];
         this.STR = this.DEX = this.CON = this.INT = this.WIS = this.CHA = 10;
         this.STRSaveProf = this.DEXSaveProf = this.CONSaveProf = this.INTSaveProf = this.WISSaveProf = this.CHASaveProf= false;
         this.proficiency = Math.ceil((4+characterLevel)/4);

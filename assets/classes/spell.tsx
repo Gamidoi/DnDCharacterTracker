@@ -36,5 +36,7 @@ export class Spell {
         this.isSaveDC  = isSaveDC;
         this.damage = damage;
         this.description = description;
+
+        if (damage[1] + damage[2] + damage[3] + damage[4] + damage[5] + damage[6] === 0) {this.damage = [false, 0, 0, 0, 0, 0, 0]}
     }
 }

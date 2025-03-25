@@ -4,6 +4,7 @@ import React, {useState} from "react";
 import {spellSlotsByLevel} from '@/assets/classes/spellSlotsByLevel';
 import {useCharacter, useCharacterUpdater} from '@/components/characterUpdater';
 import headerRandomizer from "@/components/headerRandomizer";
+import DisplayPassivesOnIndexTab from "@/components/displayPassivesOnIndexTab";
 
 
 
@@ -140,9 +141,8 @@ export default function MainCharacterSyndrome() {
                     <Text style={styles.spellSlotButtonX}> </Text>
                 </Pressable>
                 <Pressable style={styles.SpellSlotButton4} onPress={()=>{
-                    characterUpdater({type: "updateSpellSlots", spellSlot: 3})
-                }}>{character.currentUsedSpells[3] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
-                    <Text style={styles.spellSlotButtonX}> </Text>
+                    characterUpdater({type: "updateSpellSlots", spellSlot: 3})}}>
+                    <Text style={styles.spellSlotButtonX}>{character.currentUsedSpells[3] === "X" ? "X" : " "}</Text>
                 </Pressable>
             </Text>}
         </View>}
@@ -447,6 +447,8 @@ export default function MainCharacterSyndrome() {
                 </View>
             </View>
         </View>}
+
+        {DisplayPassivesOnIndexTab()}
 
 
     </ParallaxScrollView>
