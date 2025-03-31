@@ -13,7 +13,7 @@ export default function DisplayPassivesOnIndexTab(){
     return (
         <View>
             {character.abilities.map((ability) => {
-                if (ability.usesType === "Passive") {
+                if (ability.usesTrigger === "Passive") {
                     return (<View style={styles.abilityBox}>
                         <Text style={styles.abilityName}>{ability.name}</Text>
                         {ability.description != "" && <Text style={styles.descriptionText}>{ability.description}</Text>}

@@ -11,9 +11,104 @@ export default function DisplayAbilitiesOnSpellsAbilitiesTab(){
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 
+
+    function useQuantityLabel(usesType: string, uses: number): string{
+        let tempStatMod = 1;
+        if (usesType === "STR"){
+            tempStatMod = Math.floor((character.STR -10)/2);
+            if (tempStatMod < 1){tempStatMod = 1;}
+            return "STR("+ tempStatMod + ")";
+        }
+        if (usesType === "DEX"){
+            tempStatMod = Math.floor((character.DEX -10)/2);
+            if (tempStatMod < 1){tempStatMod = 1;}
+            return "DEX("+ tempStatMod + ")";
+        }
+        if (usesType === "CON"){
+            tempStatMod = Math.floor((character.CON -10)/2);
+            if (tempStatMod < 1){tempStatMod = 1;}
+            return "CON("+ tempStatMod + ")";
+        }
+        if (usesType === "INT"){
+            tempStatMod = Math.floor((character.INT -10)/2);
+            if (tempStatMod < 1){tempStatMod = 1;}
+            return "INT("+ tempStatMod + ")";
+        }
+        if (usesType === "WIS"){
+            tempStatMod = Math.floor((character.WIS -10)/2);
+            if (tempStatMod < 1){tempStatMod = 1;}
+            return "WIS("+ tempStatMod + ")";
+        }
+        if (usesType === "CHA"){
+            tempStatMod = Math.floor((character.CHA -10)/2);
+            if (tempStatMod < 1){tempStatMod = 1;}
+            return "CHA("+ tempStatMod + ")";
+        }
+        if (usesType === "Proficiency"){
+            return "Proficiency("+ character.proficiency + ")";
+        }
+        if (usesType === "Level"){
+            return "Level("+ character.characterLevel + ")";
+        }
+        if (usesType === "1"){
+            return "1";
+        }
+        if (usesType === "2"){
+            return "2";
+        }
+        if (usesType === "Set Number"){
+            return ("" + uses);
+        }
+        return ""
+    }
+
+    function getRolledDiceAsString(rolledDice :[boolean, number, number, number, number, number, number, number, number]){
+        let diceString = ""
+        if (rolledDice[1] > 0){ diceString += " " + rolledDice[1] + "d4";
+            if ( rolledDice[2] > 0 || rolledDice[3] > 0 || rolledDice[4] > 0 || rolledDice[5] > 0 || rolledDice[6] > 0 || rolledDice[7] > 0){diceString += " +"}
+        }
+        if (rolledDice[2] > 0){ diceString += " " + rolledDice[2] + "d6";
+            if (rolledDice[3] > 0 || rolledDice[4] > 0 || rolledDice[5] > 0 || rolledDice[6] > 0 || rolledDice[7] > 0){diceString += " +"}
+        }
+        if (rolledDice[3] > 0){ diceString += " " + rolledDice[3] + "d8";
+            if (rolledDice[4] > 0 || rolledDice[5] > 0 || rolledDice[6] > 0 || rolledDice[7] > 0){diceString += " +"}
+        }
+        if (rolledDice[4] > 0){ diceString += " " + rolledDice[4] + "d10";
+            if (rolledDice[5] > 0 || rolledDice[6] > 0 || rolledDice[7] > 0){diceString += " +"}
+        }
+        if (rolledDice[5] > 0){ diceString += " " + rolledDice[5] + "d12";
+            if (rolledDice[6] > 0 || rolledDice[7] > 0){diceString += " +"}
+        }
+        if (rolledDice[6] > 0){ diceString += " " + rolledDice[6] + "d20";
+            if (rolledDice[7] > 0){diceString += " +"}
+        }
+        if (rolledDice[7] > 0){ diceString += " " + rolledDice[7] + "d100";
+        }
+        if (rolledDice[8] > 0){ diceString += " +" + rolledDice[8]; }
+        return diceString;
+    }
+
+    function resistanceImmunityDisplayString(listOfResistImmune: string[]){
+        let displayString = listOfResistImmune[0];
+        for (let i = 1; i < listOfResistImmune.length; i++){
+            displayString += ", " + listOfResistImmune[i];
+        }
+        return <Text style={[
+                styles.labels,
+                {
+                    fontSize: 15,
+                    borderRadius: 7,
+                    borderWidth: 2,
+                    borderColor: "orange",
+                    marginHorizontal: 5,
+                }
+            ]}>{displayString}</Text>;
+    }
+
+
     function displayAbilitiesByType(abilityTriggerGroup: string){
          return character.abilities.map((ability) => {
-            if (ability.usesType != "Passive") {
+            if (ability.usesTrigger != "Passive") {
                 return (<View style={styles.abilityBox}>
                     <Text style={styles.abilityName}>{ability.name}</Text>
                     <Text style={styles.labels}>Uses{ability.uses > 4 ? "" : ability.uses === 1 ? " Button" : " Buttons"}</Text>
@@ -79,6 +174,31 @@ export default function DisplayAbilitiesOnSpellsAbilitiesTab(){
                         </Pressable>
                     </View>}
 
+                    <Text style={styles.labels}>{useQuantityLabel(ability.usesQuantityStat, ability.uses)} Use{ability.uses === 1 ? "" : "s"} Refresh{ability.uses === 1 ? "es" : ""} on {ability.refreshOn}</Text>
+
+                    <View style={{alignSelf: "center"}}>
+                        {ability.roll[0] && <Text style={styles.diceDisplay}>{getRolledDiceAsString(ability.roll)}</Text>}
+                    </View>
+
+                    {(ability.resistance.length + ability.immunity.length > 0 && ability.resistance[0] + ability.immunity[0] != "") && <View style={{
+                        borderWidth: 2,
+                        borderColor: "orange",
+                        borderRadius: 10,
+                        backgroundColor: "blue",
+
+                    }}>
+                        <Text style={styles.labels}>Grants</Text>
+                        <View style={{alignSelf: "center", flexDirection: "row", width: 350}}>
+                            {ability.resistance.length > 0 && <View style={{flex: ability.immunity.length > 0 ? 0.50 : 1}}>
+                                <Text style={styles.labels}>Resistance to:</Text>
+                                {resistanceImmunityDisplayString(ability.resistance)}
+                            </View>}
+                            {ability.immunity.length > 0 && <View style={{flex: ability.resistance.length > 0 ? 0.50 : 1}}>
+                                <Text style={styles.labels}>Immunity to:</Text>
+                                {resistanceImmunityDisplayString(ability.immunity)}
+                            </View>}
+                        </View>
+                    </View>}
 
                     {ability.description != "" && <Text style={styles.descriptionText}>{ability.description}</Text>}
                 </View>)
@@ -91,7 +211,7 @@ export default function DisplayAbilitiesOnSpellsAbilitiesTab(){
             {displayAbilitiesByType("On Hit")}
 
             {character.abilities.map((ability) => {
-                if (ability.usesType === "Passive") {
+                if (ability.usesTrigger === "Passive") {
                     return (<View style={styles.abilityBox}>
                         <Text style={styles.abilityName}>{ability.name}</Text>
                         {ability.description != "" && <Text style={styles.descriptionText}>{ability.description}</Text>}

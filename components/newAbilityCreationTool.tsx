@@ -24,7 +24,7 @@ export default function newAbilityCreationTool() {
     let [abilityRollD100, setAbilityRollD100] = useState("0");
     let [abilityRollBonus, setAbilityRollBonus] = useState("0");
 
-    let [usesType, setUsesType] = useState("as Action");
+    let [usesTrigger, setUsesTrigger] = useState("as Action");
     let [abilityUsesTypeDropDownOpen, setAbilityUsesTypeDropDownOpen] = useState(false);
     let [abilityUsesTypeDropDownOptions, setAbilityUsesTypeDropDownOptions] = useState([
         {label: "Passive", value: "Passive"},
@@ -38,6 +38,7 @@ export default function newAbilityCreationTool() {
         {label: "on Save", value: "on Save"},
         {label: "on Failed Save", value: "on Failed Save"},
         {label: "on Enemy Save", value: "on Enemy Save"},
+        {label: "on Spell Being Cast", value: "on Spell Being Cast"},
         {label: "on Roll d20", value: "on Roll d20"},
         {label: "on Rolling Damage", value: "on Rolling Damage"},
         {label: "when Healing", value: "when Healing"},
@@ -53,6 +54,7 @@ export default function newAbilityCreationTool() {
         {label: "Two", value: "2"},
         {label: "STR", value: "STR"},
         {label: "DEX", value: "DEX"},
+        {label: "CON", value: "CON"},
         {label: "INT", value: "INT"},
         {label: "WIS", value: "WIS"},
         {label: "CHA", value: "CHA"},
@@ -170,7 +172,7 @@ export default function newAbilityCreationTool() {
         setAbilityRollD20("0");
         setAbilityRollD100("0");
         setAbilityRollBonus("0");
-        setUsesType("as Action");
+        setUsesTrigger("as Action");
         setUsesQuantityStat("Proficiency");
         setRefreshOn("Long Rest");
         setGrantsResistance(false);
@@ -218,10 +220,10 @@ export default function newAbilityCreationTool() {
                             <Text style={styles.labels}>Ability Trigger</Text>
                             <DropDownPicker
                                 open={abilityUsesTypeDropDownOpen}
-                                value={usesType}
+                                value={usesTrigger}
                                 items={abilityUsesTypeDropDownOptions}
                                 setOpen={setAbilityUsesTypeDropDownOpen}
-                                setValue={setUsesType}
+                                setValue={setUsesTrigger}
                                 setItems={setAbilityUsesTypeDropDownOptions}
                                 onOpen={() => {closeAllDropDowns("abilityUsesType")}}
                                 autoScroll={true}
@@ -236,14 +238,27 @@ export default function newAbilityCreationTool() {
                                             marginBottom: Platform.OS === "web" ? (abilityUsesTypeDropDownOpen ? 200 : 0) : 0,
                                         }
                                     ]}
-                                dropDownContainerStyle={styles.dropDownContainer}
+                                dropDownContainerStyle={
+                                [styles.dropDownContainer,
+                                    {
+                                        width: 350,
+                                        alignSelf: "center",
+                                    }
+                                ]}
                                 textStyle={{color: "white", fontSize: 14}}
                             />
                         </View>
                     </View>
                     <View style={{flexDirection: "row", alignSelf: "center"}}>
-                        <View style={{flex: 0.65}}>
-                            <Text style={styles.labels}>number of uses</Text>
+                        <View style={{
+                            flex: usesQuantityStat != "Set Number" ? 1 : 0.65,
+                            alignSelf: "center"
+
+                        }}>
+                            <Text style={[
+                                styles.labels,
+                                    {alignSelf: "center",
+                                }]}>number of uses</Text>
                             <DropDownPicker
                                 open={usesQuantityStatDropDownOpen}
                                 value={usesQuantityStat}
@@ -258,7 +273,8 @@ export default function newAbilityCreationTool() {
                                 flatListProps={{nestedScrollEnabled:true}}
                                 style={[styles.dropDownPicker,
                                     {marginBottom: Platform.OS === "web" ? (usesQuantityStatDropDownOpen ? 200 : 0) : 0,
-                                        width: 250
+                                        width: 250,
+                                        alignSelf: "center",
                                     }]}
                                 dropDownContainerStyle={[styles.dropDownContainer, {width: 250}]}
                                 textStyle={{color: "white", fontSize: 14}}
@@ -529,7 +545,7 @@ export default function newAbilityCreationTool() {
                         closeAllDropDowns();
                         if (abilityName != ""){
                             if (usesQuantityStat != "Set Number") {usesQuantity = "" + determineUseQuantity(usesQuantityStat)}
-                            let newAbility = new Ability(abilityName, usesType, usesQuantityStat, parseInt(usesQuantity), abilityDescription, refreshOn, persistence, resistance,
+                            let newAbility = new Ability(abilityName, usesTrigger, usesQuantityStat, parseInt(usesQuantity), abilityDescription, refreshOn, persistence, resistance,
                                 immunity, [abilityRollVariable, parseInt(abilityRollD4), parseInt(abilityRollD6), parseInt(abilityRollD8), parseInt(abilityRollD10),
                                 parseInt(abilityRollD12), parseInt(abilityRollD20), parseInt(abilityRollD100), parseInt(abilityRollBonus)]);
                             setNewAbilityConfirmationCount(newAbilityConfirmationCount + 1);
@@ -561,12 +577,13 @@ export default function newAbilityCreationTool() {
                                     fontSize: 20,
                                     backgroundColor: "maroon",
                                     textAlign: "center",
+                                    textAlignVertical: "center",
                                     margin: 10,
-                                    height: 50,
+                                    minHeight: 50,
                                     borderRadius: 30,
                                     width: 260,
                                     color: "white",
-                                    paddingTop: 10,
+                                    paddingVertical: 10,
                                     borderColor: "orange",
                                     borderWidth: 3,
                                 }}>{pickedAbilityForDeletion.name}</Text></Pressable></View>

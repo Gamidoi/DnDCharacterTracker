@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from "react-native";
+import {Platform, StyleSheet, Text, View} from "react-native";
 import {Spell} from "@/assets/classes/spell";
 import {Character} from "@/assets/classes/character";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
@@ -84,8 +84,8 @@ export default function DisplaySpellBox(spellLevel :number){
                     }}>
                         <Text style={{color: "white", fontSize: 30, textAlign: "center"}}>{spell.name}</Text>
                         <Text style={{color: "white", fontSize: 10, textAlign: "center"}}>{spellLevelToString(spell.spellLevel)}</Text>
-                        <View style={{flexDirection: "row", alignSelf: "center"}}>
-                            {(spell.verbal || spell.somatic || spell.material[0]) && <View style={{ alignSelf: "center", flex: 0.35}}>
+                        <View style={{flexDirection: "row", alignSelf: "center", alignItems: "center",}}>
+                            {(spell.verbal || spell.somatic || spell.material[0]) && <View style={{ justifyContent: "center", flex: 0.35}}>
                                 <View style={{flexDirection: "row", alignSelf: "center"}}>
                                     {spell.verbal && <Text style={styles.vsmStyle}>V</Text>}
                                     {spell.somatic && <Text style={styles.vsmStyle}>S</Text>}
@@ -93,7 +93,12 @@ export default function DisplaySpellBox(spellLevel :number){
                                 </View>
                                 {spell.material[0] && <Text style={styles.materialComponentsText}>{spell.material[1]}</Text>}
                             </View>}
-                            {(spell.concentration || spell.ritual) && <View style={{flexDirection: "row", alignSelf: "center", flex: 0.65}}>
+                            {(spell.concentration || spell.ritual) && <View style={{
+                                flexDirection: "row",
+                                alignItems: "center",
+                                flex: spell.concentration && spell.ritual ? 0.65 : spell.concentration ? 0.40 : 0.24,
+                                marginLeft: Platform.OS === "web" ? spell.concentration && !spell.ritual ? 25 : spell.ritual && !spell.concentration ? 50 : 0 : 0,
+                            }}>
                                 {spell.concentration && <Text style={[styles.concentrateRitualStyle, {width: 150}]}>Concentration</Text>}
                                 {spell.ritual && <Text style={[styles.concentrateRitualStyle, {width: 90}]}>Ritual</Text>}
                             </View>}
@@ -167,6 +172,7 @@ const styles = StyleSheet.create({
         color: "white",
         textAlignVertical: "center",
         fontSize: 20,
+        alignSelf: "center",
     },
     materialComponentsText: {
         color: "white",
