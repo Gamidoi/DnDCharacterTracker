@@ -114,55 +114,98 @@ export default function DisplayAbilitiesOnSpellsAbilitiesTab(){
                     <Text style={styles.labels}>Uses{ability.uses > 4 ? "" : ability.uses === 1 ? " Button" : " Buttons"}</Text>
                     {ability.uses === 1 && <View style={styles.useButtonsRow}>
                         <Pressable style={styles.usesButton1} onPress={()=>{
-                            characterUpdater({type: "updateAbilityUsageSlot", useSlot: 0, abilityName: ability.name})}}>
+                            characterUpdater({type: "updateAbilityUsageSlot", useSlot: 0, abilityName: ability.name})
+                            if (ability.persistence[0] && ability.usedInstances[0] != "X"){characterUpdater({type: "changeActiveAbilityState", abilityName: ability.name, value: true})}
+                            if (ability.persistence[0] && !ability.persistence[1] && ability.resistance.length + ability.immunity.length > 0 && ability.usedInstances[0] != "X")
+                                {characterUpdater({type: "addResistanceAndImmunities", abilityName: ability.name})}
+                        }}>
                             <Text style={styles.ButtonX}>{ability.usedInstances[0] === "X" ? "X" : " "}</Text>
                         </Pressable>
                     </View>}
                     {ability.uses === 2 && <View style={styles.useButtonsRow}>
                         <Pressable style={styles.usesButton2} onPress={()=>{
-                            characterUpdater({type: "updateAbilityUsageSlot", useSlot: 0, abilityName: ability.name})}}>
+                            characterUpdater({type: "updateAbilityUsageSlot", useSlot: 0, abilityName: ability.name})
+                            if (ability.persistence[0] && ability.usedInstances[0] != "X"){characterUpdater({type: "changeActiveAbilityState", abilityName: ability.name, value: true})}
+                            if (ability.persistence[0] && !ability.persistence[1] && ability.resistance.length + ability.immunity.length > 0 && ability.usedInstances[0] != "X")
+                                {characterUpdater({type: "addResistanceAndImmunities", abilityName: ability.name})}
+                        }}>
                             <Text style={styles.ButtonX}>{ability.usedInstances[0] === "X" ? "X" : " "}</Text>
                         </Pressable>
                         <Pressable style={styles.usesButton2} onPress={()=>{
-                            characterUpdater({type: "updateAbilityUsageSlot", useSlot: 1, abilityName: ability.name})}}>
+                            characterUpdater({type: "updateAbilityUsageSlot", useSlot: 1, abilityName: ability.name})
+                            if (ability.persistence[0] && ability.usedInstances[1] != "X"){characterUpdater({type: "changeActiveAbilityState", abilityName: ability.name, value: true})}
+                            if (ability.persistence[0] && !ability.persistence[1] && ability.resistance.length + ability.immunity.length > 0 && ability.usedInstances[1] != "X")
+                                {characterUpdater({type: "addResistanceAndImmunities", abilityName: ability.name})}
+                        }}>
                             <Text style={styles.ButtonX}>{ability.usedInstances[1] === "X" ? "X" : " "}</Text>
                         </Pressable>
                     </View>}
                     {ability.uses === 3 && <View style={styles.useButtonsRow}>
                         <Pressable style={styles.usesButton3} onPress={()=>{
-                            characterUpdater({type: "updateAbilityUsageSlot", useSlot: 0, abilityName: ability.name})}}>
+                            characterUpdater({type: "updateAbilityUsageSlot", useSlot: 0, abilityName: ability.name})
+                            if (ability.persistence[0] && ability.usedInstances[0] != "X"){characterUpdater({type: "changeActiveAbilityState", abilityName: ability.name, value: true})}
+                            if (ability.persistence[0] && !ability.persistence[1] && ability.resistance.length + ability.immunity.length > 0 && ability.usedInstances[0] != "X")
+                                {characterUpdater({type: "addResistanceAndImmunities", abilityName: ability.name})}
+                        }}>
                             <Text style={styles.ButtonX}>{ability.usedInstances[0] === "X" ? "X" : " "}</Text>
                         </Pressable>
                         <Pressable style={styles.usesButton3} onPress={()=>{
-                            characterUpdater({type: "updateAbilityUsageSlot", useSlot: 1, abilityName: ability.name})}}>
+                            characterUpdater({type: "updateAbilityUsageSlot", useSlot: 1, abilityName: ability.name})
+                            if (ability.persistence[0] && ability.usedInstances[1] != "X"){characterUpdater({type: "changeActiveAbilityState", abilityName: ability.name, value: true})}
+                            if (ability.persistence[0] && !ability.persistence[1] && ability.resistance.length + ability.immunity.length > 0 && ability.usedInstances[1] != "X")
+                                {characterUpdater({type: "addResistanceAndImmunities", abilityName: ability.name})}
+                        }}>
                             <Text style={styles.ButtonX}>{ability.usedInstances[1] === "X" ? "X" : " "}</Text>
                         </Pressable>
                         <Pressable style={styles.usesButton3} onPress={()=>{
-                            characterUpdater({type: "updateAbilityUsageSlot", useSlot: 2, abilityName: ability.name})}}>
+                            characterUpdater({type: "updateAbilityUsageSlot", useSlot: 2, abilityName: ability.name})
+                            if (ability.persistence[0] && ability.usedInstances[2] != "X"){characterUpdater({type: "changeActiveAbilityState", abilityName: ability.name, value: true})}
+                            if (ability.persistence[0] && !ability.persistence[1] && ability.resistance.length + ability.immunity.length > 0 && ability.usedInstances[2] != "X")
+                                {characterUpdater({type: "addResistanceAndImmunities", abilityName: ability.name})}
+                        }}>
                             <Text style={styles.ButtonX}>{ability.usedInstances[2] === "X" ? "X" : " "}</Text>
                         </Pressable>
                     </View>}
                     {ability.uses === 4 && <View style={styles.useButtonsRow}>
                         <Pressable style={styles.usesButton4} onPress={()=>{
-                            characterUpdater({type: "updateAbilityUsageSlot", useSlot: 0, abilityName: ability.name})}}>
+                            characterUpdater({type: "updateAbilityUsageSlot", useSlot: 0, abilityName: ability.name})
+                            if (ability.persistence[0] && ability.usedInstances[0] != "X"){characterUpdater({type: "changeActiveAbilityState", abilityName: ability.name, value: true})}
+                            if (ability.persistence[0] && !ability.persistence[1] && ability.resistance.length + ability.immunity.length > 0 && ability.usedInstances[0] != "X")
+                                {characterUpdater({type: "addResistanceAndImmunities", abilityName: ability.name})}
+                        }}>
                             <Text style={styles.ButtonX}>{ability.usedInstances[0] === "X" ? "X" : " "}</Text>
                         </Pressable>
                         <Pressable style={styles.usesButton4} onPress={()=>{
-                            characterUpdater({type: "updateAbilityUsageSlot", useSlot: 1, abilityName: ability.name})}}>
+                            characterUpdater({type: "updateAbilityUsageSlot", useSlot: 1, abilityName: ability.name})
+                            if (ability.persistence[0] && ability.usedInstances[1] != "X"){characterUpdater({type: "changeActiveAbilityState", abilityName: ability.name, value: true})}
+                            if (ability.persistence[0] && !ability.persistence[1] && ability.resistance.length + ability.immunity.length > 0 && ability.usedInstances[1] != "X")
+                                {characterUpdater({type: "addResistanceAndImmunities", abilityName: ability.name})}
+                        }}>
                             <Text style={styles.ButtonX}>{ability.usedInstances[1] === "X" ? "X" : " "}</Text>
                         </Pressable>
                         <Pressable style={styles.usesButton4} onPress={()=>{
-                            characterUpdater({type: "updateAbilityUsageSlot", useSlot: 2, abilityName: ability.name})}}>
+                            characterUpdater({type: "updateAbilityUsageSlot", useSlot: 2, abilityName: ability.name})
+                            if (ability.persistence[0] && ability.usedInstances[2] != "X"){characterUpdater({type: "changeActiveAbilityState", abilityName: ability.name, value: true})}
+                            if (ability.persistence[0] && !ability.persistence[1] && ability.resistance.length + ability.immunity.length > 0 && ability.usedInstances[2] != "X")
+                                {characterUpdater({type: "addResistanceAndImmunities", abilityName: ability.name})}
+                        }}>
                             <Text style={styles.ButtonX}>{ability.usedInstances[2] === "X" ? "X" : " "}</Text>
                         </Pressable>
                         <Pressable style={styles.usesButton4} onPress={()=>{
-                            characterUpdater({type: "updateAbilityUsageSlot", useSlot: 3, abilityName: ability.name})}}>
+                            characterUpdater({type: "updateAbilityUsageSlot", useSlot: 3, abilityName: ability.name})
+                            if (ability.persistence[0] && ability.usedInstances[3] != "X"){characterUpdater({type: "changeActiveAbilityState", abilityName: ability.name, value: true})}
+                            if (ability.persistence[0] && !ability.persistence[1] && ability.resistance.length + ability.immunity.length > 0 && ability.usedInstances[3] != "X")
+                                {characterUpdater({type: "addResistanceAndImmunities", abilityName: ability.name})}
+                        }}>
                             <Text style={styles.ButtonX}>{ability.usedInstances[3] === "X" ? "X" : " "}</Text>
                         </Pressable>
                     </View>}
                     {ability.uses > 4 && <View style={styles.useButtonsRow}>
                         <Pressable onPress={() => {
                             characterUpdater({type: "abilityUnusedQuantityAdjust", abilityName: ability.name, value: "subtract"})
+                            if (ability.persistence[0]){characterUpdater({type: "changeActiveAbilityState", abilityName: ability.name, value: true})}
+                            if (ability.persistence[0] && !ability.persistence[1] && ability.resistance.length + ability.immunity.length > 0)
+                                {characterUpdater({type: "addResistanceAndImmunities", abilityName: ability.name})}
                         }}>
                             <MaterialCommunityIcons size={28} name="arrow-left-bold-outline" color={"red"} />
                         </Pressable>
@@ -175,6 +218,32 @@ export default function DisplayAbilitiesOnSpellsAbilitiesTab(){
                     </View>}
 
                     <Text style={styles.labels}>{useQuantityLabel(ability.usesQuantityStat, ability.uses)} Use{ability.uses === 1 ? "" : "s"} Refresh{ability.uses === 1 ? "es" : ""} on {ability.refreshOn}</Text>
+
+                    {ability.persistence[0] && <View style={{
+                        backgroundColor: ability.persistence[1] ? "red" : "grey",
+                        borderColor: "orange",
+                        borderWidth: 2,
+                        borderRadius: 15,
+                        width: 125,
+                        alignSelf: "center",
+                    }}>
+                        <Pressable style={{alignSelf: "center"}}
+                            onPress={() => {
+                                characterUpdater({type: "changeActiveAbilityState", abilityName: ability.name, value: false})
+                                if (ability.persistence[0] && ability.persistence[1] && ability.resistance.length + ability.immunity.length > 0)
+                                {characterUpdater({type: "subtractResistanceAndImmunities", abilityName: ability.name})}}}>
+                                <Text style={{
+                                    color: "white",
+                                    fontSize: 25,
+                                    textAlign: "center",
+                                }}>{ability.persistence[1] ? "Active" : "Inactive"}</Text>
+                                {ability.persistence[1] && <Text style={{
+                                    color: "white",
+                                    fontSize: 8,
+                                    textAlign: "center",
+                                }}>press to turn off</Text>}
+                        </Pressable>
+                    </View>}
 
                     <View style={{alignSelf: "center"}}>
                         {ability.roll[0] && <Text style={styles.diceDisplay}>{getRolledDiceAsString(ability.roll)}</Text>}

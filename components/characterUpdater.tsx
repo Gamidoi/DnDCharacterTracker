@@ -181,9 +181,23 @@ interface abilityUnusedQuantityAdjust{
     abilityName: string;
     value: string;
 }
+interface changeActiveAbilityState{
+    type: "changeActiveAbilityState";
+    abilityName: string;
+    value: boolean;
+}
+interface addResistanceAndImmunities{
+    type: "addResistanceAndImmunities";
+    abilityName: string;
+}
+interface subtractResistanceAndImmunities{
+    type: "subtractResistanceAndImmunities";
+    abilityName: string;
+}
+
 
 type CharacterEvent =
-    UpdateMaxHpEvent
+    | UpdateMaxHpEvent
     | UpdateCurrentHP
     | UpdateSpellSlots
     | UpdateAll
@@ -226,6 +240,9 @@ type CharacterEvent =
     | updateAbilities
     | updateAbilityUsageSlot
     | abilityUnusedQuantityAdjust
+    | changeActiveAbilityState
+    | addResistanceAndImmunities
+    | subtractResistanceAndImmunities
 
 
 const characterDispatch: (current: Character, event: CharacterEvent) => Character = (currentCharacter, event) => {
@@ -326,13 +343,108 @@ const characterDispatch: (current: Character, event: CharacterEvent) => Characte
                     newUnusedInstances += 1;
                     if (newUnusedInstances > ability.uses){newUnusedInstances = ability.uses}
                 }
-                let newAbility = {...ability, unusedQuantity: newUnusedInstances};
+                let newAbility : Ability = {...ability, unusedQuantity: newUnusedInstances};
                 abilities.push(newAbility);
             } else {abilities.push(ability)}
         })
         return {
             ...currentCharacter,
             abilities: abilities
+        }
+    }
+    if (event.type === "changeActiveAbilityState"){
+        let abilities : Ability[] = []
+        currentCharacter.abilities.map((ability) => {
+            if (event.abilityName === ability.name){
+                let newAbility : Ability = {...ability, persistence: [true, event.value]};
+                abilities.push(newAbility);
+            } else {abilities.push(ability)}
+        })
+        return {
+            ...currentCharacter,
+            abilities: abilities
+        }
+    }
+    if (event.type === "addResistanceAndImmunities"){
+        let resistances: string[] = currentCharacter.resistances
+        if (currentCharacter.abilities.length > 0) {
+            currentCharacter.abilities.map((ability: Ability) => {
+                if (ability.name === event.abilityName) {
+                    if (ability.resistance.length > 0) {
+                        ability.resistance.map((resistance) => {
+                            if (resistance != "" && resistance != undefined) {
+                                resistances.push(resistance)
+                            }
+                        })
+                    }
+                }
+            })
+        }
+        let immunities: string[] = currentCharacter.immunities
+        if (currentCharacter.abilities.length > 0) {
+            currentCharacter.abilities.map((ability: Ability) => {
+                if (ability.name === event.abilityName) {
+                    if (ability.immunity.length > 0) {
+                        ability.immunity.map((immunity) => {
+                            if (immunity != "" && immunity != undefined) {
+                                immunities.push(immunity)
+                            }
+                        })
+                    }
+                }
+            })
+        }
+        return {
+            ...currentCharacter,
+            resistances: resistances,
+            immunities: immunities
+        }
+    }
+    if (event.type === "subtractResistanceAndImmunities"){
+        let currentResistances = currentCharacter.resistances;
+        let newResistances: string[] = [];
+        currentCharacter.abilities.map((ability: Ability) =>{
+            if (ability.name === event.abilityName){
+                if (ability.resistance.length > 0) {
+                    ability.resistance.map((resistance) => {
+                        let deleteOnlyOne = 0;
+                        for (let i = currentResistances.length - 1; i >= 0; i--) {
+                            if (resistance === currentResistances[i] && deleteOnlyOne === 0) {
+                                deleteOnlyOne++;
+                            } else {
+                                newResistances.unshift(resistance);
+                            }
+                        }
+                        currentResistances = newResistances;
+                        newResistances = []
+                    })
+                }
+            }
+        })
+        let currentImmunities = currentCharacter.immunities;
+        let newImmunities: string[] = [];
+        currentCharacter.abilities.map((ability: Ability) =>{
+            if (ability.name === event.abilityName){
+                if (ability.immunity.length > 0) {
+                    ability.immunity.map((immunity) => {
+                        let deleteOnlyOne = 0;
+                        for (let i = currentImmunities.length - 1; i >= 0; i--) {
+                            if (immunity === currentImmunities[i] && deleteOnlyOne === 0) {
+                                deleteOnlyOne++;
+                            } else {
+                                newImmunities.unshift(immunity);
+                            }
+                        }
+                        currentImmunities = newImmunities;
+                        newImmunities = []
+                    })
+                }
+            }
+        })
+        return {
+            ...currentCharacter,
+            resistances: currentResistances,
+            immunities: currentImmunities
         }
     }
     if (event.type === "updateKnownSpells"){

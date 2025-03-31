@@ -23,7 +23,22 @@ export default function MainCharacterSyndrome() {
         if (warlockCasterLevel >= 9) {return "5th Level"}
         return "0th ooops!"
     }
-
+    function resistanceImmunityDisplayString(listOfResistImmune: string[]){
+        let displayString = listOfResistImmune[0];
+        for (let i = 1; i < listOfResistImmune.length; i++){
+            displayString += ", " + listOfResistImmune[i];
+        }
+        return <Text style={[
+            styles.labels,
+            {
+                fontSize: 15,
+                borderRadius: 7,
+                borderWidth: 2,
+                borderColor: "orange",
+                marginHorizontal: 5,
+            }
+        ]}>{displayString}</Text>;
+    }
 
 
 
@@ -91,6 +106,26 @@ export default function MainCharacterSyndrome() {
                 />
             </Text>
         </View>
+
+        {(character.resistances.length + character.immunities.length > 0 && character.resistances[0] + character.immunities[0] != "") && <View style={{
+            borderWidth: 2,
+            borderColor: "orange",
+            borderRadius: 10,
+            backgroundColor: "blue",
+
+        }}>
+            <Text style={styles.labels}>Grants</Text>
+            <View style={{alignSelf: "center", flexDirection: "row", width: 350}}>
+                {character.resistances.length > 0 && <View style={{flex: character.immunities.length > 0 ? 0.50 : 1}}>
+                    <Text style={styles.labels}>Resistance to:</Text>
+                    {resistanceImmunityDisplayString(character.resistances)}
+                </View>}
+                {character.immunities.length > 0 && <View style={{flex: character.resistances.length > 0 ? 0.50 : 1}}>
+                    <Text style={styles.labels}>Immunity to:</Text>
+                    {resistanceImmunityDisplayString(character.immunities)}
+                </View>}
+            </View>
+        </View>}
 
         {character.spellcastingLevel > 0 && <View style={{backgroundColor: 'black'}}>
             <View style={styles.spellRow}>
@@ -525,5 +560,10 @@ const styles = StyleSheet.create({
         margin: -13,
         fontSize: 40,
         textAlign: 'center',
-    }
+    },
+    labels: {
+        color: "white",
+        textAlign: "center",
+        fontSize: 12,
+    },
 });
