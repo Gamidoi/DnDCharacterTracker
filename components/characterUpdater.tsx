@@ -245,7 +245,7 @@ type CharacterEvent =
     | subtractResistanceAndImmunities
 
 
-const characterDispatch: (current: Character, event: CharacterEvent) => Character = (currentCharacter, event) => {
+ export const characterDispatch: (current: Character, event: CharacterEvent) => Character = (currentCharacter, event) => {
 
     if (event.type === "all"){
         if (event.character.armorClass == undefined) {
@@ -412,7 +412,7 @@ const characterDispatch: (current: Character, event: CharacterEvent) => Characte
                             if (resistance === currentResistances[i] && deleteOnlyOne === 0) {
                                 deleteOnlyOne++;
                             } else {
-                                newResistances.unshift(resistance);
+                                newResistances.unshift(currentResistances[i]);
                             }
                         }
                         currentResistances = newResistances;
@@ -432,7 +432,7 @@ const characterDispatch: (current: Character, event: CharacterEvent) => Characte
                             if (immunity === currentImmunities[i] && deleteOnlyOne === 0) {
                                 deleteOnlyOne++;
                             } else {
-                                newImmunities.unshift(immunity);
+                                newImmunities.unshift(currentImmunities[i]);
                             }
                         }
                         currentImmunities = newImmunities;
