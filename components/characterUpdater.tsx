@@ -205,7 +205,7 @@ type CharacterEvent =
     | setPersuasion
 
 
-const characterDispatch: (current: Character, event: CharacterEvent) => Character = (currentCharacter, event) => {
+export const characterDispatch: (current: Character, event: CharacterEvent) => Character = (currentCharacter, event) => {
 
     if (event.type === "all"){
         return {...event.character}
