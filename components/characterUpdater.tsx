@@ -248,7 +248,12 @@ type CharacterEvent =
  export const characterDispatch: (current: Character, event: CharacterEvent) => Character = (currentCharacter, event) => {
 
     if (event.type === "all"){
-        if (event.character.armorClass == undefined) {
+        if (typeof event.character.armorClass != "number" ||
+        typeof event.character.languages != "object" ||
+            typeof event.character.resistances != "object" ||
+            typeof event.character.immunities != "object" ||
+            typeof event.character.concentration != "string"
+        ) {
             //this if should be deleted in time. after all legacy Character objects have been updated to include armorClass. there are several locations for this, meaning it will be a long process.
             return {...event.character,
                 armorClass: 10,
@@ -256,13 +261,6 @@ type CharacterEvent =
                 resistances: [],
                 items: [],
                 immunities: [],
-                concentration: "",
-            }
-        }
-        if (event.character.concentration == undefined) {
-            //this if also should be deleted after an "adequate" time has passed that all legacy characters have been updated.
-            return {
-                ...event.character,
                 concentration: "",
             }
         }

@@ -24,7 +24,7 @@ export default function newAbilityCreationTool() {
     let [abilityRollD100, setAbilityRollD100] = useState("0");
     let [abilityRollBonus, setAbilityRollBonus] = useState("0");
 
-    let [usesTrigger, setUsesTrigger] = useState("as Action");
+    let [usesTrigger, setUsesTrigger] = useState("Passive");
     let [abilityUsesTypeDropDownOpen, setAbilityUsesTypeDropDownOpen] = useState(false);
     let [abilityUsesTypeDropDownOptions, setAbilityUsesTypeDropDownOptions] = useState([
         {label: "Passive", value: "Passive"},
@@ -172,7 +172,7 @@ export default function newAbilityCreationTool() {
         setAbilityRollD20("0");
         setAbilityRollD100("0");
         setAbilityRollBonus("0");
-        setUsesTrigger("as Action");
+        setUsesTrigger("Passive");
         setUsesQuantityStat("Proficiency");
         setRefreshOn("Long Rest");
         setGrantsResistance(false);
@@ -249,7 +249,7 @@ export default function newAbilityCreationTool() {
                             />
                         </View>
                     </View>
-                    <View style={{flexDirection: "row", alignSelf: "center"}}>
+                    {usesTrigger != "Passive" && <View style={{flexDirection: "row", alignSelf: "center"}}>
                         <View style={{
                             flex: usesQuantityStat != "Set Number" ? 1 : 0.65,
                             alignSelf: "center"
@@ -257,7 +257,8 @@ export default function newAbilityCreationTool() {
                         }}>
                             <Text style={[
                                 styles.labels,
-                                    {alignSelf: "center",
+                                {
+                                    alignSelf: "center",
                                 }]}>number of uses</Text>
                             <DropDownPicker
                                 open={usesQuantityStatDropDownOpen}
@@ -266,13 +267,16 @@ export default function newAbilityCreationTool() {
                                 setOpen={setUsesQuantityStatDropDownOpen}
                                 setValue={setUsesQuantityStat}
                                 setItems={setUsesQuantityStatDropDownOptions}
-                                onOpen={() => {closeAllDropDowns("usesQuantityStat")}}
+                                onOpen={() => {
+                                    closeAllDropDowns("usesQuantityStat")
+                                }}
                                 autoScroll={true}
                                 dropDownDirection={"BOTTOM"}
                                 zIndex={90090}
-                                flatListProps={{nestedScrollEnabled:true}}
+                                flatListProps={{nestedScrollEnabled: true}}
                                 style={[styles.dropDownPicker,
-                                    {marginBottom: Platform.OS === "web" ? (usesQuantityStatDropDownOpen ? 200 : 0) : 0,
+                                    {
+                                        marginBottom: Platform.OS === "web" ? (usesQuantityStatDropDownOpen ? 200 : 0) : 0,
                                         width: 250,
                                         alignSelf: "center",
                                     }]}
@@ -305,9 +309,9 @@ export default function newAbilityCreationTool() {
                                     padding: Platform.OS === "web" ? 7 : 0,
                                 }}/>
                         </View>}
-                    </View>
+                    </View>}
 
-                    {usesQuantityStat != "Not Limited" && <View style={{alignSelf: "center"}}>
+                    {(usesQuantityStat != "Not Limited" && usesTrigger != "Passive") && <View style={{alignSelf: "center"}}>
                         <Text style={styles.labels}>Uses Reset On</Text>
                         <DropDownPicker
                             open={refreshOnDropDownOpen}
@@ -334,16 +338,17 @@ export default function newAbilityCreationTool() {
                     </View>}
 
                     <View style={{flexDirection: "row", alignSelf: "center", marginVertical: 5}}>
-                        <View style={{flex: 0.32}}>
+                        {usesTrigger != "Passive" && <View style={{flex: 0.32}}>
                             <Text style={styles.labels}>does ability last more than One Turn?</Text>
                             <Pressable
                                 style={styles.newAbilityToolToggleButtons}
                                 onPress={() => {
                                     setPersistence([!persistence[0], persistence[1]]);
-                                    closeAllDropDowns()}}>
+                                    closeAllDropDowns()
+                                }}>
                                 <Text style={styles.toggleButtonLables}>{persistence[0] ? "Yes" : "No"}</Text>
                             </Pressable>
-                        </View>
+                        </View>}
                         <View style={{flex: 0.32}}>
                             <Text style={styles.labels}>does ability grant one or more Resistence?</Text>
                             <Pressable
@@ -508,7 +513,7 @@ export default function newAbilityCreationTool() {
                         </View>}
                     </View>
 
-                    <Text style={styles.labels}>Verbose Description</Text>
+                    <Text style={styles.labels}>Full Description</Text>
                     <TextInput
                         onChangeText={setAbilityDescription}
                         onFocus={() => closeAllDropDowns()}
@@ -550,6 +555,9 @@ export default function newAbilityCreationTool() {
                                 parseInt(abilityRollD12), parseInt(abilityRollD20), parseInt(abilityRollD100), parseInt(abilityRollBonus)]);
                             setNewAbilityConfirmationCount(newAbilityConfirmationCount + 1);
                             characterUpdater({type: "updateAbilities", knownAbilities: [...character.abilities, newAbility]})
+                            if (usesTrigger === "Passive") {
+                                characterUpdater({type: "addResistanceAndImmunities", abilityName: abilityName})
+                            }
                         }}}>
                     <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Create New Ability: {abilityName}</Text>
                     <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>For {character.charName}</Text>
@@ -568,25 +576,28 @@ export default function newAbilityCreationTool() {
                         {abilityDeleteToolDisplay && <Text style={{color: "white", textAlign: "center", marginBottom: 20}}>Choose Ability Below</Text>}
                     </Pressable>
                     <View style={{alignSelf: "center"}}>
-                        {character.abilities?.map((pickedAbilityForDeletion :Ability) => {
+                        {(character.abilities.length < 1 && abilityDeleteToolDisplay) && <Text style={[styles.labels, {marginBottom: 20}]}>
+                            This Character has no Abilities to Delete</Text>}
+                        {character.abilities.map((pickedAbilityForDeletion :Ability) => {
                             return(
-                                abilityDeleteToolDisplay && <View><Pressable onPress={() => {
-                                    setAbilityConfirmDelete(!abilityConfirmDelete);
-                                    setDeleteAbilityName(pickedAbilityForDeletion.name);
-                                }}><Text style={{
-                                    fontSize: 20,
-                                    backgroundColor: "maroon",
-                                    textAlign: "center",
-                                    textAlignVertical: "center",
-                                    margin: 10,
-                                    minHeight: 50,
-                                    borderRadius: 30,
-                                    width: 260,
-                                    color: "white",
-                                    paddingVertical: 10,
-                                    borderColor: "orange",
-                                    borderWidth: 3,
-                                }}>{pickedAbilityForDeletion.name}</Text></Pressable></View>
+                                abilityDeleteToolDisplay && <View>
+                                    <Pressable onPress={() => {
+                                        setAbilityConfirmDelete(!abilityConfirmDelete);
+                                        setDeleteAbilityName(pickedAbilityForDeletion.name);
+                                    }}><Text style={{
+                                        fontSize: 20,
+                                        backgroundColor: "maroon",
+                                        textAlign: "center",
+                                        textAlignVertical: "center",
+                                        margin: 10,
+                                        minHeight: 50,
+                                        borderRadius: 30,
+                                        width: 260,
+                                        color: "white",
+                                        paddingVertical: 10,
+                                        borderColor: "orange",
+                                        borderWidth: 3,
+                                    }}>{pickedAbilityForDeletion.name}</Text></Pressable></View>
                             )})}</View>
                     {(abilityDeleteToolDisplay && abilityConfirmDelete) &&
                         <Pressable onPress={() => {
@@ -606,6 +617,9 @@ export default function newAbilityCreationTool() {
                             character.abilities.forEach((ability) => {
                                 if (ability.name != deleteAbilityName) {
                                     knownAbilities.push(ability);
+                                }
+                                if (ability.name === deleteAbilityName && ability.usesTrigger === "Passive") {
+                                    characterUpdater({type: "subtractResistanceAndImmunities", abilityName: deleteAbilityName});
                                 }
                             });
                             characterUpdater({type: "updateAbilities", knownAbilities: knownAbilities})

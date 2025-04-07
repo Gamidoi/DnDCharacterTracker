@@ -2,6 +2,7 @@ import {StyleSheet, Text, View} from "react-native";
 import {Ability} from "@/assets/classes/ability";
 import {Character} from "@/assets/classes/character";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
+import PerAbilityDisplayResistImmune from "@/components/perAbilityDisplayResistImmune";
 
 
 
@@ -16,6 +17,9 @@ export default function DisplayPassivesOnIndexTab(){
                 if (ability.usesTrigger === "Passive") {
                     return (<View style={styles.abilityBox}>
                         <Text style={styles.abilityName}>{ability.name}</Text>
+
+                        {PerAbilityDisplayResistImmune(ability)}
+
                         {ability.description != "" && <Text style={styles.descriptionText}>{ability.description}</Text>}
                     </View>)
                 }

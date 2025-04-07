@@ -1,9 +1,11 @@
-import {Pressable, StyleSheet, Text, View} from "react-native";
+import {Platform, Pressable, StyleSheet, Text, View} from "react-native";
 import {Ability} from "@/assets/classes/ability";
 import {Character} from "@/assets/classes/character";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 import React from "react";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
+import PerAbilityDisplayResistImmune from "@/components/perAbilityDisplayResistImmune";
+import DisplayPassivesOnIndexTab from "@/components/displayPassivesOnIndexTab";
 
 
 
@@ -86,23 +88,6 @@ export default function DisplayAbilitiesOnSpellsAbilitiesTab(){
         }
         if (rolledDice[8] > 0){ diceString += " +" + rolledDice[8]; }
         return diceString;
-    }
-
-    function resistanceImmunityDisplayString(listOfResistImmune: string[]){
-        let displayString = listOfResistImmune[0];
-        for (let i = 1; i < listOfResistImmune.length; i++){
-            displayString += ", " + listOfResistImmune[i];
-        }
-        return <Text style={[
-                styles.labels,
-                {
-                    fontSize: 15,
-                    borderRadius: 7,
-                    borderWidth: 2,
-                    borderColor: "orange",
-                    marginHorizontal: 5,
-                }
-            ]}>{displayString}</Text>;
     }
 
 
@@ -248,26 +233,7 @@ export default function DisplayAbilitiesOnSpellsAbilitiesTab(){
                     <View style={{alignSelf: "center"}}>
                         {ability.roll[0] && <Text style={styles.diceDisplay}>{getRolledDiceAsString(ability.roll)}</Text>}
                     </View>
-
-                    {(ability.resistance.length + ability.immunity.length > 0 && ability.resistance[0] + ability.immunity[0] != "") && <View style={{
-                        borderWidth: 2,
-                        borderColor: "orange",
-                        borderRadius: 10,
-                        backgroundColor: "blue",
-
-                    }}>
-                        <Text style={styles.labels}>Grants</Text>
-                        <View style={{alignSelf: "center", flexDirection: "row", width: 350}}>
-                            {ability.resistance.length > 0 && <View style={{flex: ability.immunity.length > 0 ? 0.50 : 1}}>
-                                <Text style={styles.labels}>Resistance to:</Text>
-                                {resistanceImmunityDisplayString(ability.resistance)}
-                            </View>}
-                            {ability.immunity.length > 0 && <View style={{flex: ability.resistance.length > 0 ? 0.50 : 1}}>
-                                <Text style={styles.labels}>Immunity to:</Text>
-                                {resistanceImmunityDisplayString(ability.immunity)}
-                            </View>}
-                        </View>
-                    </View>}
+                    {PerAbilityDisplayResistImmune(ability)}
 
                     {ability.description != "" && <Text style={styles.descriptionText}>{ability.description}</Text>}
                 </View>)
@@ -278,15 +244,7 @@ export default function DisplayAbilitiesOnSpellsAbilitiesTab(){
     return (
         <View>
             {displayAbilitiesByType("On Hit")}
-
-            {character.abilities.map((ability) => {
-                if (ability.usesTrigger === "Passive") {
-                    return (<View style={styles.abilityBox}>
-                        <Text style={styles.abilityName}>{ability.name}</Text>
-                        {ability.description != "" && <Text style={styles.descriptionText}>{ability.description}</Text>}
-                    </View>)
-                }
-            })}
+            {DisplayPassivesOnIndexTab()}
         </View>
     )
 
@@ -294,6 +252,11 @@ export default function DisplayAbilitiesOnSpellsAbilitiesTab(){
 
 
 const styles = StyleSheet.create({
+    labels: {
+        color: "white",
+        textAlign: "center",
+        fontSize: 12,
+    },
     abilityBox: {
         backgroundColor: "teal",
         borderRadius: 10,
@@ -305,11 +268,6 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: 30,
         textAlign: "center"
-    },
-    labels: {
-        color: "white",
-        textAlign: "center",
-        fontSize: 12,
     },
     descriptionText: {
         color: "white",
@@ -387,7 +345,7 @@ const styles = StyleSheet.create({
         padding: 0,
         color: 'black',
         fontWeight: 'bold',
-        margin: -13,
+        margin: Platform.OS === "web" ? -13 : -15,
         fontSize: 40,
         textAlign: 'center',
     },

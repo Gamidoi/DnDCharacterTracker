@@ -147,12 +147,39 @@ export default function newSpellCreationTool() {
         if (type != "Duration") {setSpellDurationDropDownOpen(false);}
         if (type != "Target") {setSpellTargetDropDownOpen(false);}
     }
+    function resetVariablesOnTabClose(){
+        setSpellLevelVariable("0");
+        setSpellTimeVariable("Action");
+        setSpellDurationVariable("Instantaneous");
+        setSpellRangeVariable("Touch");
+        setSpellTargetVariable("Self");
+        setSpellNameVariable("");
+        setSpellVerbalVariable(false);
+        setSpellSomaticVariable(false);
+        setSpellMaterialBooleanVariable(false,);
+        setSpellMaterialDescriptionVariable("");
+        setSpellConcentrationVariable(false);
+        setSpellRitualVariable(false);
+        setSpellIsAttack(isAttack);
+        setSpellIsSaveDC(isAttack);
+        setSpellSaveType("DEX");
+        setSpellDamageVariable(false);
+        setDamageD4("0");
+        setDamageD6("0");
+        setDamageD8("0");
+        setDamageD10("0");
+        setDamageD12("0");
+        setDamageBonus("0");
+        setSpellDescription("");
+    }
 
     return(<View>
         <Pressable onPress={() => closeAllDropDowns()} style={styles.toolBoxStyle}>
             <Pressable onPress={() => {
                 setNewSpellCreationToolDisplay(!newSpellCreationToolDisplay);
-                closeAllDropDowns()}}>
+                closeAllDropDowns();
+                resetVariablesOnTabClose();
+            }}>
             {!newSpellCreationToolDisplay && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open New Spell Tool</Text>}
             {newSpellCreationToolDisplay && <Text style={{color: "white", textAlign: "center", marginBottom: 20}}>Close New Spell Tool</Text>}
             </Pressable>
@@ -661,25 +688,28 @@ export default function newSpellCreationTool() {
                 {deleteSpellToolDisplay && <Text style={{color: "white", textAlign: "center", marginBottom: 20}}>Choose Spell Below</Text>}
             </Pressable>
             <View style={{alignSelf: "center"}}>
-            {character.spells?.map((pickedSpellForDeletion :Spell) => {
+                {(character.spells.length < 1 && deleteSpellToolDisplay) && <Text style={[styles.lables, {marginBottom: 20}]}>
+                    This Character has no Spells to Delete</Text>}
+            {character.spells.map((pickedSpellForDeletion :Spell) => {
                 return(
-                    deleteSpellToolDisplay && <View><Pressable onPress={() => {
-                        setSpellConfirmDelete(!spellConfirmDelete);
-                        setDeleteSpellName(pickedSpellForDeletion.name);
-                    }}><Text style={{
-                        fontSize: 20,
-                        backgroundColor: "maroon",
-                        textAlign: "center",
-                        textAlignVertical: "center",
-                        margin: 10,
-                        minHeight: 50,
-                        borderRadius: 30,
-                        width: 260,
-                        color: "white",
-                        paddingVertical: 10,
-                        borderColor: "orange",
-                        borderWidth: 3,
-                    }}>{pickedSpellForDeletion.name}</Text></Pressable></View>
+                    deleteSpellToolDisplay && <View>
+                        <Pressable onPress={() => {
+                            setSpellConfirmDelete(!spellConfirmDelete);
+                            setDeleteSpellName(pickedSpellForDeletion.name);
+                        }}><Text style={{
+                            fontSize: 20,
+                            backgroundColor: "maroon",
+                            textAlign: "center",
+                            textAlignVertical: "center",
+                            margin: 10,
+                            minHeight: 50,
+                            borderRadius: 30,
+                            width: 260,
+                            color: "white",
+                            paddingVertical: 10,
+                            borderColor: "orange",
+                            borderWidth: 3,
+                        }}>{pickedSpellForDeletion.name}</Text></Pressable></View>
                 )})}</View>
             {(deleteSpellToolDisplay && spellConfirmDelete) &&
                 <Pressable onPress={() => {

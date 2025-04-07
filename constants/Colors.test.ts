@@ -58,4 +58,7 @@ test("test ability use quantity to change on stat change", () => {
     character = characterDispatch(character, {type: "updateSTR", value: 8});
     ability = character.abilities[0];
     expect(ability.uses).toBe(1);
+    character = characterDispatch(character, {type: "updateSTR", value: 15});
+    ability = character.abilities[0];
+    expect(ability.uses).toBe(2);
 })

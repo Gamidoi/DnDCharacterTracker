@@ -49,7 +49,7 @@ export default function MainCharacterSyndrome() {
           headerImage
       }>
 
-        <View style={{marginBottom: 20, backgroundColor: 'black'}}>
+        <View style={{backgroundColor: 'black'}}>
             <Text style={{color: "white", fontSize: 28}}>current HP is {character.currentHP} / {character.maxHP}</Text>
             <Text>
                 <Pressable
@@ -126,6 +126,8 @@ export default function MainCharacterSyndrome() {
                 </View>}
             </View>
         </View>}
+
+
 
         {character.spellcastingLevel > 0 && <View style={{backgroundColor: 'black'}}>
             <View style={styles.spellRow}>
