@@ -244,8 +244,8 @@ type CharacterEvent =
     | addResistanceAndImmunities
     | subtractResistanceAndImmunities
 
+export const characterDispatch: (current: Character, event: CharacterEvent) => Character = (currentCharacter, event) => {
 
- export const characterDispatch: (current: Character, event: CharacterEvent) => Character = (currentCharacter, event) => {
 
     if (event.type === "all"){
         if (typeof event.character.armorClass != "number" ||
