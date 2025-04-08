@@ -2,6 +2,7 @@ import {createContext, Dispatch, PropsWithChildren, useContext, useEffect, useRe
 import {Character} from "@/assets/classes/character";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {Spell} from "@/assets/classes/spell";
+import {Ability} from "@/assets/classes/ability";
 
 
 interface UpdateAll {
@@ -162,9 +163,41 @@ interface setPersuasion {
     type: "setPersuasion";
     value: string;
 }
+interface updateArmorClass {
+    type: "updateArmorClass";
+    value: number;
+}
+interface updateAbilities{
+    type: "updateAbilities",
+    knownAbilities: Ability[]
+}
+interface updateAbilityUsageSlot{
+    type: "updateAbilityUsageSlot";
+    useSlot: number;
+    abilityName: string;
+}
+interface abilityUnusedQuantityAdjust{
+    type: "abilityUnusedQuantityAdjust";
+    abilityName: string;
+    value: string;
+}
+interface changeActiveAbilityState{
+    type: "changeActiveAbilityState";
+    abilityName: string;
+    value: boolean;
+}
+interface addResistanceAndImmunities{
+    type: "addResistanceAndImmunities";
+    abilityName: string;
+}
+interface subtractResistanceAndImmunities{
+    type: "subtractResistanceAndImmunities";
+    abilityName: string;
+}
+
 
 type CharacterEvent =
-    UpdateMaxHpEvent
+    | UpdateMaxHpEvent
     | UpdateCurrentHP
     | UpdateSpellSlots
     | UpdateAll
@@ -203,11 +236,34 @@ type CharacterEvent =
     | setIntimidation
     | setPerformance
     | setPersuasion
-
+    | updateArmorClass
+    | updateAbilities
+    | updateAbilityUsageSlot
+    | abilityUnusedQuantityAdjust
+    | changeActiveAbilityState
+    | addResistanceAndImmunities
+    | subtractResistanceAndImmunities
 
 export const characterDispatch: (current: Character, event: CharacterEvent) => Character = (currentCharacter, event) => {
 
+
     if (event.type === "all"){
+        if (typeof event.character.armorClass != "number" ||
+        typeof event.character.languages != "object" ||
+            typeof event.character.resistances != "object" ||
+            typeof event.character.immunities != "object" ||
+            typeof event.character.concentration != "string"
+        ) {
+            //this if should be deleted in time. after all legacy Character objects have been updated to include armorClass. there are several locations for this, meaning it will be a long process.
+            return {...event.character,
+                armorClass: 10,
+                languages: ["common"],
+                resistances: [],
+                items: [],
+                immunities: [],
+                concentration: "",
+            }
+        }
         return {...event.character}
     }
     if (event.type === "updateMaxHP") {
@@ -252,54 +308,211 @@ export const characterDispatch: (current: Character, event: CharacterEvent) => C
             warlockCurrentUsedSpells: spellString
         }
     }
+    if (event.type === "updateAbilityUsageSlot"){
+        let abilities : Ability[] = []
+        currentCharacter.abilities.map((ability) => {
+            if (ability.name === event.abilityName){
+                let newUsedInstances = "";
+                for (let i = 0; i < ability.uses; i++) {
+                    if (i === event.useSlot){
+                        if (ability.usedInstances[i] === "X"){newUsedInstances += "0"}
+                        else {newUsedInstances += "X"}
+                    } else {newUsedInstances += ability.usedInstances[i]}
+                }
+                let newAbility = {...ability, usedInstances: newUsedInstances};
+                abilities.push(newAbility);
+            } else {abilities.push(ability)}
+        })
+        return {
+            ...currentCharacter,
+            abilities: abilities
+        }
+    }
+    if (event.type === "abilityUnusedQuantityAdjust"){
+        let abilities : Ability[] = []
+        currentCharacter.abilities.map((ability) => {
+            if (ability.name === event.abilityName){
+                let newUnusedInstances = ability.unusedQuantity
+                if ( event.value === "subtract") {
+                    newUnusedInstances -= 1;
+                    if (newUnusedInstances < 0){newUnusedInstances = 0}
+                }
+                if ( event.value === "add") {
+                    newUnusedInstances += 1;
+                    if (newUnusedInstances > ability.uses){newUnusedInstances = ability.uses}
+                }
+                let newAbility : Ability = {...ability, unusedQuantity: newUnusedInstances};
+                abilities.push(newAbility);
+            } else {abilities.push(ability)}
+        })
+        return {
+            ...currentCharacter,
+            abilities: abilities
+        }
+    }
+    if (event.type === "changeActiveAbilityState"){
+        let abilities : Ability[] = []
+        currentCharacter.abilities.map((ability) => {
+            if (event.abilityName === ability.name){
+                let newAbility : Ability = {...ability, persistence: [true, event.value]};
+                abilities.push(newAbility);
+            } else {abilities.push(ability)}
+        })
+        return {
+            ...currentCharacter,
+            abilities: abilities
+        }
+    }
+    if (event.type === "addResistanceAndImmunities"){
+        let resistances: string[] = currentCharacter.resistances
+        if (currentCharacter.abilities.length > 0) {
+            currentCharacter.abilities.map((ability: Ability) => {
+                if (ability.name === event.abilityName) {
+                    if (ability.resistance.length > 0) {
+                        ability.resistance.map((resistance) => {
+                            if (resistance != "" && resistance != undefined) {
+                                resistances.push(resistance)
+                            }
+                        })
+                    }
+                }
+            })
+        }
+        let immunities: string[] = currentCharacter.immunities
+        if (currentCharacter.abilities.length > 0) {
+            currentCharacter.abilities.map((ability: Ability) => {
+                if (ability.name === event.abilityName) {
+                    if (ability.immunity.length > 0) {
+                        ability.immunity.map((immunity) => {
+                            if (immunity != "" && immunity != undefined) {
+                                immunities.push(immunity)
+                            }
+                        })
+                    }
+                }
+            })
+        }
+        return {
+            ...currentCharacter,
+            resistances: resistances,
+            immunities: immunities
+        }
+    }
+    if (event.type === "subtractResistanceAndImmunities"){
+        let currentResistances = currentCharacter.resistances;
+        let newResistances: string[] = [];
+        currentCharacter.abilities.map((ability: Ability) =>{
+            if (ability.name === event.abilityName){
+                if (ability.resistance.length > 0) {
+                    ability.resistance.map((resistance) => {
+                        let deleteOnlyOne = 0;
+                        for (let i = currentResistances.length - 1; i >= 0; i--) {
+                            if (resistance === currentResistances[i] && deleteOnlyOne === 0) {
+                                deleteOnlyOne++;
+                            } else {
+                                newResistances.unshift(currentResistances[i]);
+                            }
+                        }
+                        currentResistances = newResistances;
+                        newResistances = []
+                    })
+                }
+            }
+        })
+        let currentImmunities = currentCharacter.immunities;
+        let newImmunities: string[] = [];
+        currentCharacter.abilities.map((ability: Ability) =>{
+            if (ability.name === event.abilityName){
+                if (ability.immunity.length > 0) {
+                    ability.immunity.map((immunity) => {
+                        let deleteOnlyOne = 0;
+                        for (let i = currentImmunities.length - 1; i >= 0; i--) {
+                            if (immunity === currentImmunities[i] && deleteOnlyOne === 0) {
+                                deleteOnlyOne++;
+                            } else {
+                                newImmunities.unshift(currentImmunities[i]);
+                            }
+                        }
+                        currentImmunities = newImmunities;
+                        newImmunities = []
+                    })
+                }
+            }
+        })
+        return {
+            ...currentCharacter,
+            resistances: currentResistances,
+            immunities: currentImmunities
+        }
+    }
     if (event.type === "updateKnownSpells"){
         return{
             ...currentCharacter,
             spells: event.knownSpells
         }
     }
-    if (event.type === "updateSTR"){
+    if (event.type === "updateAbilities"){
         return{
             ...currentCharacter,
-            STR: event.value
+            abilities: event.knownAbilities
+        }
+    }
+    if (event.type === "updateSTR"){
+        let updatedAbilities: Ability[] = updateAbilitiesUseOnStatChange(currentCharacter, "STR", event.value)
+        return{
+            ...currentCharacter,
+            STR: event.value,
+            abilities: updatedAbilities
         }
     }
     if (event.type === "updateDEX"){
+        let updatedAbilities: Ability[] = updateAbilitiesUseOnStatChange(currentCharacter, "DEX", event.value)
         return{
             ...currentCharacter,
-            DEX: event.value
+            DEX: event.value,
+            abilities: updatedAbilities
         }
     }
     if (event.type === "updateCON"){
+        let updatedAbilities: Ability[] = updateAbilitiesUseOnStatChange(currentCharacter, "CON", event.value)
         return{
             ...currentCharacter,
-            CON: event.value
+            CON: event.value,
+            abilities: updatedAbilities
         }
     }
     if (event.type === "updateINT"){
+        let updatedAbilities: Ability[] = updateAbilitiesUseOnStatChange(currentCharacter, "INT", event.value)
         return{
             ...currentCharacter,
-            INT: event.value
+            INT: event.value,
+            abilities: updatedAbilities
         }
     }
     if (event.type === "updateWIS"){
+        let updatedAbilities: Ability[] = updateAbilitiesUseOnStatChange(currentCharacter, "WIS", event.value)
         return{
             ...currentCharacter,
-            WIS: event.value
+            WIS: event.value,
+            abilities: updatedAbilities
         }
     }
     if (event.type === "updateCHA"){
+        let updatedAbilities: Ability[] = updateAbilitiesUseOnStatChange(currentCharacter, "CHA", event.value)
         return{
             ...currentCharacter,
-            CHA: event.value
+            CHA: event.value,
+            abilities: updatedAbilities
         }
     }
     if (event.type === "updateCharLevel"){
         let proficiency = Math.ceil((4+event.value)/4);
+        let updatedAbilities: Ability[] = updateAbilitiesUseOnStatChange(currentCharacter, "Level", event.value)
         return{
             ...currentCharacter,
             characterLevel: event.value,
-            proficiency: proficiency
+            proficiency: proficiency,
+            abilities: updatedAbilities
         }
     }
     if (event.type === "updateAllSpellcasting"){
@@ -456,9 +669,85 @@ export const characterDispatch: (current: Character, event: CharacterEvent) => C
             CHASaveProf: event.value
         }
     }
+    if (event.type === "updateArmorClass") {
+        return{
+            ...currentCharacter,
+            armorClass: event.value
+        }
+    }
 
 
     return currentCharacter;
+}
+
+function updateAbilitiesUseOnStatChange(currentCharacter: Character, statType: string, statValue: number) {
+    let updatedAbilities: Ability[] = [];
+    if (statType === "Level"){
+        currentCharacter.abilities.forEach((ability) => {
+            let abilityUsesQuantity: number = ability.uses;
+            let abilityUsedInstances: string = ability.usedInstances;
+            if (ability.usesQuantityStat === "Level") {
+                abilityUsesQuantity = statValue;
+                if (abilityUsesQuantity < 1){abilityUsesQuantity = 1}
+                if (abilityUsesQuantity < ability.uses){
+                    abilityUsedInstances = "";
+                    let i = 0;
+                    while (abilityUsedInstances.length < abilityUsesQuantity) {
+                        abilityUsedInstances += ability.usedInstances[i];
+                        i++;
+                    }
+                }
+                if (abilityUsesQuantity > ability.uses){
+                    while (abilityUsedInstances.length < abilityUsesQuantity) {
+                        abilityUsedInstances += "0";
+                    }
+                }
+            }
+            if (ability.usesQuantityStat === "Proficiency") {
+                abilityUsesQuantity = Math.ceil((4 + statValue)/4);
+                if (abilityUsesQuantity < 1){abilityUsesQuantity = 1}
+                if (abilityUsesQuantity < ability.uses){
+                    abilityUsedInstances = "";
+                    let i = 0;
+                    while (abilityUsedInstances.length < abilityUsesQuantity) {
+                        abilityUsedInstances += ability.usedInstances[i];
+                        i++;
+                    }
+                }
+                if (abilityUsesQuantity > ability.uses){
+                    while (abilityUsedInstances.length < abilityUsesQuantity) {
+                        abilityUsedInstances += "0";
+                    }
+                }
+            }
+
+            updatedAbilities.push({...ability, uses: abilityUsesQuantity, usedInstances: abilityUsedInstances})
+        })
+        return updatedAbilities;
+    }
+    currentCharacter.abilities.forEach((ability) => {
+        let abilityUsesQuantity: number = ability.uses;
+        let abilityUsedInstances: string = ability.usedInstances;
+        if (ability.usesQuantityStat === statType) {
+            abilityUsesQuantity = (Math.floor((statValue - 10) / 2));
+            if (abilityUsesQuantity < 1){abilityUsesQuantity = 1}
+            if (abilityUsesQuantity < ability.uses){
+                abilityUsedInstances = "";
+                let i = 0;
+                while (abilityUsedInstances.length < abilityUsesQuantity) {
+                    abilityUsedInstances += ability.usedInstances[i];
+                    i++;
+                }
+            }
+            if (abilityUsesQuantity > ability.uses){
+                while (abilityUsedInstances.length < abilityUsesQuantity) {
+                    abilityUsedInstances += "0";
+                }
+            }
+        }
+        updatedAbilities.push({...ability, uses: abilityUsesQuantity, usedInstances: abilityUsedInstances})
+    })
+    return updatedAbilities;
 }
 
 let CharacterContext = createContext<Character>(new Character('defaultAaA', 10, 1));

@@ -9,6 +9,7 @@ import AdjustCoreStatSaves from "@/components/adjustCoreStatSaves";
 import AttributionSection from "@/components/attributionSection";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 import headerRandomizer from "@/components/headerRandomizer";
+import newAbilityCreationTool from "@/components/newAbilityCreationTool";
 
 
 
@@ -172,6 +173,7 @@ export default function levelUpTab() {
 
 
             <View>{newSpellCreationTool()}</View>
+            <View>{newAbilityCreationTool()}</View>
 
 
                 <View style={styles.toolBoxStyle}>
@@ -830,15 +832,15 @@ export default function levelUpTab() {
                             if (isNaN(parseInt(HPChangeVariable)) || HPChangeVariable == "" || parseInt(HPChangeVariable) < 1){HPChangeVariable = "10";}
                             characterUpdater({type: "all", character: new Character(nameChangeVariable, parseInt(HPChangeVariable), parseInt(characterLevelChangeVariable))});
                             setAddCharacterConfirmationCount(addCharacterConfirmationCount + 1);
-                            AsyncStorage.setItem("currentCharacterName", nameChangeVariable);
-                            getAllCharacterNames().then(keysString => {
-                                allCharacterNamesInitial = [];
-                                keysString.forEach((key) => {
-                                    if (key.startsWith("newCharacter")) {
-                                        allCharacterNamesInitial.push(key.replace("newCharacter", ''))}
-                                });
-                                setAllCharacterNames(allCharacterNamesInitial);
-                            })
+                            AsyncStorage.setItem("currentCharacterName", nameChangeVariable).then(() => {
+                                getAllCharacterNames().then(keysString => {
+                                    allCharacterNamesInitial = [];
+                                    keysString.forEach((key) => {
+                                        if (key.startsWith("newCharacter")) {
+                                            allCharacterNamesInitial.push(key.replace("newCharacter", ''))}
+                                    });
+                                    setAllCharacterNames(allCharacterNamesInitial);
+                            })})
                         }}}>
                         <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Add a new Character; {nameChangeVariable}</Text>
                         <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>HP; {HPChangeVariable} Character Level; {characterLevelChangeVariable}</Text>

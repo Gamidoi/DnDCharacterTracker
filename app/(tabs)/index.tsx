@@ -4,6 +4,7 @@ import React, {useState} from "react";
 import {spellSlotsByLevel} from '@/assets/classes/spellSlotsByLevel';
 import {useCharacter, useCharacterUpdater} from '@/components/characterUpdater';
 import headerRandomizer from "@/components/headerRandomizer";
+import DisplayPassivesOnIndexTab from "@/components/displayPassivesOnIndexTab";
 
 
 
@@ -22,7 +23,22 @@ export default function MainCharacterSyndrome() {
         if (warlockCasterLevel >= 9) {return "5th Level"}
         return "0th ooops!"
     }
-
+    function resistanceImmunityDisplayString(listOfResistImmune: string[]){
+        let displayString = listOfResistImmune[0];
+        for (let i = 1; i < listOfResistImmune.length; i++){
+            displayString += ", " + listOfResistImmune[i];
+        }
+        return <Text style={[
+            styles.labels,
+            {
+                fontSize: 15,
+                borderRadius: 7,
+                borderWidth: 2,
+                borderColor: "orange",
+                marginHorizontal: 5,
+            }
+        ]}>{displayString}</Text>;
+    }
 
 
 
@@ -33,7 +49,7 @@ export default function MainCharacterSyndrome() {
           headerImage
       }>
 
-        <View style={{marginBottom: 20, backgroundColor: 'black'}}>
+        <View style={{backgroundColor: 'black'}}>
             <Text style={{color: "white", fontSize: 28}}>current HP is {character.currentHP} / {character.maxHP}</Text>
             <Text>
                 <Pressable
@@ -91,6 +107,28 @@ export default function MainCharacterSyndrome() {
             </Text>
         </View>
 
+        {(character.resistances.length + character.immunities.length > 0 && character.resistances[0] + character.immunities[0] != "") && <View style={{
+            borderWidth: 2,
+            borderColor: "orange",
+            borderRadius: 10,
+            backgroundColor: "blue",
+
+        }}>
+            <Text style={styles.labels}>Grants</Text>
+            <View style={{alignSelf: "center", flexDirection: "row", width: 350}}>
+                {character.resistances.length > 0 && <View style={{flex: character.immunities.length > 0 ? 0.50 : 1}}>
+                    <Text style={styles.labels}>Resistance to:</Text>
+                    {resistanceImmunityDisplayString(character.resistances)}
+                </View>}
+                {character.immunities.length > 0 && <View style={{flex: character.resistances.length > 0 ? 0.50 : 1}}>
+                    <Text style={styles.labels}>Immunity to:</Text>
+                    {resistanceImmunityDisplayString(character.immunities)}
+                </View>}
+            </View>
+        </View>}
+
+
+
         {character.spellcastingLevel > 0 && <View style={{backgroundColor: 'black'}}>
             <View style={styles.spellRow}>
         {character.spellcastingLevel > 0 && <Text style={styles.spellText}> 1st Level Spells ({currentSpells[1]})</Text>}
@@ -140,9 +178,8 @@ export default function MainCharacterSyndrome() {
                     <Text style={styles.spellSlotButtonX}> </Text>
                 </Pressable>
                 <Pressable style={styles.SpellSlotButton4} onPress={()=>{
-                    characterUpdater({type: "updateSpellSlots", spellSlot: 3})
-                }}>{character.currentUsedSpells[3] == "X" && <Text style={styles.spellSlotButtonX}>X</Text>}
-                    <Text style={styles.spellSlotButtonX}> </Text>
+                    characterUpdater({type: "updateSpellSlots", spellSlot: 3})}}>
+                    <Text style={styles.spellSlotButtonX}>{character.currentUsedSpells[3] === "X" ? "X" : " "}</Text>
                 </Pressable>
             </Text>}
         </View>}
@@ -448,6 +485,8 @@ export default function MainCharacterSyndrome() {
             </View>
         </View>}
 
+        {DisplayPassivesOnIndexTab()}
+
 
     </ParallaxScrollView>
   );
@@ -523,5 +562,10 @@ const styles = StyleSheet.create({
         margin: -13,
         fontSize: 40,
         textAlign: 'center',
-    }
+    },
+    labels: {
+        color: "white",
+        textAlign: "center",
+        fontSize: 12,
+    },
 });
