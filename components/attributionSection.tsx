@@ -1,19 +1,11 @@
-import React, {useState} from "react";
-import {StyleSheet, Text, View, Pressable, Image} from 'react-native';
+import React from "react";
+import {StyleSheet, Text, View, Image} from 'react-native';
 
 
-export default function AttributionSection() {
-    let [attributionSectionDisplay, setAttributionSectionDisplay] = useState<boolean>(false);
+export default function AttributionSection(attributionSectionDisplay: boolean) {
 
     return (
         <View style={styles.toolBoxStyle}>
-            <Pressable  style={styles.toolBoxStyle} onPress={() => {
-                setAttributionSectionDisplay(!attributionSectionDisplay);
-            }}>
-                {!attributionSectionDisplay && <Text style={[styles.standard, {height: 40, marginTop: 15, fontSize: 14}]}>Open Acknowledgments and Attributions Section</Text>}
-                {attributionSectionDisplay && <Text style={[styles.standard, {fontSize: 14}]}>Close Acknowledgments and Attributions Section</Text>}
-
-            </Pressable>
             {attributionSectionDisplay && <View>
                 <View>
                     <Text style={styles.standard}>Thank you, Peter</Text>
@@ -72,7 +64,6 @@ export default function AttributionSection() {
 
 const styles = StyleSheet.create({
     toolBoxStyle: {
-        backgroundColor: "teal",
         borderRadius: 12,
     },
     standard: {

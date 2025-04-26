@@ -1,5 +1,6 @@
 import {Spell} from "@/assets/classes/spell";
 import {Ability} from "@/assets/classes/ability";
+import {Item} from "@/assets/classes/item";
 
 export class Character {
     charName: string;
@@ -19,7 +20,14 @@ export class Character {
     languages: string[];
     resistances: string[];
     immunities: string[];
-    items: [];
+
+    items: Item[];
+    armor: string;
+    weapon1: string;
+    weapon2: string;
+    attunement1: string;
+    attunement2: string;
+    attunement3: string;
 
     STR: number;
     DEX: number;
@@ -79,5 +87,8 @@ export class Character {
         this.athletics = this.acrobatics = this.sleightOfHand = this.stealth = this.arcana = this.history = this.investigation = this.nature = this.religion =
             this.animalHandling = this.insight = this.medicine = this.perception = this.survival = this.deception = this.intimidation = this.performance =
                 this.persuasion = "X";
+
+
+        this.armor = this.weapon1 = this.weapon2 = this.attunement1 = this.attunement2 = this.attunement3 = "";
     }
 }
