@@ -45,28 +45,24 @@ export default function levelUpTab() {
             </View>
 
 
-            <Pressable
-                style={
-                [styles.toolBoxButton, {
-                    backgroundColor: "darkgreen",
-                }]}
-                onPress={() => {setSpellAndAbilityToolsDisplay(!spellAndAbilityToolsDisplay)}}>
-                {!spellAndAbilityToolsDisplay && <Text style={styles.toolBoxLabels}>Open Spell and Ability Tools List</Text>}
-                {spellAndAbilityToolsDisplay && <Text style={styles.toolBoxLabels}>Close Spell and Ability Tools List</Text>}
+            <View style={[styles.toolBoxButton, {backgroundColor: "darkgreen",}]}>
+                <Pressable
+                    onPress={() => {setSpellAndAbilityToolsDisplay(!spellAndAbilityToolsDisplay)}}>
+                    {!spellAndAbilityToolsDisplay && <Text style={styles.toolBoxLabels}>Open Spell and Ability Tools List</Text>}
+                    {spellAndAbilityToolsDisplay && <Text style={styles.toolBoxLabels}>Close Spell and Ability Tools List</Text>}
+                </Pressable>
                 {<View>{newSpellCreationTool(spellAndAbilityToolsDisplay)}</View>}
                 {<View style={{marginTop: spellAndAbilityToolsDisplay ? 15 : 0}}>{newAbilityCreationTool(spellAndAbilityToolsDisplay)}</View>}
-            </Pressable>
+            </View>
 
 
 
-            <Pressable
-                style={
-                    [styles.toolBoxButton, {
-                        backgroundColor: "darkred",
-                    }]}
-                onPress={() => {setLevelUpToolsSkillsStatsCastingHPDisplay(!levelUpToolsSkillsStatsCastingHPDisplay)}}>
-                {!levelUpToolsSkillsStatsCastingHPDisplay && <Text style={styles.toolBoxLabels}>Open Level Up Tools List</Text>}
-                {levelUpToolsSkillsStatsCastingHPDisplay && <Text style={styles.toolBoxLabels}>Close Level Up Tools List</Text>}
+            <View style={[styles.toolBoxButton, {backgroundColor: "darkred",}]}>
+                <Pressable
+                    onPress={() => {setLevelUpToolsSkillsStatsCastingHPDisplay(!levelUpToolsSkillsStatsCastingHPDisplay)}}>
+                    {!levelUpToolsSkillsStatsCastingHPDisplay && <Text style={styles.toolBoxLabels}>Open Level Up Tools List</Text>}
+                    {levelUpToolsSkillsStatsCastingHPDisplay && <Text style={styles.toolBoxLabels}>Close Level Up Tools List</Text>}
+                </Pressable>
                 {<View>{LevelUpToolsStatsCastingHP(levelUpToolsSkillsStatsCastingHPDisplay)}</View>}
                 {<View style={{
                     marginTop: levelUpToolsSkillsStatsCastingHPDisplay ? 15 : 0,
@@ -74,29 +70,29 @@ export default function levelUpTab() {
                 {<View style={{
                     marginTop: levelUpToolsSkillsStatsCastingHPDisplay ? 15 : 0,
                 }}>{AdjustSkillsTool(levelUpToolsSkillsStatsCastingHPDisplay)}</View>}
-            </Pressable>
+            </View>
 
 
-
-            <Pressable
-                style={
-                    [styles.toolBoxButton, {
-                        backgroundColor: "mediumblue",
-                    }]}
-                onPress={() => {setCharacterManagementToolsDisplay(!characterManagementToolsDisplay)}}>
-                {!characterManagementToolsDisplay && <Text style={styles.toolBoxLabels}>Open Character Management Tools List</Text>}
-                {characterManagementToolsDisplay && <Text style={styles.toolBoxLabels}>Close Character Management Tools List</Text>}
+            <View style={[styles.toolBoxButton, {backgroundColor: "mediumblue",}]}>
+                <Pressable
+                    onPress={() => {setCharacterManagementToolsDisplay(!characterManagementToolsDisplay)}}>
+                    {!characterManagementToolsDisplay && <Text style={styles.toolBoxLabels}>Open Character Management Tools List</Text>}
+                    {characterManagementToolsDisplay && <Text style={styles.toolBoxLabels}>Close Character Management Tools List</Text>}
+                </Pressable>
                 {<View style={{margin: 0, padding: 0}}>{CharacterManagementTools(characterManagementToolsDisplay)}</View>}
-            </Pressable>
+            </View>
 
 
-            <Pressable style={[styles.toolBoxButton, {backgroundColor: "slateblue"}]} onPress={() => {
-                setAttributionSectionDisplay(!attributionSectionDisplay);
-            }}>
-                {!attributionSectionDisplay && <Text style={[styles.toolBoxLabels, {height: 40, marginTop: 15, fontSize: 14}]}>Open Acknowledgments and Attributions Section</Text>}
-                {attributionSectionDisplay && <Text style={[styles.toolBoxLabels, {fontSize: 14}]}>Close Acknowledgments and Attributions Section</Text>}
+            <View style={[styles.toolBoxButton, {backgroundColor: "slateblue"}]}>
+                <Pressable onPress={() => {
+                    setAttributionSectionDisplay(!attributionSectionDisplay);
+                }}>
+                    {!attributionSectionDisplay && <Text style={[styles.toolBoxLabels, {height: 40, marginTop: 15, fontSize: 14}]}>Open Acknowledgments and Attributions Section</Text>}
+                    {attributionSectionDisplay && <Text style={[styles.toolBoxLabels, {fontSize: 14}]}>Close Acknowledgments and Attributions Section</Text>}
+                </Pressable>
                 {attributionSectionDisplay && <View>{AttributionSection(attributionSectionDisplay)}</View>}
-            </Pressable>
+            </View>
+
 
         </ParallaxScrollView>
 
