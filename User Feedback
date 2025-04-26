@@ -28,3 +28,7 @@ XXX- New spell tool section buttons are a bit large compared to the rest of the 
 - New spell, change Spell Level to dropdown, possible for Casting Time as well (more variability with that though)
 XXX- When using "confirm" windows, put object name in quotes, or have a "-" after the confirm to separate
 XXX- Move Character Load/Delete to the bottom of the page, as it shouldnt be used as much (or maybe delete at the bottom and load at the top?)
+
+----------------------------------------------------------------------------------------
+
+Check desktop layout, seems a bit on the funny side with centering of assets
