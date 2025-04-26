@@ -42,6 +42,13 @@ export default function TabLayout() {
             }}
         />
         <Tabs.Screen
+        name="Items"
+        options={{
+            title: 'Items',
+            tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="hexagon-multiple-outline" color={color} />,
+        }}
+    />
+        <Tabs.Screen
             name="LevelUpTab"
             options={{
                 title: 'Level Up',

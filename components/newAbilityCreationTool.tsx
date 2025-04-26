@@ -6,7 +6,7 @@ import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 import {FontAwesome, MaterialCommunityIcons} from "@expo/vector-icons";
 
 
-export default function newAbilityCreationTool() {
+export default function newAbilityCreationTool(spellAndAbilityToolsDisplay: boolean) {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 
@@ -182,7 +182,7 @@ export default function newAbilityCreationTool() {
     }
 
     return(
-        <View>
+        <View style={{margin: 0, padding: 0}}>{spellAndAbilityToolsDisplay && <View>
             <View style={styles.toolBoxStyle}>
                 <Pressable onPress={() => closeAllDropDowns()} style={styles.toolBoxStyle}>
                     <Pressable onPress={() => {
@@ -545,7 +545,7 @@ export default function newAbilityCreationTool() {
                     }
 
                     <Pressable
-                    style={styles.toolBoxButton}
+                    style={[styles.toolBoxButton, {marginBottom: 10}]}
                     onPress={() => {
                         closeAllDropDowns();
                         if (abilityName != ""){
@@ -566,7 +566,7 @@ export default function newAbilityCreationTool() {
             </View>
 
 
-            <View style={[styles.toolBoxStyle, {marginTop: 17}]}>
+            <View style={[styles.toolBoxStyle, {marginTop: 16}]}>
                 <Pressable onPress={() => closeAllDropDowns()} style={styles.toolBoxStyle}>
                     <Pressable onPress={() => {
                         setAbilityDeleteToolDisplay(!abilityDeleteToolDisplay);
@@ -637,7 +637,7 @@ export default function newAbilityCreationTool() {
             </View>
 
 
-        </View>
+        </View>}</View>
     )
 }
 

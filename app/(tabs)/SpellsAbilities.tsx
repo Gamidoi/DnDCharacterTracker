@@ -2,7 +2,7 @@ import {StyleSheet, Text, View, Pressable} from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import React, { useState} from "react";
 import DisplaySpellBox from "@/components/displaySpellBox";
-import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
+import {useCharacter} from "@/components/characterUpdater";
 import headerRandomizer from "@/components/headerRandomizer";
 import DisplayAbilitiesOnSpellsAbilitiesTab from "@/components/displayAbilitiesOnSpellsAbilitiesTab";
 
@@ -12,7 +12,6 @@ import DisplayAbilitiesOnSpellsAbilitiesTab from "@/components/displayAbilitiesO
 let headerImage :React.JSX.Element = headerRandomizer();
 export default function SpellsAbilitiesScreen() {
     const character = useCharacter();
-    const characterUpdater = useCharacterUpdater();
 
 
     let [displayAllSpells, setDisplayAllSpells] = useState(false);
@@ -141,8 +140,8 @@ export default function SpellsAbilitiesScreen() {
         </View>}
 
         <Pressable onPress={()=> {
-            setDisplayAllSpells(false);
             setDisplayAbilities(!displayAbilities);
+            setDisplayAllSpells(false);
             setDisplay0thSpells(false);
             setDisplay1stSpells(false);
             setDisplay2ndSpells(false);
@@ -157,7 +156,7 @@ export default function SpellsAbilitiesScreen() {
         }}>
             <Text style={styles.displayAllSpells}>{displayAbilities ? "Close" : "Open"} Abilities</Text>
         </Pressable>
-        {character.abilities.length === 0 && <Text style={styles.displaySpells}>Character has no Abilities</Text>}
+        {displayAbilities && character.abilities.length === 0 && <Text style={styles.displaySpells}>Character has no Abilities</Text>}
         {displayAbilities && DisplayAbilitiesOnSpellsAbilitiesTab()}
 
 

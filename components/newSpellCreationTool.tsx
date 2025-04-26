@@ -7,7 +7,7 @@ import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 
 
 
-export default function newSpellCreationTool() {
+export default function newSpellCreationTool(spellAndAbilityToolsDisplay: boolean) {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 
@@ -173,7 +173,7 @@ export default function newSpellCreationTool() {
         setSpellDescription("");
     }
 
-    return(<View>
+    return(<View style={{margin: 0, padding: 0}}>{spellAndAbilityToolsDisplay && <View>
         <Pressable onPress={() => closeAllDropDowns()} style={styles.toolBoxStyle}>
             <Pressable onPress={() => {
                 setNewSpellCreationToolDisplay(!newSpellCreationToolDisplay);
@@ -660,7 +660,7 @@ export default function newSpellCreationTool() {
 
 
                 <Pressable
-                    style={styles.toolBoxButton}
+                    style={[styles.toolBoxButton, {marginBottom: 10}]}
                     onPress={() => {
                         closeAllDropDowns();
                         if (spellNameVariable != ""){
@@ -681,7 +681,7 @@ export default function newSpellCreationTool() {
         </Pressable>
 
 
-        <View style={[styles.toolBoxStyle, {marginTop: 17}]}>
+        <View style={[styles.toolBoxStyle, {marginTop: 16}]}>
             <Pressable onPress={() => {setDeleteSpellToolDisplay(!deleteSpellToolDisplay)}}>
                 {!deleteSpellToolDisplay && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open Spell Deletion Tool</Text>}
                 {deleteSpellToolDisplay && <Text style={{color: "white", textAlign: "center", marginBottom: 20}}>Close Spell Deletion Tool</Text>}
@@ -750,7 +750,7 @@ export default function newSpellCreationTool() {
 
 
 
-        </View>
+        </View>}</View>
 )}
 
 const styles = StyleSheet.create({
