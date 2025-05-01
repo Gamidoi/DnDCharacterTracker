@@ -1,6 +1,4 @@
 import {Platform, Pressable, StyleSheet, Text, View} from "react-native";
-import {Ability} from "@/assets/classes/ability";
-import {Character} from "@/assets/classes/character";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 import React from "react";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
@@ -97,6 +95,8 @@ export default function DisplayAbilitiesOnSpellsAbilitiesTab(){
                 return (<View style={styles.abilityBox}>
                     <Text style={styles.abilityName}>{ability.name}</Text>
                     <Text style={styles.labels}>Uses{ability.uses > 4 ? "" : ability.uses === 1 ? " Button" : " Buttons"}</Text>
+
+
                     {ability.uses === 1 && <View style={styles.useButtonsRow}>
                         <Pressable style={styles.usesButton1} onPress={()=>{
                             characterUpdater({type: "updateAbilityUsageSlot", useSlot: 0, abilityName: ability.name})
@@ -185,6 +185,8 @@ export default function DisplayAbilitiesOnSpellsAbilitiesTab(){
                             <Text style={styles.ButtonX}>{ability.usedInstances[3] === "X" ? "X" : " "}</Text>
                         </Pressable>
                     </View>}
+
+
                     {ability.uses > 4 && <View style={styles.useButtonsRow}>
                         <Pressable onPress={() => {
                             characterUpdater({type: "abilityUnusedQuantityAdjust", abilityName: ability.name, value: "subtract"})
@@ -201,6 +203,7 @@ export default function DisplayAbilitiesOnSpellsAbilitiesTab(){
                             <MaterialCommunityIcons size={28} name="arrow-right-bold-outline" color={"blue"} />
                         </Pressable>
                     </View>}
+
 
                     <Text style={styles.labels}>{useQuantityLabel(ability.usesQuantityStat, ability.uses)} Use{ability.uses === 1 ? "" : "s"} Refresh{ability.uses === 1 ? "es" : ""} on {ability.refreshOn}</Text>
 

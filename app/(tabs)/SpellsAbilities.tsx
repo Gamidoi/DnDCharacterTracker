@@ -101,39 +101,39 @@ export default function SpellsAbilitiesScreen() {
                 <Text style={styles.displaySpells}>{display0thSpells ? "Close" : "Open"} Cantrips: {haveQuantity0thSpells}</Text>
             </Pressable>}
             {display0thSpells && <View>{DisplaySpellBox(0)}</View>}
-            {haveQuantity1stSpells && <Pressable onPress={()=> {setDisplay1stSpells(!display1stSpells)}}>
+            {haveQuantity1stSpells > 0 && <Pressable onPress={()=> {setDisplay1stSpells(!display1stSpells)}}>
                 <Text style={styles.displaySpells}>{display1stSpells ? "Close" : "Open"} 1st Level Spells: {haveQuantity1stSpells}</Text>
             </Pressable>}
             {display1stSpells && <View>{DisplaySpellBox(1)}</View>}
-            {haveQuantity2ndSpells && <Pressable onPress={()=> {setDisplay2ndSpells(!display2ndSpells)}}>
+            {haveQuantity2ndSpells > 0 && <Pressable onPress={()=> {setDisplay2ndSpells(!display2ndSpells)}}>
                 <Text style={styles.displaySpells}>{display2ndSpells ? "Close" : "Open"} 2nd Level Spells: {haveQuantity2ndSpells}</Text>
             </Pressable>}
             {display2ndSpells && <View>{DisplaySpellBox(2)}</View>}
-            {haveQuantity3rdSpells && <Pressable onPress={()=> {setDisplay3rdSpells(!display3rdSpells)}}>
+            {haveQuantity3rdSpells > 0 && <Pressable onPress={()=> {setDisplay3rdSpells(!display3rdSpells)}}>
                 <Text style={styles.displaySpells}>{display3rdSpells ? "Close" : "Open"} 3rd Level Spells: {haveQuantity3rdSpells}</Text>
             </Pressable>}
             {display3rdSpells && <View>{DisplaySpellBox(3)}</View>}
-            {haveQuantity4thSpells && <Pressable onPress={()=> {setDisplay4thSpells(!display4thSpells)}}>
+            {haveQuantity4thSpells > 0 && <Pressable onPress={()=> {setDisplay4thSpells(!display4thSpells)}}>
                 <Text style={styles.displaySpells}>{display4thSpells ? "Close" : "Open"} 4th Level Spells: {haveQuantity4thSpells}</Text>
             </Pressable>}
             {display4thSpells && <View>{DisplaySpellBox(4)}</View>}
-            {haveQuantity5thSpells && <Pressable onPress={()=> {setDisplay5thSpells(!display5thSpells)}}>
+            {haveQuantity5thSpells > 0 && <Pressable onPress={()=> {setDisplay5thSpells(!display5thSpells)}}>
                 <Text style={styles.displaySpells}>{display5thSpells ? "Close" : "Open"} 5th Level Spells: {haveQuantity5thSpells}</Text>
             </Pressable>}
             {display5thSpells && <View>{DisplaySpellBox(5)}</View>}
-            {haveQuantity6thSpells && <Pressable onPress={()=> {setDisplay6thSpells(!display6thSpells)}}>
+            {haveQuantity6thSpells > 0 && <Pressable onPress={()=> {setDisplay6thSpells(!display6thSpells)}}>
                 <Text style={styles.displaySpells}>{display6thSpells ? "Close" : "Open"} 6th Level Spells: {haveQuantity6thSpells}</Text>
             </Pressable>}
             {display6thSpells && <View>{DisplaySpellBox(6)}</View>}
-            {haveQuantity7thSpells && <Pressable onPress={()=> {setDisplay7thSpells(!display7thSpells)}}>
+            {haveQuantity7thSpells > 0 && <Pressable onPress={()=> {setDisplay7thSpells(!display7thSpells)}}>
                 <Text style={styles.displaySpells}>{display7thSpells ? "Close" : "Open"} 7th Level Spells: {haveQuantity7thSpells}</Text>
             </Pressable>}
             {display7thSpells && <View>{DisplaySpellBox(7)}</View>}
-            {haveQuantity8thSpells && <Pressable onPress={()=> {setDisplay8thSpells(!display8thSpells)}}>
+            {haveQuantity8thSpells > 0 && <Pressable onPress={()=> {setDisplay8thSpells(!display8thSpells)}}>
                 <Text style={styles.displaySpells}>{display8thSpells ? "Close" : "Open"} 8th Level Spells: {haveQuantity8thSpells}</Text>
             </Pressable>}
             {display8thSpells && <View>{DisplaySpellBox(8)}</View>}
-            {haveQuantity9thSpells && <Pressable onPress={()=> {setDisplay9thSpells(!display9thSpells)}}>
+            {haveQuantity9thSpells > 0 && <Pressable onPress={()=> {setDisplay9thSpells(!display9thSpells)}}>
                 <Text style={styles.displaySpells}>{display9thSpells ? "Close" : "Open"} 9th Level Spells: {haveQuantity9thSpells}</Text>
             </Pressable>}
             {display9thSpells && <View>{DisplaySpellBox(9)}</View>}
@@ -154,7 +154,7 @@ export default function SpellsAbilitiesScreen() {
             setDisplay9thSpells(false);
             updateQuantityOfSpellsByLevel();
         }}>
-            <Text style={styles.displayAllSpells}>{displayAbilities ? "Close" : "Open"} Abilities</Text>
+            <Text style={styles.displayAllSpells}>{displayAbilities ? "Close" : "Open"} All Abilities</Text>
         </Pressable>
         {displayAbilities && character.abilities.length === 0 && <Text style={styles.displaySpells}>Character has no Abilities</Text>}
         {displayAbilities && DisplayAbilitiesOnSpellsAbilitiesTab()}

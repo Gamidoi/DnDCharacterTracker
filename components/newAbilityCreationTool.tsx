@@ -190,8 +190,7 @@ export default function newAbilityCreationTool(spellAndAbilityToolsDisplay: bool
                         closeAllDropDowns();
                         resetVariablesOnTabClose()
                     }}>
-                        {!newAbilityCreationToolDisplay && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open New Ability Tool</Text>}
-                        {newAbilityCreationToolDisplay && <Text style={{color: "white", textAlign: "center", marginBottom: 20}}>Close New Ability Tool</Text>}
+                        <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>New Ability</Text>
                     </Pressable>
                 </Pressable>
 
@@ -337,9 +336,15 @@ export default function newAbilityCreationTool(spellAndAbilityToolsDisplay: bool
                         />
                     </View>}
 
-                    <View style={{flexDirection: "row", alignSelf: "center", marginVertical: 5}}>
-                        {usesTrigger != "Passive" && <View style={{flex: 0.32}}>
-                            <Text style={styles.labels}>does ability last more than One Turn?</Text>
+                    <View style={{
+                        flexDirection: "row",
+                        alignSelf: "center",
+                        marginVertical: 5,
+                        width: 400,
+                    }}>
+                        {usesTrigger != "Passive" && <View style={{flex: 1}}>
+                            <Text style={styles.labels}>does ability last</Text>
+                            <Text style={styles.labels}>multiple Turns?</Text>
                             <Pressable
                                 style={styles.newAbilityToolToggleButtons}
                                 onPress={() => {
@@ -349,8 +354,13 @@ export default function newAbilityCreationTool(spellAndAbilityToolsDisplay: bool
                                 <Text style={styles.toggleButtonLables}>{persistence[0] ? "Yes" : "No"}</Text>
                             </Pressable>
                         </View>}
-                        <View style={{flex: 0.32}}>
-                            <Text style={styles.labels}>does ability grant one or more Resistence?</Text>
+                        <View style={{
+                            flex: 1.1,
+                            marginRight: 10,
+                            marginLeft: usesTrigger != "Passive" ? 10 : 0
+                        }}>
+                            <Text style={styles.labels}>does ability grant one</Text>
+                            <Text style={styles.labels}>or more Resistance?</Text>
                             <Pressable
                                 style={styles.newAbilityToolToggleButtons}
                                 onPress={() => {
@@ -359,8 +369,9 @@ export default function newAbilityCreationTool(spellAndAbilityToolsDisplay: bool
                                 <Text style={styles.toggleButtonLables}>{grantsResistance ? "Yes" : "No"}</Text>
                             </Pressable>
                         </View>
-                        <View style={{flex: 0.32}}>
-                            <Text style={styles.labels}>does ability grant one or more Immunity</Text>
+                        <View style={{flex: 1.1}}>
+                            <Text style={styles.labels}>does ability grant one</Text>
+                            <Text style={styles.labels}>or more Immunity?</Text>
                             <Pressable
                                 style={styles.newAbilityToolToggleButtons}
                                 onPress={() => {
@@ -571,8 +582,7 @@ export default function newAbilityCreationTool(spellAndAbilityToolsDisplay: bool
                     <Pressable onPress={() => {
                         setAbilityDeleteToolDisplay(!abilityDeleteToolDisplay);
                         closeAllDropDowns()}}>
-                        {!abilityDeleteToolDisplay && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open Delete Ability Tool</Text>}
-                        {abilityDeleteToolDisplay && <Text style={{color: "white", textAlign: "center", marginBottom: 20}}>Close Delete Ability Tool</Text>}
+                        <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Delete Ability</Text>
                         {abilityDeleteToolDisplay && <Text style={{color: "white", textAlign: "center", marginBottom: 20}}>Choose Ability Below</Text>}
                     </Pressable>
                     <View style={{alignSelf: "center"}}>

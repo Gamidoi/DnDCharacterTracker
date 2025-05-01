@@ -24,10 +24,12 @@ export default function MainCharacterSyndrome() {
         return "0th ooops!"
     }
     function resistanceImmunityDisplayString(listOfResistImmune: string[]){
-        let displayString = listOfResistImmune[0];
-        for (let i = 1; i < listOfResistImmune.length; i++){
-            displayString += ", " + listOfResistImmune[i];
-        }
+        let setOfResistImmune = new Set(listOfResistImmune);
+        let displayString = "";
+        setOfResistImmune.forEach((item) => {
+            if (displayString != "") {displayString += ", "}
+            displayString += item;
+        })
         return <Text style={[
             styles.labels,
             {
@@ -49,8 +51,8 @@ export default function MainCharacterSyndrome() {
           headerImage
       }>
 
-        <View style={{backgroundColor: 'black'}}>
-            <Text style={{color: "white", fontSize: 28}}>current HP is {character.currentHP} / {character.maxHP}</Text>
+        <View style={{backgroundColor: 'black', alignItems: "center", alignSelf: "center"}}>
+            <Text style={{color: "white", fontSize: 28}}>Current HP is {character.currentHP} / {character.maxHP}</Text>
             <Text>
                 <Pressable
                     style={{
@@ -70,7 +72,7 @@ export default function MainCharacterSyndrome() {
                         }
                     }
                 }}>
-                    <Text style={{color: "white", fontSize: 12}}>take {incrementHP} damage</Text>
+                    <Text style={{color: "white", fontSize: 12}}>Take {incrementHP} Damage</Text>
                 </Pressable>
 
                 <Pressable
@@ -107,14 +109,13 @@ export default function MainCharacterSyndrome() {
             </Text>
         </View>
 
-        {(character.resistances.length + character.immunities.length > 0 && character.resistances[0] + character.immunities[0] != "") && <View style={{
+        {(character.resistances.length + character.immunities.length > 0) && <View style={{
             borderWidth: 2,
             borderColor: "orange",
             borderRadius: 10,
             backgroundColor: "blue",
 
         }}>
-            <Text style={styles.labels}>Grants</Text>
             <View style={{alignSelf: "center", flexDirection: "row", width: 350}}>
                 {character.resistances.length > 0 && <View style={{flex: character.immunities.length > 0 ? 0.50 : 1}}>
                     <Text style={styles.labels}>Resistance to:</Text>

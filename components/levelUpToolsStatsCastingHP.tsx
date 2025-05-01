@@ -48,8 +48,7 @@ return(
             <Pressable style={styles.toolBoxStyle} onPress={() =>
             {SetAddHPAdjustBoxDisplayStatus(!addHPAdjustBoxDisplayStatus)}
             }>
-                {!addHPAdjustBoxDisplayStatus && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open HP Adjustment Tool</Text>}
-                {addHPAdjustBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Close HP Adjustment Tool</Text>}
+                <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Max HP</Text>
                 {addHPAdjustBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter Max HP Below</Text>}
             </Pressable>
             {addHPAdjustBoxDisplayStatus && <View>
@@ -91,11 +90,14 @@ return(
 
 
         <View style={[styles.toolBoxStyle, {marginTop: 16}]}>
-            <Pressable style={styles.toolBoxStyle} onPress={() =>
-            {SetAddSpellAndCharacterLevelBoxDisplayStatus(!addSpellAndCharacterLevelBoxDisplayStatus)}
-            }>
-                {!addSpellAndCharacterLevelBoxDisplayStatus && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open Character and Spellcasting Level Tool</Text>}
-                {addSpellAndCharacterLevelBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Close Character and Spellcasting Level Tool</Text>}
+            <Pressable style={styles.toolBoxStyle} onPress={() => {
+                SetAddSpellAndCharacterLevelBoxDisplayStatus(!addSpellAndCharacterLevelBoxDisplayStatus);
+                setCharacterLevelChangeVariable("");
+                setFullCasterLevelsChangeVariable("");
+                setHalfCasterLevelsChangeVariable("");
+                setWarlockCasterLevelsChangeVariable("");
+            }}>
+                <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Character and Spellcasting Level</Text>
                 {addSpellAndCharacterLevelBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter Total Character Level of All Classes Below</Text>}
             </Pressable>
             {addSpellAndCharacterLevelBoxDisplayStatus && <View>
@@ -117,8 +119,8 @@ return(
                         textAlign: "center"
                     }}
                 />
-                <View style={{flexDirection: "row"}}>
-                    <View style={{flex: 0.333}}><Text style={{color: "white", textAlign: "center"}}>Enter Full Caster Levels Below</Text>
+                <View style={{flexDirection: "row", maxWidth: 600, alignSelf: "center"}}>
+                    <View style={{flex: 0.333}}><Text style={{color: "white", textAlign: "center"}}>Full Caster Levels</Text>
                         <TextInput
                             onChangeText={setFullCasterLevelsChangeVariable}
                             maxLength={2}
@@ -137,7 +139,7 @@ return(
                                 textAlign: "center"
                             }}
                         /></View>
-                    <View style={{flex: 0.333}}><Text style={{color: "white", textAlign: "center"}}>Enter Half Caster Levels Below</Text>
+                    <View style={{flex: 0.333, marginHorizontal: 15}}><Text style={{color: "white", textAlign: "center"}}>Half Caster Levels</Text>
                         <TextInput
                             onChangeText={setHalfCasterLevelsChangeVariable}
                             maxLength={2}
@@ -156,7 +158,7 @@ return(
                                 textAlign: "center"
                             }}
                         /></View>
-                    <View style={{flex: 0.333}}><Text style={{color: "white", textAlign: "center"}}>Enter Warlock Levels Below</Text>
+                    <View style={{flex: 0.333}}><Text style={{color: "white", textAlign: "center"}}>Warlock Levels</Text>
                         <TextInput
                             onChangeText={setWarlockCasterLevelsChangeVariable}
                             maxLength={2}
@@ -184,7 +186,7 @@ return(
                         <Text style={styles.confirmationBox}>Updated {addSpellandCharacterLevelConfirmationCount} time(s)!</Text>
                     </Pressable>}
                 <Pressable
-                    style={[styles.toolBoxButton, {marginBottom: 10}]}
+                    style={[styles.toolBoxButton, {marginBottom: 10, marginTop: addSpellandCharacterLevelConfirmationCount < 1 ? 15 : 0}]}
                     onPress={() => {
                         if (isNaN(parseInt(characterLevelChangeVariable)) || (characterLevelChangeVariable == "")){characterLevelChangeVariable = "" + character.characterLevel}
                         if (parseInt(characterLevelChangeVariable) < 1){characterLevelChangeVariable = "0";}
@@ -212,11 +214,11 @@ return(
 
 
         <View style={[styles.toolBoxStyle, {marginTop: 16}]}>
-            <Pressable style={styles.toolBoxStyle} onPress={() =>
-            {setAddAbilityScoreBoxDisplayStatus(!addAbilityScoreBoxDisplayStatus)}
-            }>
-                {!addAbilityScoreBoxDisplayStatus && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open Ability Score Tool</Text>}
-                {addAbilityScoreBoxDisplayStatus && <Text style={{color: "white", textAlign: "center", marginTop: 15, marginBottom: 18}}>Close Ability Score Tool</Text>}
+            <Pressable style={styles.toolBoxStyle} onPress={() => {
+                setAddAbilityScoreBoxDisplayStatus(!addAbilityScoreBoxDisplayStatus);
+                setAbilityScoreChangeVariable("")
+            }}>
+                <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Ability Scores</Text>
                 {addAbilityScoreBoxDisplayStatus && <View>{displayCoreStats()}</View>}
                 {addAbilityScoreBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter stat Below</Text>}
             </Pressable>
@@ -283,7 +285,7 @@ return(
                             characterUpdater({type: "updateINT", value: parseInt(abilityScoreChangeVariable)});
                             setAddAbilityScoreConfirmationCount(addAbilityScoreConfirmationCount + 1);
                         }}>
-                        <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust  INT: {abilityScoreChangeVariable}</Text>
+                        <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Adjust   INT: {abilityScoreChangeVariable}</Text>
                     </Pressable>
                     <Pressable
                         style={styles.coreStatAdjustButton}

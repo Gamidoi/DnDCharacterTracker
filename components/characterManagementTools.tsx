@@ -49,14 +49,11 @@ export function CharacterManagementTools(characterManagementToolsDisplay: boolea
 
 
 
-
-
             <View style={styles.toolBoxStyle}>
                 <Pressable style={styles.toolBoxStyle} onPress={() =>
                 {setLoadCharacterBoxDisplayStatus(!loadCharacterBoxDisplayStatus);}
                 }><View>
-                    {!loadCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open Load Character Tool</Text>}
-                    {loadCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Close Load Character Tool</Text>}
+                    <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Load Character</Text>
                     {loadCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Select Character Below</Text>}
                 </View></Pressable>
                 {(loadCharacterBoxDisplayStatus && (loadCharacterConfirmationCount > 0)) &&
@@ -98,8 +95,7 @@ export function CharacterManagementTools(characterManagementToolsDisplay: boolea
                 <Pressable style={styles.toolBoxStyle} onPress={() =>
                 {SetAddCharacterBoxDisplayStatus(!addCharacterBoxDisplayStatus);}
                 }>
-                    {!addCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open New Character Creator</Text>}
-                    {addCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Close Character Creator</Text>}
+                    <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>New Character Creator</Text>
                     {addCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter Name Below</Text>}
                 </Pressable>
                 {addCharacterBoxDisplayStatus && <View>
@@ -207,8 +203,7 @@ export function CharacterManagementTools(characterManagementToolsDisplay: boolea
                 <Pressable style={styles.toolBoxStyle} onPress={() =>
                 {setDeleteCharacterBoxDisplayStatus(!deleteCharacterBoxDisplayStatus);}
                 }><View>
-                    {!deleteCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open Delete Character Tool</Text>}
-                    {deleteCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Close Delete Character Tool</Text>}
+                    <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Delete Character</Text>
                     {deleteCharacterBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Select Character Below</Text>}
                 </View>
                 </Pressable>
@@ -315,4 +310,4 @@ const styles = StyleSheet.create({
         backgroundColor: "blue",
         borderRadius: 10,
     },
-})
+});

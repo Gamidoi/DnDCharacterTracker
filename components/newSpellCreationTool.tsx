@@ -180,8 +180,7 @@ export default function newSpellCreationTool(spellAndAbilityToolsDisplay: boolea
                 closeAllDropDowns();
                 resetVariablesOnTabClose();
             }}>
-            {!newSpellCreationToolDisplay && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open New Spell Tool</Text>}
-            {newSpellCreationToolDisplay && <Text style={{color: "white", textAlign: "center", marginBottom: 20}}>Close New Spell Tool</Text>}
+            <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>New Spell</Text>
             </Pressable>
             {newSpellCreationToolDisplay && <View>
                 <View style={{flexDirection: "row", alignSelf: "center", marginBottom: 10}}>
@@ -683,8 +682,7 @@ export default function newSpellCreationTool(spellAndAbilityToolsDisplay: boolea
 
         <View style={[styles.toolBoxStyle, {marginTop: 16}]}>
             <Pressable onPress={() => {setDeleteSpellToolDisplay(!deleteSpellToolDisplay)}}>
-                {!deleteSpellToolDisplay && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open Spell Deletion Tool</Text>}
-                {deleteSpellToolDisplay && <Text style={{color: "white", textAlign: "center", marginBottom: 20}}>Close Spell Deletion Tool</Text>}
+                <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Delete Spell</Text>
                 {deleteSpellToolDisplay && <Text style={{color: "white", textAlign: "center", marginBottom: 20}}>Choose Spell Below</Text>}
             </Pressable>
             <View style={{alignSelf: "center"}}>

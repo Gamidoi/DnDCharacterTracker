@@ -29,6 +29,11 @@ export class Character {
     attunement2: string;
     attunement3: string;
 
+    gold: number;
+    electrum: number;
+    silver: number;
+    copper: number;
+
     STR: number;
     DEX: number;
     CON: number;
@@ -68,9 +73,8 @@ export class Character {
         this.maxHP = HPMax;
         this.currentHP = HPMax;
         this.armorClass = 10;
-        this.spellcastingLevel = 0;
         this.characterLevel = characterLevel;
-        this.fullCasterLevel = this.warlockCasterLevel = this.halfCasterLevel = 0;
+        this.spellcastingLevel = this.fullCasterLevel = this.warlockCasterLevel = this.halfCasterLevel = this.gold = this.electrum = this.silver = this.copper = 0;
         this.currentUsedSpells = "0000000000000000000000";
         this.warlockCurrentUsedSpells = "0000";
         this.concentration = "";

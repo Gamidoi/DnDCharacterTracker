@@ -121,8 +121,8 @@ export default function DisplaySpellBox(spellLevel :number){
                                 width: 250,
                                 alignSelf: "center",
                             }}>
-                                <Text style={{color: "white", textAlign: "center"}}>Spell Attack: Casting Ability {spell.isAttack[1]}</Text>
-                                <Text style={{color: "white", textAlign: "center", fontSize: 20}}>{spellAttackModifierToString(spell.isAttack[1], character)}</Text>
+                                <Text style={{color: "white", textAlign: "center"}}>Casting Ability {spell.isAttack[1]}</Text>
+                                <Text style={{color: "white", textAlign: "center", fontSize: 25}}>Spell Attack: {spellAttackModifierToString(spell.isAttack[1], character)}</Text>
                             </View>}
                         {spell.isSaveDC[0] &&
                             <View style={{
@@ -133,8 +133,8 @@ export default function DisplaySpellBox(spellLevel :number){
                                 width: 270,
                                 alignSelf: "center",
                             }}>
-                                <Text style={{color: "white", textAlign: "center"}}>Saving Throw: Casting Ability {spell.isSaveDC[1]}</Text>
-                                <Text style={{color: "white", textAlign: "center", fontSize: 20}}>
+                                <Text style={{color: "white", textAlign: "center"}}>Casting Ability {spell.isSaveDC[1]}</Text>
+                                <Text style={{color: "white", textAlign: "center", fontSize: 23}}>
                                     DC {spellSaveDCToString(spell.isSaveDC[1], character)} {spell.isSaveDC[2]} Saving Throw</Text>
                             </View>}
 

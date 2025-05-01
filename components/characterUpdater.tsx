@@ -194,9 +194,20 @@ interface subtractResistanceAndImmunities{
     type: "subtractResistanceAndImmunities";
     abilityName: string;
 }
+interface updateMoney{
+    type: "updateMoney";
+    gainOrPay: boolean;
+    gold: number;
+    electrum: number;
+    silver: number;
+    copper: number;
+}
+interface magicalMoneyExchange{
+    type: "magicalMoneyExchange";
+}
 
 
-type CharacterEvent =
+export type CharacterEvent =
     | UpdateMaxHpEvent
     | UpdateCurrentHP
     | UpdateSpellSlots
@@ -243,26 +254,52 @@ type CharacterEvent =
     | changeActiveAbilityState
     | addResistanceAndImmunities
     | subtractResistanceAndImmunities
+    | updateMoney
+    | magicalMoneyExchange
 
 export const characterDispatch: (current: Character, event: CharacterEvent) => Character = (currentCharacter, event) => {
 
 
     if (event.type === "all"){
         if (typeof event.character.armorClass != "number" ||
-        typeof event.character.languages != "object" ||
+            typeof event.character.languages != "object" ||
             typeof event.character.resistances != "object" ||
             typeof event.character.immunities != "object" ||
-            typeof event.character.concentration != "string"
-        ) {
-            //this if should be deleted in time. after all legacy Character objects have been updated to include armorClass. there are several locations for this, meaning it will be a long process.
-            return {...event.character,
-                armorClass: 10,
-                languages: ["common"],
-                resistances: [],
-                items: [],
-                immunities: [],
-                concentration: "",
-            }
+            typeof event.character.concentration != "string") {
+                return {...event.character,
+                    armorClass: 10,
+                    languages: ["common"],
+                    resistances: [],
+                    items: [],
+                    immunities: [],
+                    concentration: "",
+                }
+        }
+        if (typeof event.character.armor != "string" ||
+            typeof event.character.weapon1 != "string" ||
+            typeof event.character.weapon2 != "string" ||
+            typeof event.character.attunement1 != "string" ||
+            typeof event.character.attunement2 != "string" ||
+            typeof event.character.attunement3 != "string"){
+                return {...event.character,
+                    armor: "",
+                    weapon1: "",
+                    weapon2: "",
+                    attunement1: "",
+                    attunement2: "",
+                    attunement3: "",
+                }
+        }
+        if (typeof event.character.gold != "number" ||
+            typeof event.character.electrum != "number" ||
+            typeof event.character.silver != "number" ||
+            typeof event.character.copper != "number" ){
+                return {...event.character,
+                    gold: 0,
+                    electrum: 0,
+                    silver: 0,
+                    copper: 0
+                }
         }
         return {...event.character}
     }
@@ -443,6 +480,124 @@ export const characterDispatch: (current: Character, event: CharacterEvent) => C
             ...currentCharacter,
             resistances: currentResistances,
             immunities: currentImmunities
+        }
+    }
+    if (event.type === "updateMoney"){
+        let currentGold: number = currentCharacter.gold;
+        let currentElectrum: number= currentCharacter.electrum;
+        let currentSilver: number = currentCharacter.silver;
+        let currentCopper: number = currentCharacter.copper;
+        if (event.gainOrPay){
+            currentGold += event.gold;
+            currentElectrum += event.electrum;
+            currentSilver += event.silver;
+            currentCopper += event.copper;
+        }
+        else {
+            currentCopper -= event.copper;
+            if (currentCopper < 0){
+                let makeChange: number = Math.ceil(Math.abs(currentCopper) / 10)
+                currentSilver -= makeChange;
+                currentCopper += makeChange * 10;
+            }
+            currentSilver -= event.silver;
+            if (currentSilver < 0){
+                if ((currentElectrum - event.electrum) * 5 > Math.abs(currentSilver)){
+                    let makeChange: number = Math.ceil(Math.abs(currentSilver) / 5)
+                    currentElectrum -= makeChange;
+                    currentSilver += makeChange * 5;
+                } else if (currentElectrum - event.electrum > 0){
+                    let makeChange: number = (currentElectrum - event.electrum);
+                    currentElectrum -= makeChange;
+                    currentSilver += makeChange * 5;
+                }
+                if (currentSilver < 0){
+                    let makeChange: number = Math.ceil(Math.abs(currentSilver) / 10)
+                    currentGold -= makeChange;
+                    currentSilver += makeChange * 10;
+                }
+            }
+            currentElectrum -= event.electrum;
+            if (currentElectrum < 0){
+                let makeChange: number = Math.ceil(Math.abs(currentElectrum) / 2)
+                currentGold -= makeChange;
+                currentElectrum += makeChange * 2;
+            }
+            currentGold -= event.gold;
+            if (currentGold < 0){
+                let usingElectrum: number = Math.floor(currentElectrum / 2);
+                currentElectrum -= usingElectrum * 2
+                currentGold += usingElectrum;
+                if (currentGold >= 0){
+                    currentElectrum += currentGold * 2;
+                    currentGold = 0
+                }
+                else {if (currentElectrum > 0 && currentSilver*10 + currentCopper > 50){
+                    if (currentSilver > 5){
+                        currentSilver -=5;
+                        currentElectrum--;
+                        currentGold++
+                    } else {
+                        currentCopper -= (50 - (currentSilver * 10));
+                        currentSilver = 0;
+                        currentElectrum = 0;
+                        currentGold++;
+                    }
+                }}
+            }
+            if (currentGold < 0){
+                let usingSilver: number = Math.floor(currentSilver / 10);
+                currentSilver -= usingSilver * 10;
+                currentGold += usingSilver;
+                if (currentGold >= 0){
+                    currentSilver += currentGold * 10;
+                    currentGold = 0;
+                } else if (currentSilver*10 + currentCopper > 100){
+                    currentCopper -= (100 - (currentSilver * 10));
+                    currentSilver = 0;
+                    currentGold++
+                }
+            }
+            if (currentGold < 0){
+                let usingCopper: number = Math.floor(currentCopper / 100);
+                currentCopper -= usingCopper * 100;
+                currentGold += usingCopper;
+                if (currentGold >= 0){
+                    currentCopper += currentGold * 100;
+                    currentGold = 0;
+                } else {currentGold = currentElectrum = currentSilver = currentCopper = 0;}
+            }
+        }
+        return {
+            ...currentCharacter,
+            gold: currentGold,
+            electrum: currentElectrum,
+            silver: currentSilver,
+            copper: currentCopper
+        }
+
+    }
+    if (event.type === "magicalMoneyExchange"){
+        let currentCopper: number = currentCharacter.copper;
+        let currentSilver: number = currentCharacter.silver;
+        let currentElectrum: number = currentCharacter.electrum;
+        let currentGold: number = currentCharacter.gold;
+        let exchangeCopper: number = Math.floor(currentCopper / 10);
+        currentCopper = currentCopper%10;
+        currentSilver += exchangeCopper;
+        let exchangeSilver: number = Math.floor(currentSilver / 5);
+        currentSilver = currentSilver%5;
+        currentElectrum += exchangeSilver;
+        let exchangeElectrum: number = Math.floor(currentElectrum / 2);
+        currentElectrum = currentElectrum%2;
+        currentGold += exchangeElectrum;
+
+        return {
+            ...currentCharacter,
+            gold: currentGold,
+            electrum: currentElectrum,
+            silver: currentSilver,
+            copper: currentCopper
         }
     }
     if (event.type === "updateKnownSpells"){
