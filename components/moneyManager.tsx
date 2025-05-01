@@ -53,7 +53,7 @@ export function MoneyManager(itemManagementToolsDisplay: boolean) {
                 {moneyManagerDisplayStatus && <View>
                     <Text style={{color: "white", textAlign: "center"}}>{currentMoneyString()}</Text>
                     <Text style={{color: "white", textAlign: "center"}}>{howMuchMyMoneyWeighs()}</Text>
-                    <View style={{flexDirection: "row"}}>
+                    <View style={{flexDirection: "row", maxWidth: 350, alignSelf: "center"}}>
                         <View style={{flex: 1}}>
                             <Text style={styles.label}>Gold</Text>
                             <TextInput
@@ -164,10 +164,12 @@ const styles = StyleSheet.create({
         borderWidth: 3,
         borderColor: "white",
         height: 60,
-        width: Platform.OS === "web" ? 120 : 80,
+        //width: Platform.OS === "web" ? window.length > 500 ? 120 : window.length * 0.2 : 80,
+        width: 80,
         alignSelf: "center",
         color: "white",
-        textAlign: "center"
+        textAlign: "center",
+        marginHorizontal: 5,
     },
     toolBoxButton: {
         backgroundColor: "maroon",
