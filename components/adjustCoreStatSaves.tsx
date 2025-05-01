@@ -15,8 +15,7 @@ export default function AdjustCoreStatSaves(levelUpToolsSkillsStatsCastingHPDisp
             <Pressable onPress={() => {
                 setAdjustCoreStatSavesToolDisplay(!adjustCoreStatSavesToolDisplay);
             }}>
-                {!adjustCoreStatSavesToolDisplay && <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Open Saving Throw Proficiency Tool</Text>}
-                {adjustCoreStatSavesToolDisplay && <Text style={{color: "white", textAlign: "center", marginBottom: 20}}>Close Saving Throw Proficiency Tool</Text>}
+                <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Saving Throw Proficiencies</Text>
             </Pressable>
             {adjustCoreStatSavesToolDisplay && <View style={{flexDirection: "row", alignSelf: "center"}}>
                 <Pressable
