@@ -14,6 +14,8 @@ Level Up tab:
 - Close all option?
 - Adjust skills, not sure you need "not prof-prof..." under EVER section, maybe just at the top like a column header?
 
+General:
+Check desktop layout, seems a bit on the funny side with centering of assets
 
 Completed Feedback:
 XXX- When using "confirm" windows, put object name in quotes, or have a "-" after the confirm to separate
@@ -29,7 +31,7 @@ XXX- New spell, change Spell Level to dropdown, possible for Casting Time as wel
 XXX- When "Close all Spells" clicked, minimize all spell lists internally
 XXX- Personal pet peeve: Should capitolize the second part of spell components ("Casting Time: Action" instead of "..: action")
 XXX- Not sure spell level is needed within the spell window itself? If want it, maybe deliniate it more, like put it into a small box?
-
+XXX- New spell, change Spell Level to dropdown, possible for Casting Time as well (more variability with that though)
+XXX- When using "confirm" windows, put object name in quotes, or have a "-" after the confirm to separate
+XXX- Move Character Load/Delete to the bottom of the page, as it shouldnt be used as much (or maybe delete at the bottom and load at the top?)
 Ignored Feedback:
-
-
