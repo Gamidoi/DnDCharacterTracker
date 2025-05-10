@@ -11,10 +11,13 @@ export class Item{
     unusedQuantity: number;
     refreshOn: string;
     refreshQuantity: string;
-
+    value: number;
     description: string;
+    refreshRoll: [boolean, number, number, number, number, number, number, number, number];
+
     constructor(type: string, name: string, roll: [boolean, number, number, number, number, number, number, number, number], requiresAttunment: boolean, twoHanded: boolean,
-                quantity: number, AC: [number, number], description: string, uses: number, refreshOn: string, refreshQuantity: string) {
+                quantity: number, AC: [number, number], description: string, uses: number, refreshOn: string, refreshQuantity: string,  value: number,
+                refreshRoll: [boolean, number, number, number, number, number, number, number, number]) {
         this.type = type;
         this.name = name;
         this.roll = roll;
@@ -31,5 +34,8 @@ export class Item{
         this.unusedQuantity = uses;
         this.refreshOn = refreshOn;
         this.refreshQuantity = refreshQuantity;
+        if (parseInt(refreshQuantity) > uses) {this.refreshQuantity = "All";}
+        this.value = value;
+        this.refreshRoll = refreshRoll;
     }
 }

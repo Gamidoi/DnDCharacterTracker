@@ -15,7 +15,7 @@ export default function MainCharacterSyndrome() {
 
     let [incrementHP, setIncrementHP] = useState("0");
     let currentSpells :string = spellSlotsByLevel(character.spellcastingLevel);
-    function lableWarlockSpellLevel(warlockCasterLevel: number) :string {
+    function labelWarlockSpellLevel(warlockCasterLevel: number) :string {
         if (warlockCasterLevel > 0 && warlockCasterLevel < 3) {return "1st Level"}
         if (warlockCasterLevel >= 3 && warlockCasterLevel < 5) {return "2nd Level"}
         if (warlockCasterLevel >= 5 && warlockCasterLevel < 7) {return "3rd Level"}
@@ -52,6 +52,15 @@ export default function MainCharacterSyndrome() {
       }>
 
         <View style={{backgroundColor: 'black', alignItems: "center", alignSelf: "center"}}>
+            <Text style={{
+                color: "white",
+                textAlign: "center",
+                fontSize: 20,
+                borderWidth: 2,
+                borderColor: "orange",
+                borderRadius: 5,
+                padding: 6,
+            }}>AC: {character.armorClass}</Text>
             <Text style={{color: "white", fontSize: 28}}>Current HP is {character.currentHP} / {character.maxHP}</Text>
             <Text>
                 <Pressable
@@ -422,7 +431,7 @@ export default function MainCharacterSyndrome() {
         {character.warlockCasterLevel > 0 && <View style={{backgroundColor: 'black'}}>
             <View style={styles.spellRow}>
                 <View style={styles.spellText}><Text style={styles.spellText}>Warlock Spells</Text>
-                    <Text style={styles.spellText}>{lableWarlockSpellLevel(character.warlockCasterLevel)}</Text></View>
+                    <Text style={styles.spellText}>{labelWarlockSpellLevel(character.warlockCasterLevel)}</Text></View>
                 <View style={[styles.spellSlotButtonRow, {marginTop: 12}]}>
                     {character.warlockCasterLevel == 1 && (<Text>
                         <Pressable style={[styles.SpellSlotButton1, {backgroundColor: "purple"}]} onPress={()=>{
@@ -534,6 +543,8 @@ const styles = StyleSheet.create({
         height: 35,
         width: "95%",
         borderRadius: 15,
+        borderColor: "orange",
+        borderWidth: 3,
     },
     SpellSlotButton2: {
         color: 'white',
@@ -541,6 +552,8 @@ const styles = StyleSheet.create({
         height: 35,
         width: "45%",
         borderRadius: 12,
+        borderColor: "orange",
+        borderWidth: 3,
     },
     SpellSlotButton3: {
         color: 'white',
@@ -548,6 +561,8 @@ const styles = StyleSheet.create({
         height: 35,
         width: "29.5%",
         borderRadius: 8,
+        borderColor: "orange",
+        borderWidth: 3,
     },
     SpellSlotButton4: {
         color: 'white',
@@ -555,6 +570,8 @@ const styles = StyleSheet.create({
         height: 35,
         width: "21.9%",
         borderRadius: 5,
+        borderColor: "orange",
+        borderWidth: 3,
     },
     spellSlotButtonX: {
         padding: 0,

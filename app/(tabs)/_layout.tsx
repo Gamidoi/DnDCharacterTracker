@@ -45,7 +45,7 @@ export default function TabLayout() {
         name="Items"
         options={{
             title: 'Items',
-            tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="hexagon-multiple-outline" color={color} />,
+            tabBarIcon: ({ color }) => <MaterialCommunityIcons size={28} name="flask-round-bottom" color={color} />,
         }}
     />
         <Tabs.Screen

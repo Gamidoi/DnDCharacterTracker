@@ -3,6 +3,8 @@ import {Character} from "@/assets/classes/character";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {Spell} from "@/assets/classes/spell";
 import {Ability} from "@/assets/classes/ability";
+import {Item} from "@/assets/classes/item";
+import {getStatMod} from "@/assets/functionLibrary/getCoreStatMod";
 
 
 interface UpdateAll {
@@ -176,6 +178,11 @@ interface updateAbilityUsageSlot{
     useSlot: number;
     abilityName: string;
 }
+interface useConsumable {
+    type: "useConsumable";
+    itemName: string;
+    value: string;
+}
 interface abilityUnusedQuantityAdjust{
     type: "abilityUnusedQuantityAdjust";
     abilityName: string;
@@ -204,6 +211,44 @@ interface updateMoney{
 }
 interface magicalMoneyExchange{
     type: "magicalMoneyExchange";
+}
+interface addItem{
+    type: "addItem";
+    ownedItems: Item[];
+}
+interface equipWeapon1{
+    type: "equipWeapon1";
+    value: string;
+}
+interface equipWeapon2{
+    type: "equipWeapon2";
+    value: string;
+}
+interface equipArmor{
+    type: "equipArmor";
+    value: string;
+}
+interface attune1{
+    type: "attune1";
+    value: string;
+}
+interface attune2{
+    type: "attune2";
+    value: string;
+}
+interface attune3{
+    type: "attune3";
+    value: string;
+}
+interface usingItemChargesButtons{
+    type: "usingItemChargesButtons";
+    index: number;
+    itemName: string;
+}
+interface usingItemChargesCounter{
+    type: "usingItemChargesCounter",
+    itemName: string,
+    value: string
 }
 
 
@@ -255,7 +300,17 @@ export type CharacterEvent =
     | addResistanceAndImmunities
     | subtractResistanceAndImmunities
     | updateMoney
+    | addItem
     | magicalMoneyExchange
+    | useConsumable
+    | usingItemChargesButtons
+    | usingItemChargesCounter
+    | equipWeapon1
+    | equipWeapon2
+    | equipArmor
+    | attune1
+    | attune2
+    | attune3
 
 export const characterDispatch: (current: Character, event: CharacterEvent) => Character = (currentCharacter, event) => {
 
@@ -273,6 +328,16 @@ export const characterDispatch: (current: Character, event: CharacterEvent) => C
                     items: [],
                     immunities: [],
                     concentration: "",
+                    armor: "",
+                    weapon1: "",
+                    weapon2: "",
+                    attunement1: "",
+                    attunement2: "",
+                    attunement3: "",
+                    gold: 0,
+                    electrum: 0,
+                    silver: 0,
+                    copper: 0
                 }
         }
         if (typeof event.character.armor != "string" ||
@@ -288,6 +353,10 @@ export const characterDispatch: (current: Character, event: CharacterEvent) => C
                     attunement1: "",
                     attunement2: "",
                     attunement3: "",
+                    gold: 0,
+                    electrum: 0,
+                    silver: 0,
+                    copper: 0
                 }
         }
         if (typeof event.character.gold != "number" ||
@@ -399,6 +468,12 @@ export const characterDispatch: (current: Character, event: CharacterEvent) => C
             ...currentCharacter,
             abilities: abilities
         }
+    }
+    if (event.type === "addItem"){
+        return({
+            ...currentCharacter,
+            items: event.ownedItems
+        })
     }
     if (event.type === "addResistanceAndImmunities"){
         let resistances: string[] = currentCharacter.resistances
@@ -828,6 +903,128 @@ export const characterDispatch: (current: Character, event: CharacterEvent) => C
         return{
             ...currentCharacter,
             armorClass: event.value
+        }
+    }
+    if (event.type === "equipWeapon1") {
+        let otherWeapon: string = currentCharacter.weapon2;
+        currentCharacter.items.map((item) => {
+            if (item.twoHanded && (currentCharacter.weapon2 === item.name) && (item.name != event.value)) {
+                otherWeapon = "";
+            }
+            if (!item.twoHanded && (event.value === item.name) && (item.quantity < 2) && (currentCharacter.weapon2 === item.name)) {
+                otherWeapon = "";
+            }
+        })
+        return{
+            ...currentCharacter,
+            weapon1: event.value,
+            weapon2: otherWeapon
+        }
+    }
+    if (event.type === "equipWeapon2") {
+        let otherWeapon: string = currentCharacter.weapon1;
+        currentCharacter.items.map((item) => {
+            if (item.twoHanded && (currentCharacter.weapon1 === item.name) && (item.name != event.value)) {
+                otherWeapon = ""
+            }
+            if (!item.twoHanded && (event.value === item.name) && (item.quantity < 2) && (currentCharacter.weapon1 === item.name)) {
+                otherWeapon = "";
+            }
+        })
+        return{
+            ...currentCharacter,
+            weapon2: event.value,
+            weapon1: otherWeapon
+        }
+    }
+    if (event.type === "equipArmor") {
+        let newAC = 10;
+        let isHoldingShield = 0;
+        currentCharacter.items.map((item) => {
+            if (item.name === event.value){
+                let dexBonusToAC = getStatMod(currentCharacter.DEX);
+                if (dexBonusToAC > item.AC[1]) {
+                    dexBonusToAC = item.AC[1];
+                }
+                newAC = (item.AC[0] + dexBonusToAC);
+            }
+            if (item.name === currentCharacter.weapon1 && item.type === "Shield"){
+                isHoldingShield += item.AC[0];
+            }
+        })
+        newAC += isHoldingShield;
+        return{
+            ...currentCharacter,
+            armor: event.value,
+            armorClass: newAC
+        }
+    }
+    if (event.type === "attune1") {
+        return{
+            ...currentCharacter,
+            attunement1: event.value
+        }
+    }
+    if (event.type === "attune2") {
+        return{
+            ...currentCharacter,
+            attunement2: event.value
+        }
+    }
+    if (event.type === "attune3") {
+        return{
+            ...currentCharacter,
+            attunement3: event.value
+        }
+    }
+    if (event.type === "useConsumable") {
+        let updatedItems: Item[] = [];
+        currentCharacter.items.forEach((item) => {
+            if (item.name === event.itemName){
+                let quantity = item.quantity - 1;
+                if (event.value === "add"){quantity = item.quantity + 1;}
+                if (quantity < 0) {quantity = 0;}
+                updatedItems.push({...item, quantity: quantity})
+            } else {updatedItems.push(item);}
+        })
+        return{
+            ...currentCharacter,
+            items: updatedItems
+        }
+    }
+    if (event.type === "usingItemChargesCounter") {
+        let updatedItems: Item[] = [];
+        currentCharacter.items.forEach((item) => {
+            if (item.name === event.itemName){
+                let unusedQuantity = item.unusedQuantity - 1;
+                if (event.value === "add"){unusedQuantity = item.unusedQuantity + 1;}
+                if (unusedQuantity < 0) {unusedQuantity = 0;}
+                if (unusedQuantity > item.uses) {unusedQuantity = item.uses}
+                updatedItems.push({...item, unusedQuantity: unusedQuantity})
+            } else {updatedItems.push(item);}
+        })
+        return{
+            ...currentCharacter,
+            items: updatedItems
+        }
+    }
+    if (event.type === "usingItemChargesButtons") {
+        let updatedItems: Item[] = [];
+        currentCharacter.items.forEach((item) => {
+            if (item.name === event.itemName){
+                let newUsedString = "";
+                for (let index = 0; index < item.uses; index++){
+                    if (index === event.index){
+                        if (item.usedInstances[index] === "0") {newUsedString += "X";}
+                        else {newUsedString += "0";}
+                    } else {newUsedString += item.usedInstances[index];}
+                }
+                updatedItems.push({...item, usedInstances: newUsedString})
+            } else {updatedItems.push(item);}
+        })
+        return {
+            ...currentCharacter,
+            items: updatedItems
         }
     }
 

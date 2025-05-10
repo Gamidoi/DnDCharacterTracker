@@ -12,6 +12,7 @@ import {displayCoreStats} from "@/components/displayCoreStats";
 import {AdjustSkillsTool} from "@/components/adjustSkillsTool";
 import {CharacterManagementTools} from "@/components/characterManagementTools";
 import {MoneyManager} from "@/components/moneyManager";
+import {NewItemCreator} from "@/components/newItemCreator";
 
 
 let headerImage :React.JSX.Element = headerRandomizer();
@@ -53,7 +54,8 @@ export default function levelUpTab() {
                     onPress={() => {setItemManagementToolsDisplay(!itemManagementToolsDisplay)}}>
                      <Text style={styles.toolBoxLabels}>Item Management Tools</Text>
                 </Pressable>
-                {<View style={{margin: 0, padding: 0}}>{MoneyManager(itemManagementToolsDisplay)}</View>}
+                <View style={{margin: 0, padding: 0}}>{MoneyManager(itemManagementToolsDisplay, true)}</View>
+                <View style={{marginTop: itemManagementToolsDisplay ? 15 : 0, padding: 0}}>{NewItemCreator(itemManagementToolsDisplay)}</View>
             </View>
 
 

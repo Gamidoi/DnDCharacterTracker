@@ -4,6 +4,7 @@ import React, {useState} from "react";
 import {Ability} from "@/assets/classes/ability";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 import {FontAwesome, MaterialCommunityIcons} from "@expo/vector-icons";
+import {settingDiceToRollQuantity} from "@/components/settingDiceToRollQuantity";
 
 
 export default function newAbilityCreationTool(spellAndAbilityToolsDisplay: boolean) {
@@ -328,7 +329,7 @@ export default function newAbilityCreationTool(spellAndAbilityToolsDisplay: bool
                             flatListProps={{nestedScrollEnabled: true}}
                             style={[styles.dropDownPicker,
                                 {
-                                    marginBottom: Platform.OS === "web" ? (refreshOnDropDownOpen ? 200 : 0) : 0,
+                                    marginBottom: Platform.OS === "web" ? (refreshOnDropDownOpen ? 160 : 0) : 0,
                                     width: 250
                                 }]}
                             dropDownContainerStyle={[styles.dropDownContainer, {width: 250}]}
@@ -439,88 +440,18 @@ export default function newAbilityCreationTool(spellAndAbilityToolsDisplay: bool
                     </View>
 
 
-                    <View><Text style={styles.labels}>Does the Spell Roll for Damage/Healing/Other?</Text>
+                    <View><Text style={styles.labels}>Does the Ability Roll for Damage/Healing/Other?</Text>
                         <Pressable style={[styles.newAbilityToolToggleButtons, {width: 150, height: 40}]} onPress={() => {
                             setAbilityRollVariable(!abilityRollVariable);
                             closeAllDropDowns();
                         }}>
                             <Text style={styles.toggleButtonLables}>{abilityRollVariable ? "Yes" : "No"}</Text>
                         </Pressable>
-                        {abilityRollVariable && <View style={{flexDirection: "row", alignSelf: "center"}}>
-                            <View style={{flex: 0.24}}><Text style={styles.labels}>D4s</Text>
-                                <TextInput
-                                    onChangeText={setAbilityRollD4}
-                                    onFocus={() => closeAllDropDowns()}
-                                    placeholder={"0"}
-                                    keyboardType={"numeric"}
-                                    maxLength={2}
-                                    placeholderTextColor={"grey"}
-                                    style={styles.damageDiceEntry}/></View>
-                            <View style={{flex: 0.24}}><Text style={styles.labels}>D6s</Text>
-                                <TextInput
-                                    onChangeText={setAbilityRollD6}
-                                    onFocus={() => closeAllDropDowns()}
-                                    placeholder={"0"}
-                                    keyboardType={"numeric"}
-                                    maxLength={2}
-                                    placeholderTextColor={"grey"}
-                                    style={styles.damageDiceEntry}/></View>
-                            <View style={{flex: 0.24}}><Text style={styles.labels}>D8s</Text>
-                                <TextInput
-                                    onChangeText={setAbilityRollD8}
-                                    onFocus={() => closeAllDropDowns()}
-                                    placeholder={"0"}
-                                    keyboardType={"numeric"}
-                                    maxLength={2}
-                                    placeholderTextColor={"grey"}
-                                    style={styles.damageDiceEntry}/></View>
-                            <View style={{flex: 0.24}}><Text style={styles.labels}>D10s</Text>
-                                <TextInput
-                                    onChangeText={setAbilityRollD10}
-                                    onFocus={() => closeAllDropDowns()}
-                                    placeholder={"0"}
-                                    keyboardType={"numeric"}
-                                    maxLength={2}
-                                    placeholderTextColor={"grey"}
-                                    style={styles.damageDiceEntry}/></View>
-                        </View>}
-                        {abilityRollVariable && <View style={{flexDirection: "row", alignSelf: "center"}}>
-                            <View style={{flex: 0.24}}><Text style={styles.labels}>D12s</Text>
-                                <TextInput
-                                    onChangeText={setAbilityRollD12}
-                                    onFocus={() => closeAllDropDowns()}
-                                    placeholder={"0"}
-                                    keyboardType={"numeric"}
-                                    maxLength={2}
-                                    placeholderTextColor={"grey"}
-                                    style={styles.damageDiceEntry}/></View>
-                            <View style={{flex: 0.24}}><Text style={styles.labels}>D20s</Text>
-                                <TextInput
-                                    onChangeText={setAbilityRollD20}
-                                    onFocus={() => closeAllDropDowns()}
-                                    placeholder={"0"}
-                                    keyboardType={"numeric"}
-                                    maxLength={2}
-                                    placeholderTextColor={"grey"}
-                                    style={styles.damageDiceEntry}/></View>
-                            <View style={{flex: 0.24}}><Text style={styles.labels}>D100s</Text>
-                                <TextInput
-                                    onChangeText={setAbilityRollD100}
-                                    onFocus={() => closeAllDropDowns()}
-                                    placeholder={"0"}
-                                    keyboardType={"numeric"}
-                                    maxLength={2}
-                                    placeholderTextColor={"grey"}
-                                    style={styles.damageDiceEntry}/></View>
-                            <View style={{flex: 0.24}}><Text style={styles.labels}>bonus</Text>
-                                <TextInput
-                                    onChangeText={setAbilityRollBonus}
-                                    onFocus={() => closeAllDropDowns()}
-                                    placeholder={"0"}
-                                    keyboardType={"numeric"}
-                                    maxLength={2}
-                                    placeholderTextColor={"grey"}
-                                    style={styles.damageDiceEntry}/></View>
+                        {abilityRollVariable && <View>{settingDiceToRollQuantity(
+                            // @ts-ignore
+                                setAbilityRollD4, setAbilityRollD6, setAbilityRollD8, setAbilityRollD10,
+                                setAbilityRollD12, setAbilityRollD20, setAbilityRollD100, setAbilityRollBonus
+                            )}
                         </View>}
                     </View>
 
@@ -556,23 +487,23 @@ export default function newAbilityCreationTool(spellAndAbilityToolsDisplay: bool
                     }
 
                     <Pressable
-                    style={[styles.toolBoxButton, {marginBottom: 10}]}
-                    onPress={() => {
-                        closeAllDropDowns();
-                        if (abilityName != ""){
-                            if (usesQuantityStat != "Set Number") {usesQuantity = "" + determineUseQuantity(usesQuantityStat)}
-                            let newAbility = new Ability(abilityName, usesTrigger, usesQuantityStat, parseInt(usesQuantity), abilityDescription, refreshOn, persistence, resistance,
-                                immunity, [abilityRollVariable, parseInt(abilityRollD4), parseInt(abilityRollD6), parseInt(abilityRollD8), parseInt(abilityRollD10),
-                                parseInt(abilityRollD12), parseInt(abilityRollD20), parseInt(abilityRollD100), parseInt(abilityRollBonus)]);
-                            setNewAbilityConfirmationCount(newAbilityConfirmationCount + 1);
-                            characterUpdater({type: "updateAbilities", knownAbilities: [...character.abilities, newAbility]})
-                            if (usesTrigger === "Passive") {
-                                characterUpdater({type: "addResistanceAndImmunities", abilityName: abilityName})
-                            }
-                        }}}>
-                    <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Create New Ability: {abilityName}</Text>
-                    <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>For {character.charName}</Text>
-                </Pressable>
+                        style={[styles.toolBoxButton, {marginBottom: 10}]}
+                        onPress={() => {
+                            closeAllDropDowns();
+                            if (abilityName != ""){
+                                if (usesQuantityStat != "Set Number") {usesQuantity = "" + determineUseQuantity(usesQuantityStat)}
+                                let newAbility = new Ability(abilityName, usesTrigger, usesQuantityStat, parseInt(usesQuantity), abilityDescription, refreshOn, persistence, resistance,
+                                    immunity, [abilityRollVariable, parseInt(abilityRollD4), parseInt(abilityRollD6), parseInt(abilityRollD8), parseInt(abilityRollD10),
+                                    parseInt(abilityRollD12), parseInt(abilityRollD20), parseInt(abilityRollD100), parseInt(abilityRollBonus)]);
+                                setNewAbilityConfirmationCount(newAbilityConfirmationCount + 1);
+                                characterUpdater({type: "updateAbilities", knownAbilities: [...character.abilities, newAbility]})
+                                if (usesTrigger === "Passive") {
+                                    characterUpdater({type: "addResistanceAndImmunities", abilityName: abilityName})
+                                }
+                            }}}>
+                        <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Create New Ability: {abilityName}</Text>
+                        <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>For {character.charName}</Text>
+                    </Pressable>
                 </Pressable>}
             </View>
 
@@ -608,7 +539,8 @@ export default function newAbilityCreationTool(spellAndAbilityToolsDisplay: bool
                                         borderColor: "orange",
                                         borderWidth: 3,
                                     }}>{pickedAbilityForDeletion.name}</Text></Pressable></View>
-                            )})}</View>
+                            )})}
+                    </View>
                     {(abilityDeleteToolDisplay && abilityConfirmDelete) &&
                         <Pressable onPress={() => {
                             setAbilityConfirmDelete(false);}}>
