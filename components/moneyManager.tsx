@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 
 
-export function MoneyManager(itemManagementToolsDisplay: boolean) {
+export function MoneyManager(itemManagementToolsDisplay: boolean, displayMoneyChanger: boolean = false) {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
     let [moneyManagerDisplayStatus, setMoneyManagerDisplayStatus] = React.useState<boolean>(false);
@@ -53,7 +53,7 @@ export function MoneyManager(itemManagementToolsDisplay: boolean) {
                 {moneyManagerDisplayStatus && <View>
                     <Text style={{color: "white", textAlign: "center"}}>{currentMoneyString()}</Text>
                     <Text style={{color: "white", textAlign: "center"}}>{howMuchMyMoneyWeighs()}</Text>
-                    <View style={{flexDirection: "row"}}>
+                    <View style={{flexDirection: "row", maxWidth: 350, alignSelf: "center"}}>
                         <View style={{flex: 1}}>
                             <Text style={styles.label}>Gold</Text>
                             <TextInput
@@ -129,18 +129,20 @@ export function MoneyManager(itemManagementToolsDisplay: boolean) {
                             <Text style={styles.label}>Pay</Text>
                         </Pressable>
                     </View>
-                    <Pressable
+                    {displayMoneyChanger && <Pressable
                         style={[
                             styles.toolBoxButton, {
                                 backgroundColor: "blue",
                                 width: 310,
                                 marginTop: 0,
                             }]}
-                        onPress={() => {characterUpdater({type: "magicalMoneyExchange"})}}>
+                        onPress={() => {
+                            characterUpdater({type: "magicalMoneyExchange"})
+                        }}>
                         <Text style={styles.label}>Too Much Copper?</Text>
                         <Text style={styles.label}>Visit The</Text>
                         <Text style={styles.label}>Magical Money Exchange!</Text>
-                    </Pressable>
+                    </Pressable>}
                 </View>}
             </View>
         </View>}</View>
@@ -164,10 +166,11 @@ const styles = StyleSheet.create({
         borderWidth: 3,
         borderColor: "white",
         height: 60,
-        width: Platform.OS === "web" ? 120 : 80,
+        width: 80,
         alignSelf: "center",
         color: "white",
-        textAlign: "center"
+        textAlign: "center",
+        marginHorizontal: 5,
     },
     toolBoxButton: {
         backgroundColor: "maroon",

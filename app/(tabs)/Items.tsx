@@ -1,8 +1,10 @@
 import React from "react";
 import headerRandomizer from "@/components/headerRandomizer";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
-import {Text} from "react-native";
+import {Text, View} from "react-native";
 import ParallaxScrollView from "@/components/ParallaxScrollView";
+import {MoneyManager} from "@/components/moneyManager";
+import {displayItemsOnItemsTab} from "@/components/displayItemsOnItemsTab";
 
 
 let headerImage :React.JSX.Element = headerRandomizer();
@@ -14,7 +16,8 @@ export default function MainCharacterSyndrome() {
         headerImage={
             headerImage
         }>
-        <Text style={{color: "white", fontSize: 45, alignSelf: "center"}}>Under Construction, Come Back Soon!!!</Text>
+        <View>{MoneyManager(true)}</View>
+        <View>{displayItemsOnItemsTab()}</View>
 
     </ParallaxScrollView>)
 }
