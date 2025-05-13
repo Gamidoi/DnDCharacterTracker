@@ -1,48 +1,29 @@
 import {Item} from "@/assets/classes/item";
-import {StyleSheet, View, Text, Pressable} from "react-native";
+import {StyleSheet, View, Text} from "react-native";
 import React from "react";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 import {itemChargesInteraction} from "@/components/itemChargesInteractionTool";
 import {itemQuantityAdjustTool} from "@/components/itemQuantityAdjustTool";
 import {getDiceRollAsString} from "@/assets/functionLibrary/getDiceRollAsString";
-import {getStatMod} from "@/assets/functionLibrary/getCoreStatMod";
 import {displayItemAttunementButtons} from "@/components/displayItemAttunementButtons";
-import {preventEquipIfNeedsAttunement} from "@/assets/functionLibrary/preventEquipIfNeedsAttunement";
+import {displayItemHandEquipButtons} from "@/components/displayItemHandEquipButtons";
 
 
-export function displayItemArmorBox(item: Item) {
+export function displayItemShieldBox(item: Item) {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
-
-    function ACIfWorn(){
-        let DexBonusToAC = getStatMod(character.DEX);
-        if (DexBonusToAC > item.AC[1]) {DexBonusToAC = item.AC[1];}
-        return (item.AC[0] + DexBonusToAC);
-    }
 
 
     return (<View style={styles.itemArmorBox}>
         <Text style={styles.itemName}>{item.name}</Text>
-        <Text style={styles.ACDisplay}>AC: {item.AC[0]}{item.AC[1] > 0 ? " + Dex (Max +" + item.AC[1] + ")" : ""}</Text>
-        <Text style={styles.statAdjustedACDisplay}>{ACIfWorn()}</Text>
+        <Text style={styles.ACDisplay}>AC Bonus: {item.AC[0]}</Text>
 
         {itemChargesInteraction(item, getDiceRollAsString(item.refreshRoll))}
 
-        <Text style={styles.label}>Equip Armor?</Text>
-        <View style={{flexDirection: "row", alignSelf: "center"}}><Pressable onPress={() => {
-            if (preventEquipIfNeedsAttunement(item, character)){
-                characterUpdater({type: "equipArmor", value: item.name});
-            }
-            }}>
-                <Text style={[
-                    styles.equipButton,
-                    {backgroundColor: character.armor?.name === item.name ? "darkgray" :
-                            preventEquipIfNeedsAttunement(item, character) ? "darkgoldenrod" : "maroon"
-                    }]}>{item.name}</Text>
-            </Pressable>
-        </View>
+        <Text style={styles.label}>Equip Shield?</Text>
+        {displayItemHandEquipButtons(item)}
 
-        {(character.armor?.name === item.name) && <Text style={styles.label}>Armor is Already Equipped</Text>}
+        {((character.weapon1?.name === item.name) || (character.weapon2?.name === item.name)) && <Text style={styles.label}>Shield is Already Equipped</Text>}
         {displayItemAttunementButtons(item)}
         <Text style={styles.label}>Value: {item.value}gp</Text>
         <Text style={styles.label}>Quantity Owned</Text>

@@ -327,43 +327,36 @@ export const characterDispatch: (current: Character, event: CharacterEvent) => C
                     resistances: [],
                     items: [],
                     immunities: [],
-                    concentration: "",
-                    armor: "",
-                    weapon1: "",
-                    weapon2: "",
-                    attunement1: "",
-                    attunement2: "",
-                    attunement3: "",
+                    concentration: null,
                     gold: 0,
                     electrum: 0,
                     silver: 0,
-                    copper: 0
+                    copper: 0,
+                    armor: null,
+                    weapon1: null,
+                    weapon2: null,
+                    attunement1: null,
+                    attunement2: null,
+                    attunement3: null
                 }
         }
-        if (typeof event.character.armor != "string" ||
-            typeof event.character.weapon1 != "string" ||
-            typeof event.character.weapon2 != "string" ||
-            typeof event.character.attunement1 != "string" ||
-            typeof event.character.attunement2 != "string" ||
-            typeof event.character.attunement3 != "string"){
-                return {...event.character,
-                    armor: "",
-                    weapon1: "",
-                    weapon2: "",
-                    attunement1: "",
-                    attunement2: "",
-                    attunement3: "",
-                    gold: 0,
-                    electrum: 0,
-                    silver: 0,
-                    copper: 0
-                }
-        }
-        if (typeof event.character.gold != "number" ||
+        if (typeof event.character.armor === "string" ||
+            typeof event.character.weapon1 === "string" ||
+            typeof event.character.weapon2 === "string" ||
+            typeof event.character.attunement1 === "string" ||
+            typeof event.character.attunement2 === "string" ||
+            typeof event.character.attunement3 === "string" ||
+            typeof event.character.gold != "number" ||
             typeof event.character.electrum != "number" ||
             typeof event.character.silver != "number" ||
-            typeof event.character.copper != "number" ){
+            typeof event.character.copper != "number"){
                 return {...event.character,
+                    armor: null,
+                    weapon1: null,
+                    weapon2: null,
+                    attunement1: null,
+                    attunement2: null,
+                    attunement3: null,
                     gold: 0,
                     electrum: 0,
                     silver: 0,
@@ -906,40 +899,71 @@ export const characterDispatch: (current: Character, event: CharacterEvent) => C
         }
     }
     if (event.type === "equipWeapon1") {
-        let otherWeapon: string = currentCharacter.weapon2;
+        let otherWeapon: Item | null = currentCharacter.weapon2;
+        let currentAC = currentCharacter.armorClass;
+        let newWeapon = null;
         currentCharacter.items.map((item) => {
-            if (item.twoHanded && (currentCharacter.weapon2 === item.name) && (item.name != event.value)) {
-                otherWeapon = "";
+            if (item.twoHanded && (currentCharacter.weapon2?.name === item.name) && (item.name != event.value)) {
+                otherWeapon = null;
             }
-            if (!item.twoHanded && (event.value === item.name) && (item.quantity < 2) && (currentCharacter.weapon2 === item.name)) {
-                otherWeapon = "";
+            if (!item.twoHanded && (event.value === item.name) && (item.quantity < 2) && (currentCharacter.weapon2?.name === item.name)) {
+                otherWeapon = null;
+                if (item.type === "Shield") {
+                    currentAC -= item.AC[0];
+                }
+            }
+            if (item.name === currentCharacter.weapon1?.name && item.type === "Shield") {
+                currentAC -= item.AC[0];
+            }
+            if (item.name === event.value && item.type === "Shield") {
+                currentAC += item.AC[0];
+            }
+            if (item.name === event.value){
+                newWeapon = item;
             }
         })
         return{
             ...currentCharacter,
-            weapon1: event.value,
-            weapon2: otherWeapon
+            weapon1: newWeapon,
+            weapon2: otherWeapon,
+            armorClass: currentAC
         }
     }
     if (event.type === "equipWeapon2") {
-        let otherWeapon: string = currentCharacter.weapon1;
+        let otherWeapon: Item | null = currentCharacter.weapon1;
+        let currentAC = currentCharacter.armorClass;
+        let newWeapon = null;
         currentCharacter.items.map((item) => {
-            if (item.twoHanded && (currentCharacter.weapon1 === item.name) && (item.name != event.value)) {
-                otherWeapon = ""
+            if (item.twoHanded && (currentCharacter.weapon1?.name === item.name) && (item.name != event.value)) {
+                otherWeapon = null;
             }
-            if (!item.twoHanded && (event.value === item.name) && (item.quantity < 2) && (currentCharacter.weapon1 === item.name)) {
-                otherWeapon = "";
+            if (!item.twoHanded && (event.value === item.name) && (item.quantity < 2) && (currentCharacter.weapon1?.name === item.name)) {
+                otherWeapon = null;
+                if (item.type === "Shield") {
+                    currentAC -= item.AC[0];
+                }
+            }
+            if (item.name === currentCharacter.weapon2?.name && item.type === "Shield") {
+                currentAC -= item.AC[0];
+            }
+            if (item.name === event.value && item.type === "Shield") {
+                currentAC += item.AC[0];
+            }
+            if (item.name === event.value){
+                newWeapon = item;
             }
         })
         return{
             ...currentCharacter,
-            weapon2: event.value,
-            weapon1: otherWeapon
+            weapon2: newWeapon,
+            weapon1: otherWeapon,
+            armorClass: currentAC
         }
     }
     if (event.type === "equipArmor") {
         let newAC = 10;
         let isHoldingShield = 0;
+        let newArmor = null;
         currentCharacter.items.map((item) => {
             if (item.name === event.value){
                 let dexBonusToAC = getStatMod(currentCharacter.DEX);
@@ -948,33 +972,174 @@ export const characterDispatch: (current: Character, event: CharacterEvent) => C
                 }
                 newAC = (item.AC[0] + dexBonusToAC);
             }
-            if (item.name === currentCharacter.weapon1 && item.type === "Shield"){
+            if (item.name === currentCharacter.weapon1?.name && item.type === "Shield"){
                 isHoldingShield += item.AC[0];
+            }
+            if (item.name === currentCharacter.weapon2?.name && item.type === "Shield"){
+                isHoldingShield += item.AC[0];
+            }
+            if (item.name === event.value){
+                newArmor = item;
             }
         })
         newAC += isHoldingShield;
+        if (event.value === ""){
+            newAC += getStatMod(currentCharacter.DEX);
+        }
         return{
             ...currentCharacter,
-            armor: event.value,
+            armor: newArmor,
             armorClass: newAC
         }
     }
     if (event.type === "attune1") {
+        let unequipIfLostAttunementWeapon1 = currentCharacter.weapon1;
+        let unequipIfLostAttunementWeapon2 = currentCharacter.weapon2;
+        let unequipIfLostAttunementArmor = currentCharacter.armor;
+        let reducedACIfLostAttunement = 10 + getStatMod(currentCharacter.DEX);
+        let bonusACFromShield = 0;
+        let newAttunement = null;
+        currentCharacter.items.map((item) => {
+            if (item.name === currentCharacter.attunement1?.name && currentCharacter.attunement1?.name != event.value){
+                if (item.name === currentCharacter.weapon1?.name &&
+                    (currentCharacter.attunement2?.name != item.name && currentCharacter.attunement3?.name != item.name)){
+                    unequipIfLostAttunementWeapon1 = null;
+                }
+                if (item.name === currentCharacter.weapon2?.name &&
+                    (currentCharacter.attunement2?.name != item.name && currentCharacter.attunement3?.name != item.name)){
+                    unequipIfLostAttunementWeapon2 = null;
+                }
+                if (item.name === currentCharacter.armor?.name &&
+                    (currentCharacter.attunement2?.name != item.name && currentCharacter.attunement3?.name != item.name)){
+                    unequipIfLostAttunementArmor = null;
+                }
+            }
+            if (item.name === event.value){
+                newAttunement = item;
+            }
+        })
+        currentCharacter.items.map((item) => {
+            if (item.name === unequipIfLostAttunementWeapon1?.name && item.type === "Shield"){
+                bonusACFromShield += item.AC[0];
+            }
+            if (item.name === unequipIfLostAttunementWeapon2?.name && item.type === "Shield"){
+                bonusACFromShield += item.AC[0];
+            }
+            if (item.name === unequipIfLostAttunementArmor?.name){
+                reducedACIfLostAttunement = item.AC[0];
+                let DEXMod = getStatMod(currentCharacter.DEX);
+                if (DEXMod > item.AC[1]) {DEXMod = item.AC[1]}
+                reducedACIfLostAttunement += DEXMod;
+            }
+        })
+        reducedACIfLostAttunement += bonusACFromShield;
         return{
             ...currentCharacter,
-            attunement1: event.value
+            attunement1: newAttunement,
+            weapon1: unequipIfLostAttunementWeapon1,
+            weapon2: unequipIfLostAttunementWeapon2,
+            armor: unequipIfLostAttunementArmor,
+            armorClass: reducedACIfLostAttunement
         }
     }
     if (event.type === "attune2") {
+        let unequipIfLostAttunementWeapon1 = currentCharacter.weapon1;
+        let unequipIfLostAttunementWeapon2 = currentCharacter.weapon2;
+        let unequipIfLostAttunementArmor = currentCharacter.armor;
+        let reducedACIfLostAttunement = 10 + getStatMod(currentCharacter.DEX);
+        let bonusACFromShield = 0;
+        let newAttunement = null;
+        currentCharacter.items.map((item) => {
+            if (item.name === currentCharacter.attunement2?.name && currentCharacter.attunement2?.name != event.value){
+                if (item.name === currentCharacter.weapon1?.name &&
+                    (currentCharacter.attunement1?.name != item.name && currentCharacter.attunement3?.name != item.name)) {
+                    unequipIfLostAttunementWeapon1 = null;
+                }
+                if (item.name === currentCharacter.weapon2?.name &&
+                    (currentCharacter.attunement1?.name != item.name && currentCharacter.attunement3?.name != item.name)){
+                    unequipIfLostAttunementWeapon2 = null;
+                }
+                if (item.name === currentCharacter.armor?.name &&
+                    (currentCharacter.attunement1?.name != item.name && currentCharacter.attunement3?.name != item.name)){
+                    unequipIfLostAttunementArmor = null;
+                }
+            }
+            if (item.name === event.value){
+                newAttunement = item;
+            }
+        })
+        currentCharacter.items.map((item) => {
+            if (item.name === unequipIfLostAttunementWeapon1?.name && item.type === "Shield"){
+                bonusACFromShield += item.AC[0];
+            }
+            if (item.name === unequipIfLostAttunementWeapon2?.name && item.type === "Shield"){
+                bonusACFromShield += item.AC[0];
+            }
+            if (item.name === unequipIfLostAttunementArmor?.name){
+                reducedACIfLostAttunement = item.AC[0];
+                let DEXMod = getStatMod(currentCharacter.DEX);
+                if (DEXMod > item.AC[1]) {DEXMod = item.AC[1]}
+                reducedACIfLostAttunement += DEXMod;
+            }
+        })
+        reducedACIfLostAttunement += bonusACFromShield;
         return{
             ...currentCharacter,
-            attunement2: event.value
+            attunement2: newAttunement,
+            weapon1: unequipIfLostAttunementWeapon1,
+            weapon2: unequipIfLostAttunementWeapon2,
+            armor: unequipIfLostAttunementArmor,
+            armorClass: reducedACIfLostAttunement
         }
     }
     if (event.type === "attune3") {
+        let unequipIfLostAttunementWeapon1 = currentCharacter.weapon1;
+        let unequipIfLostAttunementWeapon2 = currentCharacter.weapon2;
+        let unequipIfLostAttunementArmor = currentCharacter.armor;
+        let reducedACIfLostAttunement = 10 + getStatMod(currentCharacter.DEX);
+        let bonusACFromShield = 0;
+        let newAttunement = null
+        currentCharacter.items.map((item) => {
+            if (item.name === currentCharacter.attunement3?.name && currentCharacter.attunement3?.name != event.value){
+                if (item.name === currentCharacter.weapon1?.name &&
+                    (currentCharacter.attunement1?.name != item.name && currentCharacter.attunement2?.name != item.name)){
+                    unequipIfLostAttunementWeapon1 = null;
+                }
+                if (item.name === currentCharacter.weapon2?.name &&
+                    (currentCharacter.attunement1?.name != item.name && currentCharacter.attunement2?.name != item.name)){
+                    unequipIfLostAttunementWeapon2 = null;
+                }
+                if (item.name === currentCharacter.armor?.name &&
+                    (currentCharacter.attunement1?.name != item.name && currentCharacter.attunement2?.name != item.name)){
+                    unequipIfLostAttunementArmor = null;
+                }
+            }
+            if (item.name === event.value) {
+                newAttunement = item;
+            }
+        })
+        currentCharacter.items.map((item) => {
+            if (item.name === unequipIfLostAttunementWeapon1?.name && item.type === "Shield"){
+                bonusACFromShield += item.AC[0];
+            }
+            if (item.name === unequipIfLostAttunementWeapon2?.name && item.type === "Shield"){
+                bonusACFromShield += item.AC[0];
+            }
+            if (item.name === unequipIfLostAttunementArmor?.name){
+                reducedACIfLostAttunement = item.AC[0];
+                let DEXMod = getStatMod(currentCharacter.DEX);
+                if (DEXMod > item.AC[1]) {DEXMod = item.AC[1]}
+                reducedACIfLostAttunement += DEXMod;
+            }
+        })
+        reducedACIfLostAttunement += bonusACFromShield;
         return{
             ...currentCharacter,
-            attunement3: event.value
+            attunement3: newAttunement,
+            weapon1: unequipIfLostAttunementWeapon1,
+            weapon2: unequipIfLostAttunementWeapon2,
+            armor: unequipIfLostAttunementArmor,
+            armorClass: reducedACIfLostAttunement
         }
     }
     if (event.type === "useConsumable") {

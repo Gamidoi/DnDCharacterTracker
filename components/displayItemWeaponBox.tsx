@@ -1,65 +1,65 @@
 import {Item} from "@/assets/classes/item";
-import {StyleSheet, View, Text, Pressable, Platform} from "react-native";
-import React, {useState} from "react";
+import {StyleSheet, View, Text} from "react-native";
+import React from "react";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 import {itemChargesInteraction} from "@/components/itemChargesInteractionTool";
 import {itemQuantityAdjustTool} from "@/components/itemQuantityAdjustTool";
 import {getDiceRollAsString} from "@/assets/functionLibrary/getDiceRollAsString";
-import {getStatMod} from "@/assets/functionLibrary/getCoreStatMod";
+import {getStatBonus} from "@/assets/functionLibrary/getCoreStatMod";
+import {displayItemAttunementButtons} from "@/components/displayItemAttunementButtons";
+import {displayItemHandEquipButtons} from "@/components/displayItemHandEquipButtons";
 
 
 export function displayItemWeaponBox(item: Item) {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 
-    let toAttackModifier = getStatMod(character.STR) + character.proficiency + item.roll[8];
-    let actualDamageRollSTR: [boolean, number, number, number, number, number, number, number, number] = [item.roll[0], item.roll[1],
-        item.roll[2], item.roll[3], item.roll[4], item.roll[5], item.roll[6], item.roll[7], item.roll[8] + getStatMod(character.STR)];
+    function toAttackModifierProficient(stat: string): number {
+        return getStatBonus(stat) + character.proficiency + item.roll[8];
+    }
+    function toAttackModifierNotProficient(stat: string): number {
+        return getStatBonus(stat) + item.roll[8];
+    }
+
+    function getActualDamageRollPerStat(stat: string): [boolean, number, number, number, number, number, number, number, number]{
+        let statBonus: number = getStatBonus(stat);
+        return [item.roll[0], item.roll[1], item.roll[2], item.roll[3], item.roll[4],
+            item.roll[5], item.roll[6], item.roll[7], item.roll[8] + statBonus];
+    }
+
+    let attackTypeTags = ["STR", "DEX", "CON", "INT", "WIS", "CHA"]
 
     return (<View style={styles.itemWeaponBox}>
         <Text style={styles.itemName}>{item.name}</Text>
         {item.roll[0] && <Text style={styles.diceDisplay}>{getDiceRollAsString(item.roll)}</Text>}
-        {<Text style={styles.statAdjustedRollDisplay}>STR weapon {
-            toAttackModifier > 0 ? "+" + toAttackModifier : "-" + toAttackModifier
-        } to hit for{
-            getDiceRollAsString(actualDamageRollSTR)}</Text>}
-        {(item.twoHanded || item.requiresAttunment) && <View style={styles.tagsBox}>
-            {item.twoHanded && <Text style={styles.specificTag}>Two Handed</Text>}
+
+        {attackTypeTags.map(tag => {
+            return item.weaponTags.includes(tag) && <>
+                {!item.weaponTags.includes("Not Proficient") ? <Text style={styles.statAdjustedRollDisplay}>{tag} weapon {
+                    toAttackModifierProficient(tag) > 0 ? "+" + toAttackModifierProficient(tag) : "-" + toAttackModifierProficient(tag)
+                } to hit for{getDiceRollAsString(getActualDamageRollPerStat(tag))}</Text> :
+                    <Text style={styles.statAdjustedRollDisplay}>{tag} weapon {
+                        toAttackModifierNotProficient(tag) > 0 ? "+" + toAttackModifierNotProficient(tag) : "-" + toAttackModifierNotProficient(tag)
+                    } to hit for{getDiceRollAsString(getActualDamageRollPerStat(tag))}</Text>}
+            </>
+        })}
+
+
+
+        {(item.weaponTags.length > 0 || item.requiresAttunment) && <View style={styles.tagsBox}>
             {item.requiresAttunment && <Text style={styles.specificTag}>Attunement</Text>}
+            {item.weaponTags.map(tag => {
+                if (tag.length > 3) {return <Text style={styles.specificTag}>{tag}</Text>}
+            })}
         </View>}
 
         {itemChargesInteraction(item, getDiceRollAsString(item.refreshRoll))}
 
 
         <Text style={styles.label}>Equip Weapon?</Text>
-        {item.twoHanded ? <View style={{flexDirection: "row", alignSelf: "center"}}><Pressable onPress={() => {
-            characterUpdater({type: "equipWeapon1", value: item.name});
-            characterUpdater({type: "equipWeapon2", value: item.name});
-        }}>
-            <Text style={[
-                styles.equipButton,
-                {backgroundColor: character.weapon1 === item.name ? "darkgray" : "darkgoldenrod"
-                }]}>Both Hands</Text>
-            </Pressable></View> :
-            <View style={{flexDirection: "row", alignSelf: "center"}}>
-                <Pressable onPress={() => {
-                    characterUpdater({type: "equipWeapon1", value: item.name});
-                }}>
-                    <Text style={[
-                        styles.equipButton,
-                        {backgroundColor: character.weapon1 === item.name ? "darkgray" : "darkgoldenrod"
-                        }]}>Left Hand</Text>
-                </Pressable>
-                <Pressable onPress={() => {
-                    characterUpdater({type: "equipWeapon2", value: item.name});
-                }}>
-                    <Text style={[
-                        styles.equipButton,
-                        {backgroundColor: character.weapon2 === item.name ? "darkgray" : "darkgoldenrod"
-                        }]}>Right Hand</Text>
-                </Pressable>
-            </View>}
-        {((character.weapon1 === item.name) || (character.weapon2 === item.name)) && <Text style={styles.label}>Weapon is Already Equipped</Text>}
+        {displayItemHandEquipButtons(item)}
+        {((character.weapon1?.name === item.name) || (character.weapon2?.name === item.name)) && <Text style={styles.label}>Weapon is Already Equipped</Text>}
+        {displayItemAttunementButtons(item)}
 
 
         <Text style={styles.label}>Value: {item.value}gp</Text>

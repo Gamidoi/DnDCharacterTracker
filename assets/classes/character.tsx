@@ -14,7 +14,7 @@ export class Character {
     warlockCasterLevel: number;
     currentUsedSpells: string;
     warlockCurrentUsedSpells: string;
-    concentration: string;
+    concentration: Spell | null;
     abilities: Ability[];
     spells: Spell[];
     languages: string[];
@@ -22,12 +22,12 @@ export class Character {
     immunities: string[];
 
     items: Item[];
-    armor: string;
-    weapon1: string;
-    weapon2: string;
-    attunement1: string;
-    attunement2: string;
-    attunement3: string;
+    armor: Item | null;
+    weapon1: Item | null;
+    weapon2: Item | null;
+    attunement1: Item | null;
+    attunement2: Item | null;
+    attunement3: Item | null;
 
     gold: number;
     electrum: number;
@@ -77,7 +77,7 @@ export class Character {
         this.spellcastingLevel = this.fullCasterLevel = this.warlockCasterLevel = this.halfCasterLevel = this.gold = this.electrum = this.silver = this.copper = 0;
         this.currentUsedSpells = "0000000000000000000000";
         this.warlockCurrentUsedSpells = "0000";
-        this.concentration = "";
+        this.concentration = null;
         this.abilities = [];
         this.spells = [];
         this.languages = ["common"];
@@ -93,6 +93,6 @@ export class Character {
                 this.persuasion = "X";
 
 
-        this.armor = this.weapon1 = this.weapon2 = this.attunement1 = this.attunement2 = this.attunement3 = "";
+        this.armor = this.weapon1 = this.weapon2 = this.attunement1 = this.attunement2 = this.attunement3 = null;
     }
 }

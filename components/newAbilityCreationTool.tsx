@@ -15,6 +15,7 @@ export default function newAbilityCreationTool(spellAndAbilityToolsDisplay: bool
     let [usesQuantity, setUsesQuantity] = useState("");
     let [abilityDescription, setAbilityDescription] = useState("");
     let [persistence, setPersistence] = useState<[boolean, boolean]>([false, false]);
+
     let [abilityRollVariable, setAbilityRollVariable] = useState(false);
     let [abilityRollD4, setAbilityRollD4] = useState("0");
     let [abilityRollD6, setAbilityRollD6] = useState("0");

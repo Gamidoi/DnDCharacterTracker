@@ -14,6 +14,7 @@ export function NewItemCreator(itemManagementToolsDisplay: boolean) {
     let [newItemDisplay, setNewItemDisplay] = useState(false);
     let [deleteItemDisplay, setDeleteItemDisplay] = useState(false);
     let [newItemConfirmationCount, setNewItemConfirmationCount] = useState(0);
+    let [allItemNames, setAllItemNames] = useState<string[]>(getAllItemNames());
 
     let [itemName, setItemName] = useState("");
 
@@ -28,7 +29,6 @@ export function NewItemCreator(itemManagementToolsDisplay: boolean) {
     let [itemRollBonus, setItemRollBonus] = useState("0");
 
     let [attunement, setAttunement] = useState(false);
-    let [twoHanded, setTwoHanded] = useState(false);
     let [quantity, setQuantity] = useState("1");
     let [AC, setAC] = useState("10");
     let [ACMaxDEXBonus, setACMaxDEXBonus] = useState("10");
@@ -62,6 +62,21 @@ export function NewItemCreator(itemManagementToolsDisplay: boolean) {
         {label: "Dawn", value: "Dawn"},
         ]);
 
+    let [itemTags, setItemTags] = useState<string[]>(["Melee"]);
+    let [itemTagsDropdownOpen, setItemTagsDropdownOpen] = useState(false);
+    let [itemTagsDropdownOptions, setItemTagsDropdownOptions] = useState([
+        {label: "Melee", value: "Melee"},
+        {label: "Ranged", value: "Ranged"},
+        {label: "Two Handed", value: "Two Handed"},
+        {label: "Finesse", value: "Finesse"},
+        {label: "Reach", value: "Reach"},
+        {label: "Not Proficient", value: "Not Proficient"},
+        {label: "Custom Attack Mod CON", value: "CON"},
+        {label: "Custom Attack Mod INT", value: "INT"},
+        {label: "Custom Attack Mod WIS", value: "WIS"},
+        {label: "Custom Attack Mod CHA", value: "CHA"}
+    ])
+
 
     let [itemType, setItemType] = useState<string>("Consumable");
     let [itemTypeDropDownOpen, setItemTypeDropDownOpen] = useState(false);
@@ -89,7 +104,6 @@ export function NewItemCreator(itemManagementToolsDisplay: boolean) {
         setItemRolld100("0");
         setItemRollBonus("0");
         setAttunement(false);
-        setTwoHanded(false);
         setQuantity("1");
         setAC("10");
         setACMaxDEXBonus("10");
@@ -101,47 +115,91 @@ export function NewItemCreator(itemManagementToolsDisplay: boolean) {
         setSetAmountRefreshQuantity("1");
         setRefreshQuantityDropDownOpen(false)
         setDescription("");
+        setItemTags(["Melee"]);
+        setAllItemNames(getAllItemNames());
     }
 
     function closeAllDropDowns(activeDropDownMenu: string = ""){
         if (activeDropDownMenu != "refreshOn") {setRefreshOnDropDownOpen(false);}
         if (activeDropDownMenu != "itemType") {setItemTypeDropDownOpen(false);}
         if (activeDropDownMenu != "refreshQuantity"){setRefreshQuantityDropDownOpen(false);}
+        if (activeDropDownMenu != "itemTags") {setItemTagsDropdownOpen(false);}
     }
 
     function createItem(){
         if (itemName != ""){
-            if (parseInt(quantity) < 1){quantity = "1";}
+            let ownedItems: Item[] = [];
+            character.items.map(item => {
+                if (item.name != itemName){
+                    ownedItems.push(item);
+                }
+            })
+            if (parseInt(quantity) < 1) {quantity = "1";}
             if (itemType === "Weapon"){itemRollAll = true;}
             if (refreshQuantity === "Set Quantity"){refreshQuantity = setAmountRefreshQuantity;}
             let rollToRefresh = (refreshQuantity === "Rolled");
             let newItem: Item = new Item(itemType, itemName, [itemRollAll, parseInt(itemRolld4), parseInt(itemRolld6), parseInt(itemRolld8),
-                    parseInt(itemRolld10), parseInt(itemRolld12), parseInt(itemRolld20), parseInt(itemRolld100), parseInt(itemRollBonus)],
-                attunement, twoHanded, parseInt(quantity), [parseInt(AC), parseInt(ACMaxDEXBonus)], description, parseInt(uses), refreshOn, refreshQuantity,  parseInt(itemValue),
+                parseInt(itemRolld10), parseInt(itemRolld12), parseInt(itemRolld20), parseInt(itemRolld100), parseInt(itemRollBonus)],
+                attunement, itemTags, parseInt(quantity), [parseInt(AC), parseInt(ACMaxDEXBonus)], description, parseInt(uses), refreshOn, refreshQuantity,  parseInt(itemValue),
                 [rollToRefresh, parseInt(itemRefreshRolld4), parseInt(itemRefreshRolld6), parseInt(itemRefreshRolld8), parseInt(itemRefreshRolld10),
-                    parseInt(itemRefreshRolld12), parseInt(itemRefreshRolld20), parseInt(itemRefreshRolld100), parseInt(itemRefreshRollBonus)]);
+                parseInt(itemRefreshRolld12), parseInt(itemRefreshRolld20), parseInt(itemRefreshRolld100), parseInt(itemRefreshRollBonus)]);
             setNewItemConfirmationCount(newItemConfirmationCount + 1);
-            characterUpdater({type: "addItem", ownedItems: [...character.items, newItem]})
+            setAllItemNames([...allItemNames, itemName])
+            characterUpdater({type: "addItem", ownedItems: [...ownedItems, newItem]})
         }
     }
+
+    function getAllItemNames(){
+        let allItems: string[] = [];
+        character.items.map(item => {
+            allItems.push(item.name);
+        })
+        return allItems;
+    }
+
+    function deleteItem(itemToDelete: string){
+        let ownedItems :Item[] = [];
+        character.items.forEach((item) => {
+            if (item.name != itemToDelete) {
+                ownedItems.push(item);
+            }
+        });
+        if (character.weapon1?.name === itemToDelete) {
+            characterUpdater({type: "equipWeapon1", value: ""});
+        }
+        if (character.weapon2?.name === itemToDelete) {
+            characterUpdater({type: "equipWeapon2", value: ""});
+        }
+        if (character.armor?.name === itemToDelete) {
+            characterUpdater({type: "equipArmor", value: ""});
+        }
+        if (character.attunement1?.name === itemToDelete) {
+            characterUpdater({type: "attune1", value: ""});
+        }
+        if (character.attunement2?.name === itemToDelete) {
+            characterUpdater({type: "attune2", value: ""});
+        }
+        if (character.attunement3?.name === itemToDelete) {
+            characterUpdater({type: "attune3", value: ""});
+        }
+        characterUpdater({type: "addItem", ownedItems: ownedItems});
+    }
+
     function sortCurrentItems() {
-        let sortedItems: Item[] = [];
+        let allConsumables: Item[] = [];
+        let allShields: Item[] = [];
+        let allWeapons: Item[] = [];
+        let allArmors: Item[] = [];
+        let allArtifacts: Item[] = [];
+        //many arrays spread to add together when done.
         character.items.map((item) => {
-            if (item.type === "Consumable") {sortedItems.push(item)}
+            if (item.type === "Consumable") {allConsumables.push(item)}
+            if (item.type === "Shield") {allShields.push(item)}
+            if (item.type === "Weapon") {allWeapons.push(item)}
+            if (item.type === "Armor") {allArmors.push(item)}
+            if (item.type === "Artifact") {allArtifacts.push(item)}
         })
-        character.items.map((item) => {
-            if (item.type === "Shield") {sortedItems.push(item)}
-        })
-        character.items.map((item) => {
-            if (item.type === "Weapon") {sortedItems.push(item)}
-        })
-        character.items.map((item) => {
-            if (item.type === "Armor") {sortedItems.push(item)}
-        })
-        character.items.map((item) => {
-            if (item.type === "Artifact") {sortedItems.push(item)}
-        })
-        return sortedItems;
+        return [...allConsumables, ...allShields, ...allWeapons, ...allArmors, ...allArtifacts];
     }
 
     return (<>{itemManagementToolsDisplay && <View>
@@ -152,6 +210,7 @@ export function NewItemCreator(itemManagementToolsDisplay: boolean) {
                 closeAllDropDowns();
                 setDeleteItemDisplay(false);
                 setNewItemConfirmationCount(0);
+                setAllItemNames(getAllItemNames());
             }}>
                 <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Acquire New Items</Text>
             </Pressable>
@@ -263,14 +322,32 @@ export function NewItemCreator(itemManagementToolsDisplay: boolean) {
                             <Text style={styles.toggleButtonLables}>{attunement ? "Yes" : "No"}</Text>
                         </Pressable>
                     </View>}
-                    {itemType === "Weapon" && <View style={{flex: 1}}>
-                        <Text style={styles.label}>Two Handed?</Text>
-                        <Pressable style={[styles.newItemToolToggleButtons, {width: 100, height: 40}]} onPress={() => {
-                            setTwoHanded(!twoHanded);
-                            closeAllDropDowns();
-                        }}>
-                            <Text style={styles.toggleButtonLables}>{twoHanded ? "Yes" : "No"}</Text>
-                        </Pressable>
+                    {itemType === "Weapon" && <View style={{flex: 1.5}}>
+                        <Text style={styles.label}>Weapon Tags</Text>
+                        <DropDownPicker
+                            open={itemTagsDropdownOpen}
+                            value={itemTags}
+                            items={itemTagsDropdownOptions}
+                            setOpen={setItemTagsDropdownOpen}
+                            setValue={setItemTags}
+                            setItems={setItemTagsDropdownOptions}
+                            onOpen={() => {
+                                closeAllDropDowns("itemTags")
+                            }}
+                            multiple={true}
+                            autoScroll={true}
+                            dropDownDirection={"BOTTOM"}
+                            zIndex={80091}
+                            flatListProps={{nestedScrollEnabled: true}}
+                            style={[styles.dropDownPicker,
+                                {
+                                    marginBottom: Platform.OS === "web" ? (itemTagsDropdownOpen ? 210 : 0) : 0,
+                                    width: 170,
+                                    alignSelf: "center"
+                                }]}
+                            dropDownContainerStyle={[styles.dropDownContainer, {width: 170}]}
+                            textStyle={{color: "white", fontSize: 14}}
+                        />
                     </View>}
                     {itemType != "Consumable" && <View style={{flex: 1}}>
                         <Text style={styles.label}>Charges/Uses?</Text>
@@ -455,6 +532,7 @@ export function NewItemCreator(itemManagementToolsDisplay: boolean) {
                 {(newItemConfirmationCount > 0) &&
                     <Pressable  style={styles.confirmationButton} onPress={() => {
                         setNewItemConfirmationCount(0);
+                        setAllItemNames(getAllItemNames());
                         closeAllDropDowns();}}>
                         <Text style={styles.confirmationBox}>Confirmed! New Item</Text>
                         <Text style={styles.confirmationBox}>"{itemName}"</Text>
@@ -462,11 +540,18 @@ export function NewItemCreator(itemManagementToolsDisplay: boolean) {
                     </Pressable>
                 }
 
+                {allItemNames.includes(itemName) && <View style={styles.warning}>
+                    <Text>Warning! Item name is already used, making another Item with the same name WILL delete the Original Item</Text>
+                </View>}
+
                 <Pressable
                     style={[styles.toolBoxButton, {marginBottom: 10}]}
                     onPress={() => {
                         closeAllDropDowns();
+                        deleteItem(itemName);
+                        setAllItemNames(getAllItemNames());
                         createItem();
+                        setAllItemNames(getAllItemNames());
                     }}>
                     <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>Acquire New Item: {itemName}</Text>
                     <Text style={{color: "white", fontSize: 12, textAlign: "center"}}>For {character.charName}</Text>
@@ -542,31 +627,7 @@ export function NewItemCreator(itemManagementToolsDisplay: boolean) {
                         style={styles.deleteConfirmButtons}
                         onPress={() => {
                             setItemConfirmDelete(false);
-                            let ownedItems :Item[] = [];
-                            character.items.forEach((item) => {
-                                if (item.name != deleteItemName) {
-                                    ownedItems.push(item);
-                                }
-                            });
-                            if (character.weapon1 === deleteItemName) {
-                                characterUpdater({type: "equipWeapon1", value: ""});
-                            }
-                            if (character.weapon2 === deleteItemName) {
-                                characterUpdater({type: "equipWeapon2", value: ""});
-                            }
-                            if (character.armor === deleteItemName) {
-                                characterUpdater({type: "equipArmor", value: ""});
-                            }
-                            if (character.attunement1 === deleteItemName) {
-                                characterUpdater({type: "attune1", value: ""});
-                            }
-                            if (character.attunement2 === deleteItemName) {
-                                characterUpdater({type: "attune2", value: ""});
-                            }
-                            if (character.attunement3 === deleteItemName) {
-                                characterUpdater({type: "attune3", value: ""});
-                            }
-                            characterUpdater({type: "addItem", ownedItems: ownedItems});
+                            deleteItem(deleteItemName)
                             setDeleteItemDisplay(false);
                         }}>
                             <Text style={styles.deleteConfirmText}>Confirm Item Deletion?</Text>
@@ -672,4 +733,8 @@ const styles = StyleSheet.create({
         borderColor: "orange",
         alignSelf: "center",
     },
+    warning: {
+        color: "black",
+        backgroundColor: "yellow",
+    }
 });

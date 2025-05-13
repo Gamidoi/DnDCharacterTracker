@@ -1,7 +1,6 @@
 import {Item} from "@/assets/classes/item";
-import {StyleSheet, View, Text, Pressable} from "react-native";
-import {MaterialCommunityIcons} from "@expo/vector-icons";
-import React, {useState} from "react";
+import {StyleSheet, View, Text} from "react-native";
+import React from "react";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 import {itemQuantityAdjustTool} from "@/components/itemQuantityAdjustTool";
 
