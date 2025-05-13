@@ -59,7 +59,7 @@ export function displayItemsOnItemsTab() {
                     getItemsOfCatagory();
                 }}><Text style={styles.itemCatagoryHeader}>Shields</Text></Pressable>
             {displayShield && <View>
-                {shields === 0 && <Text style={[styles.noItemsInCatagory, {backgroundColor: "teal"}]}>Character has no Consumables</Text>}
+                {shields === 0 && <Text style={[styles.noItemsInCatagory, {backgroundColor: "darkgreen"}]}>Character has no Shields</Text>}
                 {character.items.map((item: Item) => {
                     if (item.type === "Shield") {
                         return displayItemShieldBox(item)}})}
@@ -142,7 +142,45 @@ export function displayItemsOnItemsTab() {
                 onPress={() => {
                     setDisplayArtifacts(!displayArtifacts);
                     getItemsOfCatagory();
-                }}><Text style={styles.itemCatagoryHeader}>Artifacts</Text></Pressable>
+                }}>
+                <Text style={styles.itemCatagoryHeader}>Artifacts</Text>
+                <View style={{borderWidth: 2, borderColor: "orange", borderRadius: 4}}>
+                    <Text style={styles.label}>Left Hand: {character.attunement1 != null ? character.attunement1?.name : "Empty"}</Text>
+                    <Text style={styles.label}>Right Hand: {character.attunement2 != null ? character.attunement2?.name : "Empty"}</Text>
+                    <Text style={styles.label}>Right Hand: {character.attunement3 != null ? character.attunement3?.name : "Empty"}</Text>
+                    <Text style={[styles.label, {marginTop: 8}]}>Empty Attunement:</Text>
+                    <View style={{flexDirection: "row", alignSelf: "center", padding: 4}}>
+                        <Pressable onPress={() => {
+                            characterUpdater({type: "attune1", value: ""});
+                        }}>
+                            <Text style={[
+                                styles.equipButton,
+                                {backgroundColor: character.attunement1 === null ? "darkgray" : "darkgoldenrod",
+                                    width: 90,
+                                }]}>Slot 1</Text>
+                        </Pressable>
+                        <Pressable onPress={() => {
+                            characterUpdater({type: "attune2", value: ""});
+                        }}>
+                            <Text style={[
+                                styles.equipButton,
+                                {backgroundColor: character.attunement2 === null ? "darkgray" : "darkgoldenrod",
+                                    width: 90,
+                                }]}>Slot 2</Text>
+                        </Pressable>
+                        <Pressable onPress={() => {
+                            characterUpdater({type: "attune3", value: ""});
+                        }}>
+                            <Text style={[
+                                styles.equipButton,
+                                {backgroundColor: character.attunement3 === null ? "darkgray" : "darkgoldenrod",
+                                    width: 90,
+                                }]}>Slot 3</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </Pressable>
+
             {displayArtifacts && <View>
                 {artifacts === 0 && <Text style={[styles.noItemsInCatagory, {backgroundColor: "teal"}]}>Character has no Artifacts</Text>}
                 {character.items.map((item: Item) => {
@@ -197,6 +235,7 @@ const styles = StyleSheet.create({
         backgroundColor: "darkgoldenrod",
         flexDirection: "row",
         alignSelf: "center",
-        padding: 13
+        textAlign: "center",
+        padding: 13,
     },
 })
