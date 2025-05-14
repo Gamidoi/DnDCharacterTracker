@@ -4,28 +4,24 @@ import React from "react";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 import {itemChargesInteraction} from "@/components/itemChargesInteractionTool";
 import {itemQuantityAdjustTool} from "@/components/itemQuantityAdjustTool";
-import {getDiceRollAsString} from "@/assets/functionLibrary/getDiceRollAsString";
+import {
+    getActualDamageRollPerStat,
+    getDiceRollAsString, toAttackModifierNotProficient,
+    toAttackModifierProficient
+} from "@/assets/functionLibrary/getDiceRollAsString";
 import {getStatBonus} from "@/assets/functionLibrary/getCoreStatMod";
 import {displayItemAttunementButtons} from "@/components/displayItemAttunementButtons";
 import {displayItemHandEquipButtons} from "@/components/displayItemHandEquipButtons";
 
 
-export function displayItemWeaponBox(item: Item) {
+export function displayItemWeaponBox(item: Item | null) {
+    if (item === null){return <></>}
+
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 
-    function toAttackModifierProficient(stat: string): number {
-        return getStatBonus(stat) + character.proficiency + item.roll[8];
-    }
-    function toAttackModifierNotProficient(stat: string): number {
-        return getStatBonus(stat) + item.roll[8];
-    }
 
-    function getActualDamageRollPerStat(stat: string): [boolean, number, number, number, number, number, number, number, number]{
-        let statBonus: number = getStatBonus(stat);
-        return [item.roll[0], item.roll[1], item.roll[2], item.roll[3], item.roll[4],
-            item.roll[5], item.roll[6], item.roll[7], item.roll[8] + statBonus];
-    }
+
 
     let attackTypeTags = ["STR", "DEX", "CON", "INT", "WIS", "CHA"]
 
@@ -35,12 +31,21 @@ export function displayItemWeaponBox(item: Item) {
 
         {attackTypeTags.map(tag => {
             return item.weaponTags.includes(tag) && <>
-                {!item.weaponTags.includes("Not Proficient") ? <Text style={styles.statAdjustedRollDisplay}>{tag} weapon {
-                    toAttackModifierProficient(tag) > 0 ? "+" + toAttackModifierProficient(tag) : "-" + toAttackModifierProficient(tag)
-                } to hit for{getDiceRollAsString(getActualDamageRollPerStat(tag))}</Text> :
-                    <Text style={styles.statAdjustedRollDisplay}>{tag} weapon {
-                        toAttackModifierNotProficient(tag) > 0 ? "+" + toAttackModifierNotProficient(tag) : "-" + toAttackModifierNotProficient(tag)
-                    } to hit for{getDiceRollAsString(getActualDamageRollPerStat(tag))}</Text>}
+                {!item.weaponTags.includes("Not Proficient") ?
+                    <Text style={styles.statAdjustedRollDisplay}>
+                        {tag}
+                        {" weapon "}
+                        {toAttackModifierProficient(tag, item) > 0 ? "+" : "-"}
+                        {toAttackModifierProficient(tag, item)}
+                        {" to hit for"}
+                        {getDiceRollAsString(getActualDamageRollPerStat(tag, item))}</Text> :
+                    <Text style={styles.statAdjustedRollDisplay}>
+                        {tag}
+                        {" weapon "}
+                        {toAttackModifierNotProficient(tag, item) > 0 ? "+": "-"}
+                        {toAttackModifierNotProficient(tag, item)}
+                        {" to hit for"}
+                        {getDiceRollAsString(getActualDamageRollPerStat(tag, item))}</Text>}
             </>
         })}
 
