@@ -6,10 +6,10 @@ import {
     getDiceRollAsString, toAttackModifierNotProficient,
     toAttackModifierProficient
 } from "@/assets/functionLibrary/getDiceRollAsString";
-import {displayItemWeaponBox} from "@/components/displayItemWeaponBox";
+import {DisplayItemWeaponBox} from "@/components/displayItemWeaponBox";
 
 
-export function displayEquippedOnIndex(){
+export function DisplayEquippedOnIndex(){
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 
@@ -39,7 +39,7 @@ export function displayEquippedOnIndex(){
                 </>
             })}
         </View>}
-        {displayItemWeaponBox(character.weapon1)}
+        <DisplayItemWeaponBox item={character.weapon1} displayQuantityButtons={false} />
 
 
 

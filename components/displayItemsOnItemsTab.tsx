@@ -2,14 +2,14 @@ import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 import {useState} from "react";
 import {Item} from "@/assets/classes/item";
 import {Pressable, StyleSheet, View, Text} from "react-native";
-import {displayItemConsumableBox} from "@/components/displayItemConsumableBox";
-import {displayItemWeaponBox} from "@/components/displayItemWeaponBox";
-import {displayItemArmorBox} from "@/components/displayItemArmorBox";
-import {displayItemShieldBox} from "@/components/displayItemShieldBox";
-import {displayItemArtifactBox} from "@/components/displayItemArtifactBox";
+import {DisplayItemConsumableBox} from "@/components/displayItemConsumableBox";
+import {DisplayItemWeaponBox} from "@/components/displayItemWeaponBox";
+import {DisplayItemArmorBox} from "@/components/displayItemArmorBox";
+import {DisplayItemShieldBox} from "@/components/displayItemShieldBox";
+import {DisplayItemArtifactBox} from "@/components/displayItemArtifactBox";
 
 
-export function displayItemsOnItemsTab() {
+export function DisplayItemsOnItemsTab() {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 
@@ -47,7 +47,7 @@ export function displayItemsOnItemsTab() {
                 {consumables === 0 && <Text style={[styles.noItemsInCatagory, {backgroundColor: "teal"}]}>Character has no Consumables</Text>}
                 {character.items.map((item: Item) => {
                     if (item.type === "Consumable") {
-                        return displayItemConsumableBox(item)}})}
+                        return <DisplayItemConsumableBox item={item} />}})}
             </View>}
         </View>
 
@@ -62,7 +62,7 @@ export function displayItemsOnItemsTab() {
                 {shields === 0 && <Text style={[styles.noItemsInCatagory, {backgroundColor: "darkgreen"}]}>Character has no Shields</Text>}
                 {character.items.map((item: Item) => {
                     if (item.type === "Shield") {
-                        return displayItemShieldBox(item)}})}
+                        return <DisplayItemShieldBox item={item} />}})}
             </View>}
         </View>
 
@@ -100,7 +100,7 @@ export function displayItemsOnItemsTab() {
             {displayWeapons && <View>
                 {weapons === 0 && <Text style={[styles.noItemsInCatagory, {backgroundColor: "saddlebrown"}]}>Character has no Weapons</Text>}
                 {character.items.map((item: Item) => {
-                    if (item.type === "Weapon") {return displayItemWeaponBox(item)}})}
+                    if (item.type === "Weapon") {return <DisplayItemWeaponBox item={item} displayQuantityButtons={true} />}})}
             </View>}
         </View>
 
@@ -131,7 +131,10 @@ export function displayItemsOnItemsTab() {
             {displayArmors && <View>
                 {armors === 0 && <Text  style={[styles.noItemsInCatagory, {backgroundColor: "darkgreen"}]}>Character has no Armors</Text>}
                 {character.items.map((item: Item) => {
-                    if (item.type === "Armor") {return displayItemArmorBox(item)}})}
+                    if (item.type === "Armor") {
+                        return <DisplayItemArmorBox item={item}/>
+                    }
+                })}
             </View>}
         </View>
 
@@ -185,7 +188,7 @@ export function displayItemsOnItemsTab() {
                 {artifacts === 0 && <Text style={[styles.noItemsInCatagory, {backgroundColor: "teal"}]}>Character has no Artifacts</Text>}
                 {character.items.map((item: Item) => {
                     if (item.type === "Artifact") {
-                        return displayItemArtifactBox(item)}})}
+                        return <DisplayItemArtifactBox item={item} />}})}
             </View>}
         </View>
     </>)

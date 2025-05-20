@@ -4,8 +4,10 @@ import React from "react";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 import {preventEquipIfNeedsAttunement} from "@/assets/functionLibrary/preventEquipIfNeedsAttunement";
 
-
-export function displayItemAttunementButtons(item: Item) {
+export type DisplayItemAttunementButtonProps = {
+    item: Item;
+}
+export function DisplayItemAttunementButtons({item}: DisplayItemAttunementButtonProps) {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 

@@ -6,8 +6,11 @@ import {FontAwesome, MaterialCommunityIcons} from "@expo/vector-icons";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 
 
+export type NewSpellCreationToolProps = {
+    displayOn: boolean;
+}
 
-export default function newSpellCreationTool(spellAndAbilityToolsDisplay: boolean) {
+export default function NewSpellCreationTool({displayOn}: NewSpellCreationToolProps) {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 
@@ -173,7 +176,7 @@ export default function newSpellCreationTool(spellAndAbilityToolsDisplay: boolea
         setSpellDescription("");
     }
 
-    return(<View style={{margin: 0, padding: 0}}>{spellAndAbilityToolsDisplay && <View>
+    return(<View style={{margin: 0, padding: 0}}>{displayOn && <View>
         <Pressable onPress={() => closeAllDropDowns()} style={styles.toolBoxStyle}>
             <Pressable onPress={() => {
                 setNewSpellCreationToolDisplay(!newSpellCreationToolDisplay);

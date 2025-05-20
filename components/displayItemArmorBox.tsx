@@ -2,15 +2,19 @@ import {Item} from "@/assets/classes/item";
 import {StyleSheet, View, Text, Pressable} from "react-native";
 import React from "react";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
-import {itemChargesInteraction} from "@/components/itemChargesInteractionTool";
-import {itemQuantityAdjustTool} from "@/components/itemQuantityAdjustTool";
+import {ItemChargesInteraction} from "@/components/itemChargesInteractionTool";
+import {ItemQuantityAdjustTool} from "@/components/itemQuantityAdjustTool";
 import {getDiceRollAsString} from "@/assets/functionLibrary/getDiceRollAsString";
 import {getStatMod} from "@/assets/functionLibrary/getCoreStatMod";
-import {displayItemAttunementButtons} from "@/components/displayItemAttunementButtons";
+import {DisplayItemAttunementButtons} from "@/components/displayItemAttunementButtons";
 import {preventEquipIfNeedsAttunement} from "@/assets/functionLibrary/preventEquipIfNeedsAttunement";
 
 
-export function displayItemArmorBox(item: Item) {
+
+export type DisplayItemArmorBoxProps = {
+    item: Item;
+}
+export function DisplayItemArmorBox({item}: DisplayItemArmorBoxProps) {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 
@@ -26,7 +30,7 @@ export function displayItemArmorBox(item: Item) {
         <Text style={styles.ACDisplay}>AC: {item.AC[0]}{item.AC[1] > 0 ? " + Dex (Max +" + item.AC[1] + ")" : ""}</Text>
         <Text style={styles.statAdjustedACDisplay}>{ACIfWorn()}</Text>
 
-        {itemChargesInteraction(item, getDiceRollAsString(item.refreshRoll))}
+        <ItemChargesInteraction item={item} getRolledDiceAsString={getDiceRollAsString(item.refreshRoll)} />
 
         <Text style={styles.label}>Equip Armor?</Text>
         <View style={{flexDirection: "row", alignSelf: "center"}}><Pressable onPress={() => {
@@ -43,10 +47,10 @@ export function displayItemArmorBox(item: Item) {
         </View>
 
         {(character.armor?.name === item.name) && <Text style={styles.label}>Armor is Already Equipped</Text>}
-        {displayItemAttunementButtons(item)}
+        <DisplayItemAttunementButtons item={item} />
         <Text style={styles.label}>Value: {item.value}gp</Text>
         <Text style={styles.label}>Quantity Owned</Text>
-        {itemQuantityAdjustTool(item)}
+        <ItemQuantityAdjustTool item={item} />
         {item.description != "" && <Text style={styles.descriptionText}>{item.description}</Text>}
     </View>)
 }

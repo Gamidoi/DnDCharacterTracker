@@ -1,9 +1,14 @@
-import {Pressable, StyleSheet, Text, View} from "react-native";
+import {Pressable, StyleSheet, Text, View, type ViewProps} from "react-native";
 import React, {useState} from "react";
 import {CharacterEvent, useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 
 
-export function AdjustSkillsTool(levelUpToolsSkillsStatsCastingHPDisplay: boolean) {
+
+export type AdjustSkillsTool = {
+    displayOn: boolean;
+};
+
+export function AdjustSkillsTool({displayOn}: AdjustSkillsTool) {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
     let [addSkillsBoxDisplayStatus, setAddSkillsBoxDisplayStatus] = useState(false);
@@ -71,7 +76,7 @@ export function AdjustSkillsTool(levelUpToolsSkillsStatsCastingHPDisplay: boolea
 
 
     return(
-        <View>{levelUpToolsSkillsStatsCastingHPDisplay && <View style={styles.toolBoxStyle}>
+        <View>{displayOn && <View style={styles.toolBoxStyle}>
             <View><Pressable style={styles.toolBoxStyle} onPress={() =>
             {setAddSkillsBoxDisplayStatus(!addSkillsBoxDisplayStatus)}
             }>

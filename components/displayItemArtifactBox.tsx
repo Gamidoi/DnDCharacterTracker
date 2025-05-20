@@ -2,24 +2,28 @@ import {Item} from "@/assets/classes/item";
 import {StyleSheet, View, Text} from "react-native";
 import React from "react";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
-import {itemChargesInteraction} from "@/components/itemChargesInteractionTool";
-import {itemQuantityAdjustTool} from "@/components/itemQuantityAdjustTool";
+import {ItemChargesInteraction} from "@/components/itemChargesInteractionTool";
+import {ItemQuantityAdjustTool} from "@/components/itemQuantityAdjustTool";
 import {getDiceRollAsString} from "@/assets/functionLibrary/getDiceRollAsString";
-import {displayItemAttunementButtons} from "@/components/displayItemAttunementButtons";
+import {DisplayItemAttunementButtons} from "@/components/displayItemAttunementButtons";
 
 
-export function displayItemArtifactBox(item: Item) {
+
+ export type DisplayItemArtifactBoxProps = {
+     item: Item;
+ }
+export function DisplayItemArtifactBox({item}: DisplayItemArtifactBoxProps) {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 
     return (<View style={styles.itemArtifactBox}>
         <Text style={styles.itemName}>{item.name}</Text>
 
-        {itemChargesInteraction(item, getDiceRollAsString(item.refreshRoll))}
-        {displayItemAttunementButtons(item)}
+        <ItemChargesInteraction item={item} getRolledDiceAsString={getDiceRollAsString(item.refreshRoll)} />
+        <DisplayItemAttunementButtons item={item} />
         <Text style={styles.label}>Value: {item.value}gp</Text>
         <Text style={styles.label}>Quantity Owned</Text>
-        {itemQuantityAdjustTool(item)}
+        <ItemQuantityAdjustTool item={item} />
         {item.description != "" && <Text style={styles.descriptionText}>{item.description}</Text>}
     </View>)
 }

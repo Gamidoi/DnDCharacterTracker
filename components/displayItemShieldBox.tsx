@@ -2,14 +2,17 @@ import {Item} from "@/assets/classes/item";
 import {StyleSheet, View, Text} from "react-native";
 import React from "react";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
-import {itemChargesInteraction} from "@/components/itemChargesInteractionTool";
-import {itemQuantityAdjustTool} from "@/components/itemQuantityAdjustTool";
+import {ItemChargesInteraction} from "@/components/itemChargesInteractionTool";
+import {ItemQuantityAdjustTool} from "@/components/itemQuantityAdjustTool";
 import {getDiceRollAsString} from "@/assets/functionLibrary/getDiceRollAsString";
-import {displayItemAttunementButtons} from "@/components/displayItemAttunementButtons";
-import {displayItemHandEquipButtons} from "@/components/displayItemHandEquipButtons";
+import {DisplayItemAttunementButtons} from "@/components/displayItemAttunementButtons";
+import {DisplayItemHandEquipButtons} from "@/components/displayItemHandEquipButtons";
 
 
-export function displayItemShieldBox(item: Item) {
+export type DisplayItemShieldBoxProps = {
+    item: Item;
+}
+export function DisplayItemShieldBox({item}: DisplayItemShieldBoxProps) {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 
@@ -18,16 +21,16 @@ export function displayItemShieldBox(item: Item) {
         <Text style={styles.itemName}>{item.name}</Text>
         <Text style={styles.ACDisplay}>AC Bonus: {item.AC[0]}</Text>
 
-        {itemChargesInteraction(item, getDiceRollAsString(item.refreshRoll))}
+        <ItemChargesInteraction item={item} getRolledDiceAsString={getDiceRollAsString(item.refreshRoll)} />
 
         <Text style={styles.label}>Equip Shield?</Text>
-        {displayItemHandEquipButtons(item)}
+        <DisplayItemHandEquipButtons item={item} />
 
         {((character.weapon1?.name === item.name) || (character.weapon2?.name === item.name)) && <Text style={styles.label}>Shield is Already Equipped</Text>}
-        {displayItemAttunementButtons(item)}
+        <DisplayItemAttunementButtons item={item} />
         <Text style={styles.label}>Value: {item.value}gp</Text>
         <Text style={styles.label}>Quantity Owned</Text>
-        {itemQuantityAdjustTool(item)}
+        <ItemQuantityAdjustTool item={item} />
         {item.description != "" && <Text style={styles.descriptionText}>{item.description}</Text>}
     </View>)
 }

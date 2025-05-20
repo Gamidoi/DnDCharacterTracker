@@ -5,7 +5,12 @@ import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 import {preventEquipIfNeedsAttunement} from "@/assets/functionLibrary/preventEquipIfNeedsAttunement";
 
 
-export function displayItemHandEquipButtons(item: Item) {
+
+export type DisplayItemHandEquipButtonsProps = {
+    item: Item;
+}
+
+export function DisplayItemHandEquipButtons({item}: DisplayItemHandEquipButtonsProps) {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 

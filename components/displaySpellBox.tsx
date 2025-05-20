@@ -4,9 +4,11 @@ import {Character} from "@/assets/classes/character";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 
 
+export type SpellBoxProps = {
+    spellLevel: number;
+}
 
-
-export default function DisplaySpellBox(spellLevel :number){
+export default function DisplaySpellBox({spellLevel}: SpellBoxProps) {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 

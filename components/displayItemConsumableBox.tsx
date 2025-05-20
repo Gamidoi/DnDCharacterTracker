@@ -1,13 +1,14 @@
 import {Item} from "@/assets/classes/item";
 import {StyleSheet, View, Text} from "react-native";
 import React from "react";
-import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
-import {itemQuantityAdjustTool} from "@/components/itemQuantityAdjustTool";
+import {ItemQuantityAdjustTool} from "@/components/itemQuantityAdjustTool";
 
 
-export function displayItemConsumableBox(item: Item) {
-    const character = useCharacter();
-    const characterUpdater = useCharacterUpdater();
+export type ItemConsumableBoxProps = {
+    item: Item;
+}
+
+export function DisplayItemConsumableBox({item}: ItemConsumableBoxProps) {
 
     function getRolledDiceAsString(){
         let diceString = ""
@@ -39,7 +40,7 @@ export function displayItemConsumableBox(item: Item) {
     return (<View style={styles.itemConsumableBox}>
         <Text style={styles.itemName}>{item.name}</Text>
         <Text style={styles.label}>Quantity</Text>
-        {itemQuantityAdjustTool(item)}
+        <ItemQuantityAdjustTool item={item} />
         <Text style={styles.label}>Value: {item.value}gp</Text>
         {item.roll[0] && <Text style={styles.diceDisplay}>{getRolledDiceAsString()}</Text>}
 

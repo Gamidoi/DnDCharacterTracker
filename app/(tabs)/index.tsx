@@ -1,12 +1,11 @@
 import { StyleSheet, TextInput, View, Text, Pressable} from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import React, {useState} from "react";
-import {spellSlotsByLevel} from '@/assets/classes/spellSlotsByLevel';
 import {useCharacter, useCharacterUpdater} from '@/components/characterUpdater';
 import headerRandomizer from "@/components/headerRandomizer";
 import DisplayPassivesOnIndexTab from "@/components/displayPassivesOnIndexTab";
-import {usingSpellSlotsIndexTab} from "@/components/usingSpellSlotsIndexTab";
-import {displayEquippedOnIndex} from "@/components/displayEquippedOnIndex";
+import {UsingSpellSlotsIndexTab} from "@/components/usingSpellSlotsIndexTab";
+import {DisplayEquippedOnIndex} from "@/components/displayEquippedOnIndex";
 
 
 
@@ -133,9 +132,9 @@ export default function MainCharacterSyndrome() {
 
 
 
-        {usingSpellSlotsIndexTab()}
-        {displayEquippedOnIndex()}
-        {DisplayPassivesOnIndexTab()}
+        <UsingSpellSlotsIndexTab />
+        <DisplayEquippedOnIndex />
+        <DisplayPassivesOnIndexTab />
 
 
     </ParallaxScrollView>

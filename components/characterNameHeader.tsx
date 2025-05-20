@@ -1,7 +1,8 @@
-import {Text, View} from 'react-native'
+import {Text, View, type ViewProps} from 'react-native'
 import {useCharacter} from "@/components/characterUpdater";
 
 
+export type CharacterNameHeader = ViewProps;
 
 export default function CharacterNameHeader() {
     const character = useCharacter();

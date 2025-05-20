@@ -2,19 +2,22 @@ import {Item} from "@/assets/classes/item";
 import {StyleSheet, View, Text} from "react-native";
 import React from "react";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
-import {itemChargesInteraction} from "@/components/itemChargesInteractionTool";
-import {itemQuantityAdjustTool} from "@/components/itemQuantityAdjustTool";
+import {ItemChargesInteraction} from "@/components/itemChargesInteractionTool";
+import {ItemQuantityAdjustTool} from "@/components/itemQuantityAdjustTool";
 import {
     getActualDamageRollPerStat,
     getDiceRollAsString, toAttackModifierNotProficient,
     toAttackModifierProficient
 } from "@/assets/functionLibrary/getDiceRollAsString";
-import {getStatBonus} from "@/assets/functionLibrary/getCoreStatMod";
-import {displayItemAttunementButtons} from "@/components/displayItemAttunementButtons";
-import {displayItemHandEquipButtons} from "@/components/displayItemHandEquipButtons";
+import {DisplayItemAttunementButtons} from "@/components/displayItemAttunementButtons";
+import {DisplayItemHandEquipButtons} from "@/components/displayItemHandEquipButtons";
 
 
-export function displayItemWeaponBox(item: Item | null) {
+export type DisplayItemWeaponBoxProps = {
+    item: Item|null;
+    displayQuantityButtons: boolean;
+}
+export function DisplayItemWeaponBox({item, displayQuantityButtons = true}: DisplayItemWeaponBoxProps) {
     if (item === null){return <></>}
 
     const character = useCharacter();
@@ -58,18 +61,18 @@ export function displayItemWeaponBox(item: Item | null) {
             })}
         </View>}
 
-        {itemChargesInteraction(item, getDiceRollAsString(item.refreshRoll))}
+        <ItemChargesInteraction item={item} getRolledDiceAsString={getDiceRollAsString(item.refreshRoll)} />
 
 
         <Text style={styles.label}>Equip Weapon?</Text>
-        {displayItemHandEquipButtons(item)}
+        <DisplayItemHandEquipButtons item={item} />
         {((character.weapon1?.name === item.name) || (character.weapon2?.name === item.name)) && <Text style={styles.label}>Weapon is Already Equipped</Text>}
-        {displayItemAttunementButtons(item)}
+        <DisplayItemAttunementButtons item={item} />
 
 
         <Text style={styles.label}>Value: {item.value}gp</Text>
         <Text style={styles.label}>Quantity Owned</Text>
-        {itemQuantityAdjustTool(item)}
+        {displayQuantityButtons && <ItemQuantityAdjustTool item={item} />}
         {item.description != "" && <Text style={styles.descriptionText}>{item.description}</Text>}
     </View>)
 }

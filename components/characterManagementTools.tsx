@@ -1,4 +1,4 @@
-import {Pressable, StyleSheet, Text, TextInput, View} from "react-native";
+import {Pressable, StyleSheet, Text, TextInput, View, ViewProps} from "react-native";
 import {Character} from "@/assets/classes/character";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, {useState} from "react";
@@ -19,8 +19,12 @@ getAllCharacterNames().then(keysString => {
     });
 })
 
+export type CharacterManagementToolsProps = ViewProps & {
+    displayOn: boolean;
+}
 
-export function CharacterManagementTools(characterManagementToolsDisplay: boolean){
+
+export function CharacterManagementTools({displayOn}: CharacterManagementToolsProps){
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 
@@ -45,7 +49,7 @@ export function CharacterManagementTools(characterManagementToolsDisplay: boolea
 
 
     return(
-        <View>{characterManagementToolsDisplay &&<View>
+        <View>{displayOn &&<View>
 
 
 

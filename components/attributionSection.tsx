@@ -2,7 +2,11 @@ import React from "react";
 import {StyleSheet, Text, View, Image} from 'react-native';
 
 
-export default function AttributionSection(attributionSectionDisplay: boolean) {
+export type AttributionSectionProps = {
+    attributionSectionDisplay: boolean;
+}
+
+export default function AttributionSection({attributionSectionDisplay}: AttributionSectionProps) {
 
     return (
         <View style={styles.toolBoxStyle}>

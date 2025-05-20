@@ -4,7 +4,7 @@ import React from "react";
 import {spellSlotsByLevel} from "@/assets/classes/spellSlotsByLevel";
 
 
-export function usingSpellSlotsIndexTab(){
+export function UsingSpellSlotsIndexTab(){
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 

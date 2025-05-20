@@ -60,7 +60,7 @@ export default function ParallaxScrollView({
           ]}>
           {headerImage}
         </Animated.View>
-        {CharacterNameHeader()}
+        <CharacterNameHeader />
         <View style={styles.content}>{children}</View>
       </Animated.ScrollView>
     </View>

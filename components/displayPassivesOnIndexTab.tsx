@@ -18,7 +18,7 @@ export default function DisplayPassivesOnIndexTab(){
                     return (<View style={styles.abilityBox}>
                         <Text style={styles.abilityName}>{ability.name}</Text>
 
-                        {PerAbilityDisplayResistImmune(ability)}
+                        <PerAbilityDisplayResistImmune ability={ability} />
 
                         {ability.description != "" && <Text style={styles.descriptionText}>{ability.description}</Text>}
                     </View>)
