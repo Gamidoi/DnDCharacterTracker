@@ -1,10 +1,14 @@
 import { StyleSheet, Text, View, TextInput, Pressable} from 'react-native';
 import React, { useState} from "react";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
-import {displayCoreStats} from "@/components/displayCoreStats";
+import {DisplayCoreStats} from "@/components/displayCoreStats";
 
 
-export default function LevelUpToolsStatsCastingHP(levelUpToolsSkillsStatsCastingHPDisplay: boolean) {
+export type levelUpToolsStatsChastingHPProps = {
+    displayOn: boolean;
+}
+
+export default function LevelUpToolsStatsCastingHP({displayOn}: levelUpToolsStatsChastingHPProps) {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 
@@ -42,7 +46,7 @@ export default function LevelUpToolsStatsCastingHP(levelUpToolsSkillsStatsCastin
 
 
 return(
-    <View>{levelUpToolsSkillsStatsCastingHPDisplay && <View>
+    <View>{displayOn && <View>
 
         <View style={styles.toolBoxStyle}>
             <Pressable style={styles.toolBoxStyle} onPress={() =>
@@ -219,7 +223,7 @@ return(
                 setAbilityScoreChangeVariable("")
             }}>
                 <Text style={{color: "white", textAlign: "center", height: 40, marginTop: 15}}>Ability Scores</Text>
-                {addAbilityScoreBoxDisplayStatus && <View>{displayCoreStats()}</View>}
+                {addAbilityScoreBoxDisplayStatus && <DisplayCoreStats />}
                 {addAbilityScoreBoxDisplayStatus && <Text style={{color: "white", textAlign: "center"}}>Enter stat Below</Text>}
             </Pressable>
             {addAbilityScoreBoxDisplayStatus && <View>

@@ -4,7 +4,11 @@ import React from "react";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 import {Item} from "@/assets/classes/item";
 
-export function itemQuantityAdjustTool(item: Item) {
+
+export type itemQuantityAdjustToolProps = {
+    item: Item;
+}
+export function ItemQuantityAdjustTool({item}: itemQuantityAdjustToolProps) {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
     return (

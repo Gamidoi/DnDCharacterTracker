@@ -3,7 +3,7 @@ import React from "react";
 import {useCharacter} from "@/components/characterUpdater";
 
 
-export function displayCoreStats(){
+export function DisplayCoreStats() {
 
     const character = useCharacter();
 

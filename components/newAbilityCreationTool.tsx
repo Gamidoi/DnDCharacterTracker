@@ -4,10 +4,14 @@ import React, {useState} from "react";
 import {Ability} from "@/assets/classes/ability";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 import {FontAwesome, MaterialCommunityIcons} from "@expo/vector-icons";
-import {settingDiceToRollQuantity} from "@/components/settingDiceToRollQuantity";
+import {SettingDiceToRollQuantity} from "@/components/settingDiceToRollQuantity";
 
 
-export default function newAbilityCreationTool(spellAndAbilityToolsDisplay: boolean) {
+export type newAbilityCreationToolProps = {
+    displayOn: boolean;
+}
+
+export default function NewAbilityCreationTool({displayOn}: newAbilityCreationToolProps) {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 
@@ -183,8 +187,14 @@ export default function newAbilityCreationTool(spellAndAbilityToolsDisplay: bool
         setImmunity([]);
     }
 
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
+    // @ts-ignore
     return(
-        <View style={{margin: 0, padding: 0}}>{spellAndAbilityToolsDisplay && <View>
+        <View style={{margin: 0, padding: 0}}>{displayOn && <View>
             <View style={styles.toolBoxStyle}>
                 <Pressable onPress={() => closeAllDropDowns()} style={styles.toolBoxStyle}>
                     <Pressable onPress={() => {
@@ -448,12 +458,12 @@ export default function newAbilityCreationTool(spellAndAbilityToolsDisplay: bool
                         }}>
                             <Text style={styles.toggleButtonLables}>{abilityRollVariable ? "Yes" : "No"}</Text>
                         </Pressable>
-                        {abilityRollVariable && <View>{settingDiceToRollQuantity(
-                            // @ts-ignore
-                                setAbilityRollD4, setAbilityRollD6, setAbilityRollD8, setAbilityRollD10,
-                                setAbilityRollD12, setAbilityRollD20, setAbilityRollD100, setAbilityRollBonus
-                            )}
-                        </View>}
+                        {abilityRollVariable && <SettingDiceToRollQuantity
+                            //@ts-ignore
+                            setd4={setAbilityRollD4} setd6={setAbilityRollD6} setd8={setAbilityRollD8} setd10={setAbilityRollD10}
+                            //@ts-ignore
+                            setd12={setAbilityRollD12} setd20={setAbilityRollD20} setd100={setAbilityRollD100} setBonus={setAbilityRollBonus}
+                        />}
                     </View>
 
                     <Text style={styles.labels}>Full Description</Text>

@@ -2,13 +2,13 @@ import {StyleSheet, Text, View, Pressable, Platform} from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import React, { useState} from "react";
 import {useCharacter} from "@/components/characterUpdater";
-import newSpellCreationTool from "@/components/newSpellCreationTool";
+import NewSpellCreationTool from "@/components/newSpellCreationTool";
 import AdjustCoreStatSaves from "@/components/adjustCoreStatSaves";
 import AttributionSection from "@/components/attributionSection";
 import headerRandomizer from "@/components/headerRandomizer";
-import newAbilityCreationTool from "@/components/newAbilityCreationTool";
+import NewAbilityCreationTool from "@/components/newAbilityCreationTool";
 import LevelUpToolsStatsCastingHP from "@/components/levelUpToolsStatsCastingHP";
-import {displayCoreStats} from "@/components/displayCoreStats";
+import {DisplayCoreStats} from "@/components/displayCoreStats";
 import {AdjustSkillsTool} from "@/components/adjustSkillsTool";
 import {CharacterManagementTools} from "@/components/characterManagementTools";
 import {MoneyManager} from "@/components/moneyManager";
@@ -44,7 +44,7 @@ export default function levelUpTab() {
                 <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}>Total Spellcasting Level: {character.spellcastingLevel}</Text>
                 <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}>Full caster: {character.fullCasterLevel} | Half Caster: {character.halfCasterLevel}</Text>
                 {character.warlockCasterLevel > 0 && <Text style={{color: "white", fontSize: 20, backgroundColor: "black", textAlign: "center"}}>Warlock Level: {character.warlockCasterLevel}</Text>}
-                {displayCoreStats()}
+                <DisplayCoreStats />
             </View>
 
 
@@ -54,8 +54,8 @@ export default function levelUpTab() {
                     onPress={() => {setItemManagementToolsDisplay(!itemManagementToolsDisplay)}}>
                      <Text style={styles.toolBoxLabels}>Item Management Tools</Text>
                 </Pressable>
-                <View style={{margin: 0, padding: 0}}>{MoneyManager(itemManagementToolsDisplay, true)}</View>
-                <View style={{marginTop: itemManagementToolsDisplay ? 15 : 0, padding: 0}}>{NewItemCreator(itemManagementToolsDisplay)}</View>
+                <View style={{margin: 0, padding: 0}}><MoneyManager displayOn={itemManagementToolsDisplay} displayMoneyChanger={true} /></View>
+                <View style={{marginTop: itemManagementToolsDisplay ? 15 : 0, padding: 0}}><NewItemCreator displayOn={itemManagementToolsDisplay} /></View>
             </View>
 
 
@@ -64,8 +64,8 @@ export default function levelUpTab() {
                     onPress={() => {setSpellAndAbilityToolsDisplay(!spellAndAbilityToolsDisplay)}}>
                     <Text style={styles.toolBoxLabels}>Spell and Ability Tools</Text>
                 </Pressable>
-                {<View>{newSpellCreationTool(spellAndAbilityToolsDisplay)}</View>}
-                {<View style={{marginTop: spellAndAbilityToolsDisplay ? 15 : 0}}>{newAbilityCreationTool(spellAndAbilityToolsDisplay)}</View>}
+                <NewSpellCreationTool displayOn={spellAndAbilityToolsDisplay} />
+                {<View style={{marginTop: spellAndAbilityToolsDisplay ? 15 : 0}}><NewAbilityCreationTool displayOn={spellAndAbilityToolsDisplay} /></View>}
             </View>
 
 
@@ -75,13 +75,17 @@ export default function levelUpTab() {
                     onPress={() => {setLevelUpToolsSkillsStatsCastingHPDisplay(!levelUpToolsSkillsStatsCastingHPDisplay)}}>
                     <Text style={styles.toolBoxLabels}>Level Up Tools</Text>
                 </Pressable>
-                {<View>{LevelUpToolsStatsCastingHP(levelUpToolsSkillsStatsCastingHPDisplay)}</View>}
-                {<View style={{
+                <LevelUpToolsStatsCastingHP displayOn={levelUpToolsSkillsStatsCastingHPDisplay} />
+                <View style={{
                     marginTop: levelUpToolsSkillsStatsCastingHPDisplay ? 15 : 0,
-                }}>{AdjustCoreStatSaves(levelUpToolsSkillsStatsCastingHPDisplay)}</View>}
-                {<View style={{
+                }}>
+                    <AdjustCoreStatSaves displayOn={levelUpToolsSkillsStatsCastingHPDisplay} />
+                </View>
+                <View style={{
                     marginTop: levelUpToolsSkillsStatsCastingHPDisplay ? 15 : 0,
-                }}>{AdjustSkillsTool(levelUpToolsSkillsStatsCastingHPDisplay)}</View>}
+                }}>
+                    <AdjustSkillsTool displayOn={levelUpToolsSkillsStatsCastingHPDisplay} />
+                </View>
             </View>
 
 
@@ -90,7 +94,7 @@ export default function levelUpTab() {
                     onPress={() => {setCharacterManagementToolsDisplay(!characterManagementToolsDisplay)}}>
                     <Text style={styles.toolBoxLabels}>Character Management Tools</Text>
                 </Pressable>
-                {<View style={{margin: 0, padding: 0}}>{CharacterManagementTools(characterManagementToolsDisplay)}</View>}
+                <CharacterManagementTools  style={{margin: 0, padding: 0}}  displayOn={characterManagementToolsDisplay} />
             </View>
 
 
@@ -100,7 +104,7 @@ export default function levelUpTab() {
                 }}>
                     <Text style={[styles.toolBoxLabels, {height: 40, marginTop: 15, fontSize: 14}]}>Acknowledgments and Attributions Section</Text>
                 </Pressable>
-                {attributionSectionDisplay && <View>{AttributionSection(attributionSectionDisplay)}</View>}
+                <AttributionSection attributionSectionDisplay={attributionSectionDisplay} />
             </View>
 
 

@@ -1,4 +1,4 @@
-import {Platform, Pressable, StyleSheet, Text, View} from "react-native";
+import {Platform, Pressable, StyleSheet, Text, View, ViewProps} from "react-native";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 import React from "react";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
@@ -7,7 +7,9 @@ import DisplayPassivesOnIndexTab from "@/components/displayPassivesOnIndexTab";
 
 
 
-export default function DisplayAbilitiesOnSpellsAbilitiesTab(){
+export type DisplayAbilitiesOnSpellsAbilitiesTabProps = ViewProps;
+
+export default function DisplayAbilitiesOnSpellsAbilitiesTab({...ViewProps}: DisplayAbilitiesOnSpellsAbilitiesTabProps) {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 
@@ -236,7 +238,7 @@ export default function DisplayAbilitiesOnSpellsAbilitiesTab(){
                     <View style={{alignSelf: "center"}}>
                         {ability.roll[0] && <Text style={styles.diceDisplay}>{getRolledDiceAsString(ability.roll)}</Text>}
                     </View>
-                    {PerAbilityDisplayResistImmune(ability)}
+                    <PerAbilityDisplayResistImmune ability={ability} />
 
                     {ability.description != "" && <Text style={styles.descriptionText}>{ability.description}</Text>}
                 </View>)

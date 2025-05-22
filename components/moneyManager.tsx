@@ -3,7 +3,12 @@ import React, {useState} from "react";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 
 
-export function MoneyManager(itemManagementToolsDisplay: boolean, displayMoneyChanger: boolean = false) {
+export type moneyManagerProps = {
+    displayOn: boolean;
+    displayMoneyChanger: boolean;
+}
+
+export function MoneyManager({displayOn, displayMoneyChanger = false}: moneyManagerProps) {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
     let [moneyManagerDisplayStatus, setMoneyManagerDisplayStatus] = React.useState<boolean>(false);
@@ -38,7 +43,7 @@ export function MoneyManager(itemManagementToolsDisplay: boolean, displayMoneyCh
 
 
     return(
-        <View>{itemManagementToolsDisplay && <View>
+        <View>{displayOn && <View>
             <View style={styles.toolBoxStyle}>
                 <Pressable style={styles.toolBoxStyle} onPress={() => {
                     setMoneyManagerDisplayStatus(!moneyManagerDisplayStatus);

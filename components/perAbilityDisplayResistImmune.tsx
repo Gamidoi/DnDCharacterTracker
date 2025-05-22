@@ -3,7 +3,11 @@ import React from "react";
 import {Ability} from "@/assets/classes/ability";
 
 
-export default function PerAbilityDisplayResistImmune(ability: Ability) {
+export type perAbilityDisplayResistImmuneProps = {
+    ability: Ability;
+}
+
+export default function PerAbilityDisplayResistImmune({ability}: perAbilityDisplayResistImmuneProps) {
 
 
     function resistanceImmunityDisplayString(listOfResistImmune: string[]){
@@ -23,7 +27,7 @@ export default function PerAbilityDisplayResistImmune(ability: Ability) {
         ]}>{displayString}</Text>;
     }
 
-    return(<>
+    return(<View>
         {(ability.resistance.length + ability.immunity.length > 0 && ability.resistance[0] + ability.immunity[0] != "") && <View style={{
             borderWidth: 2,
             borderColor: "orange",
@@ -42,7 +46,7 @@ export default function PerAbilityDisplayResistImmune(ability: Ability) {
                     {resistanceImmunityDisplayString(ability.immunity)}
                 </View>}
             </View>
-        </View>}</>
+        </View>}</View>
     )}
 
 

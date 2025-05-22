@@ -1,9 +1,14 @@
-import {StyleSheet, Text, View, Pressable} from 'react-native';
+import {StyleSheet, Text, View, Pressable, type ViewProps} from 'react-native';
 import React, {useState} from "react";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 
 
-export default function AdjustCoreStatSaves(levelUpToolsSkillsStatsCastingHPDisplay: boolean) {
+
+export type AdjustCoreStatSaves = ViewProps & {
+    displayOn: boolean;
+};
+
+export default function AdjustCoreStatSaves({displayOn, ...ViewProps}: AdjustCoreStatSaves) {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 
@@ -11,7 +16,7 @@ export default function AdjustCoreStatSaves(levelUpToolsSkillsStatsCastingHPDisp
 
 
     return(
-        <View>{levelUpToolsSkillsStatsCastingHPDisplay && <View style={styles.toolBoxStyle}>
+        <View>{displayOn && <View style={styles.toolBoxStyle}>
             <Pressable onPress={() => {
                 setAdjustCoreStatSavesToolDisplay(!adjustCoreStatSavesToolDisplay);
             }}>

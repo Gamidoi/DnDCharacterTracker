@@ -3,11 +3,16 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import React, {useState} from "react";
 import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 import {Item} from "@/assets/classes/item";
-import { settingDiceToRollQuantity } from './settingDiceToRollQuantity';
+import { SettingDiceToRollQuantity } from './settingDiceToRollQuantity';
 import {FontAwesome, MaterialCommunityIcons} from "@expo/vector-icons";
 
 
-export function NewItemCreator(itemManagementToolsDisplay: boolean) {
+
+export type newItemCreatorProps = {
+    displayOn: boolean;
+}
+
+export function NewItemCreator({displayOn}: newItemCreatorProps) {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
 
@@ -202,7 +207,7 @@ export function NewItemCreator(itemManagementToolsDisplay: boolean) {
         return [...allConsumables, ...allShields, ...allWeapons, ...allArmors, ...allArtifacts];
     }
 
-    return (<>{itemManagementToolsDisplay && <View>
+    return (<>{displayOn && <View>
         <Pressable style={styles.toolBoxStyle} onPress={() => closeAllDropDowns()}>
             <Pressable style={styles.toolBoxStyle} onPress={() => {
                 setNewItemDisplay(!newItemDisplay);
@@ -283,11 +288,12 @@ export function NewItemCreator(itemManagementToolsDisplay: boolean) {
                         <Text style={styles.toggleButtonLables}>{itemRollAll ? "Yes" : "No"}</Text>
                     </Pressable>}
                     {(itemRollAll || itemType === "Weapon") &&
-                        <View>{settingDiceToRollQuantity(
+                        <SettingDiceToRollQuantity
                             // @ts-ignore
-                            setItemRolld4, setItemRolld6, setItemRolld8, setItemRolld10,
-                            setItemRolld12, setItemRolld20, setItemRolld100, setItemRollBonus
-                        )}</View>}
+                            setd4={setItemRolld4} setd6={setItemRolld6} setd8={setItemRolld8} setd10={setItemRolld10}
+                            // @ts-ignore
+                            setd12={setItemRolld12} setd20={setItemRolld20} setd100={setItemRolld100} setBonus={setItemRollBonus}
+                        />}
                     {(itemType === "Armor" || itemType === "Shield") && <View style={{flexDirection: "row", alignSelf: "center"}}>
                         <View style={{flex: 1}}>
                             <Text style={styles.label}>Armor Class{itemType === "Shield" ? " Bonus" : ""}</Text>
@@ -454,13 +460,12 @@ export function NewItemCreator(itemManagementToolsDisplay: boolean) {
                                 padding: 5,
                         }}/>
                     </View>}
-                    {refreshQuantity === "Rolled" && <View>
-                        {settingDiceToRollQuantity(
+                    {refreshQuantity === "Rolled" && <SettingDiceToRollQuantity
                             // @ts-ignore
-                            setItemRefreshRolld4, setItemRefreshRolld6, setItemRefreshRolld8, setItemRefreshRolld10,
-                            setItemRefreshRolld12, setItemRefreshRolld20, setItemRefreshRolld100, setItemRefreshRollBonus
-                        )}
-                    </View>}
+                            setd4={setItemRefreshRolld4} setd6={setItemRefreshRolld6} setd8={setItemRefreshRolld8} setd10={setItemRefreshRolld10}
+                            // @ts-ignore
+                            setd12={setItemRefreshRolld12} setd20={setItemRefreshRolld20} setd100={setItemRefreshRolld100} setBonus={setItemRefreshRollBonus}
+                        />}
                 </View>}
 
                 <View style={{flexDirection: "row"}}>

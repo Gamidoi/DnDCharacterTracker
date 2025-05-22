@@ -2,18 +2,19 @@ import {StyleSheet, Text, TextInput, View} from "react-native";
 import React from "react";
 
 
-export function settingDiceToRollQuantity(
-    setd4: ()=>void,
-    setd6: ()=>void,
-    setd8: ()=>void,
-    setd10: ()=>void,
-    setd12: ()=>void,
-    setd20: ()=>void,
-    setd100: ()=>void,
-    setBonus: ()=>void,
-    )
-{
-    return(<>
+export type settingDiceToRollQuantityProps = {
+    setd4: ()=>void;
+    setd6: ()=>void;
+    setd8: ()=>void;
+    setd10: ()=>void;
+    setd12: ()=>void;
+    setd20: ()=>void;
+    setd100: ()=>void;
+    setBonus: ()=>void;
+}
+
+export function SettingDiceToRollQuantity({setd4, setd6, setd8, setd10, setd12, setd20, setd100, setBonus}: settingDiceToRollQuantityProps) {
+    return(<View>
         <View style={{flexDirection: "row", alignSelf: "center"}}>
             <View style={{flex: 0.24}}><Text style={styles.label}>D4s</Text>
                 <TextInput
@@ -90,7 +91,7 @@ export function settingDiceToRollQuantity(
                     style={styles.itemDiceEntry}/>
             </View>
         </View>
-    </>)
+    </View>)
 }
 
 const styles = StyleSheet.create({

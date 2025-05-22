@@ -6,9 +6,12 @@ import {useCharacter, useCharacterUpdater} from "@/components/characterUpdater";
 
 
 
+export type itemChargesInteractionToolProps = {
+    item: Item;
+    getRolledDiceAsString: string;
+}
 
-
-export function itemChargesInteraction(item: Item, getRolledDiceAsString: string) {
+export function ItemChargesInteraction({item, getRolledDiceAsString}: itemChargesInteractionToolProps) {
     const character = useCharacter();
     const characterUpdater = useCharacterUpdater();
     return (<>{item.uses > 0 && <>
