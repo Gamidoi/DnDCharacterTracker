@@ -316,11 +316,11 @@ export const characterDispatch: (current: Character, event: CharacterEvent) => C
 
 
     if (event.type === "all"){
-        if (typeof event.character.armorClass != "number" ||
-            typeof event.character.languages != "object" ||
-            typeof event.character.resistances != "object" ||
-            typeof event.character.immunities != "object" ||
-            typeof event.character.concentration != "string") {
+        if (!event.character.armorClass||
+            !event.character.languages||
+            !event.character.resistances||
+            !event.character.immunities||
+            !event.character.concentration) {
                 return {...event.character,
                     armorClass: 10,
                     languages: ["common"],
@@ -340,16 +340,16 @@ export const characterDispatch: (current: Character, event: CharacterEvent) => C
                     attunement3: null
                 }
         }
-        if (typeof event.character.armor === "string" ||
-            typeof event.character.weapon1 === "string" ||
-            typeof event.character.weapon2 === "string" ||
-            typeof event.character.attunement1 === "string" ||
-            typeof event.character.attunement2 === "string" ||
-            typeof event.character.attunement3 === "string" ||
-            typeof event.character.gold != "number" ||
-            typeof event.character.electrum != "number" ||
-            typeof event.character.silver != "number" ||
-            typeof event.character.copper != "number"){
+        if (!event.character.armor||
+            !event.character.weapon1||
+            !event.character.weapon2||
+            !event.character.attunement1||
+            !event.character.attunement2||
+            !event.character.attunement3||
+            !event.character.gold||
+            !event.character.electrum||
+            !event.character.silver||
+            !event.character.copper){
                 return {...event.character,
                     armor: null,
                     weapon1: null,
@@ -1289,7 +1289,13 @@ export const CharacterInfoProvider = ({children}: PropsWithChildren) => {
     useEffect(() => {
         AsyncStorage.getItem("currentCharacterName").then((characterName) => {
             AsyncStorage.getItem("newCharacter" + characterName).then((characterObjectString) => {
-                updateCharacter({type: 'all', character: JSON.parse("" + characterObjectString)})
+                if (characterObjectString) {
+                    updateCharacter({type: 'all', character: JSON.parse("" + characterObjectString)})
+                } else {
+                    updateCharacter({type: 'all', character: new Character('defaultDdD', 10, 1)});
+                    updateCharacter({type: "updateAllSpellcasting", fullCaster: 3, halfCaster: 2, warlock: 2});
+                    characterName = "defaultddd";
+                }
                 AsyncStorage.removeItem("newCharacterdefaultBbB");
                 if (characterName == "" || characterName == undefined) {
                     updateCharacter({type: "all", character: new Character("defaultCcC")});
