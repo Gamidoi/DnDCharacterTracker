@@ -148,9 +148,9 @@ export function DisplayItemsOnItemsTab() {
                 }}>
                 <Text style={styles.itemCatagoryHeader}>Artifacts</Text>
                 <View style={{borderWidth: 2, borderColor: "orange", borderRadius: 4}}>
-                    <Text style={styles.label}>Left Hand: {character.attunement1 != null ? character.attunement1?.name : "Empty"}</Text>
-                    <Text style={styles.label}>Right Hand: {character.attunement2 != null ? character.attunement2?.name : "Empty"}</Text>
-                    <Text style={styles.label}>Right Hand: {character.attunement3 != null ? character.attunement3?.name : "Empty"}</Text>
+                    <Text style={styles.label}> Attunement 1: {character.attunement1 != null ? character.attunement1?.name : "Empty"}</Text>
+                    <Text style={styles.label}>Attunement 2: {character.attunement2 != null ? character.attunement2?.name : "Empty"}</Text>
+                    <Text style={styles.label}>Attunement 3: {character.attunement3 != null ? character.attunement3?.name : "Empty"}</Text>
                     <Text style={[styles.label, {marginTop: 8}]}>Empty Attunement:</Text>
                     <View style={{flexDirection: "row", alignSelf: "center", padding: 4}}>
                         <Pressable onPress={() => {

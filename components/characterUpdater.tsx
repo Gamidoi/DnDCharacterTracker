@@ -690,10 +690,23 @@ export const characterDispatch: (current: Character, event: CharacterEvent) => C
     }
     if (event.type === "updateDEX"){
         let updatedAbilities: Ability[] = updateAbilitiesUseOnStatChange(currentCharacter, "DEX", event.value)
+        let armorClass = currentCharacter.armorClass;
+        let armorMaxDEXBonus = 0;
+        currentCharacter.items.map((item: Item) => {
+            if (item.name === currentCharacter.armor?.name) {
+                armorMaxDEXBonus = item.AC[1];
+            }
+        })
+        let currentDEXBonus = getStatMod(currentCharacter.DEX)
+        if (currentDEXBonus > armorMaxDEXBonus){currentDEXBonus = armorMaxDEXBonus;}
+        let newDEXBonus = getStatMod(event.value);
+        if (newDEXBonus > armorMaxDEXBonus){newDEXBonus = armorMaxDEXBonus;}
+        armorClass = (armorClass - currentDEXBonus + newDEXBonus);
         return{
             ...currentCharacter,
             DEX: event.value,
-            abilities: updatedAbilities
+            abilities: updatedAbilities,
+            armorClass: armorClass
         }
     }
     if (event.type === "updateCON"){

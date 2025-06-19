@@ -6,6 +6,7 @@ import headerRandomizer from "@/components/headerRandomizer";
 import DisplayPassivesOnIndexTab from "@/components/displayPassivesOnIndexTab";
 import {UsingSpellSlotsIndexTab} from "@/components/usingSpellSlotsIndexTab";
 import {DisplayEquippedOnIndex} from "@/components/displayEquippedOnIndex";
+import {getStatMod} from "@/assets/functionLibrary/getCoreStatMod";
 
 
 
@@ -53,7 +54,7 @@ export default function MainCharacterSyndrome() {
                 borderColor: "orange",
                 borderRadius: 5,
                 padding: 6,
-            }}>AC: {character.armorClass}</Text>
+            }}>AC: {character?.armorClass}{!character.armorClass && (10 + getStatMod(character.DEX))}</Text>
             <Text style={{color: "white", fontSize: 28}}>Current HP is {character.currentHP} / {character.maxHP}</Text>
             <Text>
                 <Pressable
