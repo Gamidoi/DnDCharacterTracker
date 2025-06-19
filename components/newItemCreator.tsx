@@ -632,7 +632,7 @@ export function NewItemCreator({displayOn}: newItemCreatorProps) {
                         style={styles.deleteConfirmButtons}
                         onPress={() => {
                             setItemConfirmDelete(false);
-                            deleteItem(deleteItemName)
+                            deleteItem(deleteItemName);
                             setDeleteItemDisplay(false);
                         }}>
                             <Text style={styles.deleteConfirmText}>Confirm Item Deletion?</Text>
